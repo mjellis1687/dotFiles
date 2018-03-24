@@ -43,7 +43,7 @@ esac
 
 # If this is an xterm set the title to user@host:dir
 case "$TERM" in
-xterm*|rxvt*)
+xterm*|rxvt*|screen*)
 	reset=$(tput sgr0)
 	red=$(tput setaf 1)
 	blue=$(tput setaf 4)

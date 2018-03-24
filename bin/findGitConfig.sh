@@ -24,17 +24,28 @@ credential()
 	fi
 }
 
+email()
+{
+	if [ "${HOSTNAME}" = "matty-2016" ] || [ "${HOSTNAME}" = "matty-Gazelle-Professional" ]; then
+		EM="ellis.matt.j@gmail.com"
+	else
+		EM="matthew.j.ellis@jci.com"
+	fi
+}
+	
+
 # MAIN
-ED=""
-CR=""
 case $1 in
 	editor)
+		ED=""
 		editor
 		;;
 	credential)
+		CR=""
 		credential
 		;;
 	*)
+		EM=""
 		editor
 esac
 
