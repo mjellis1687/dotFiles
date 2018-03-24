@@ -1,0 +1,7 @@
+
+# Allows for partial command + history search
+# Note: bash is using readline to handle prompt
+## arrow up
+"\e[A":history-search-backward
+## arrow back
+"\e[B":history-search-forward
