@@ -32,20 +32,35 @@ email()
 		EM="matthew.j.ellis@jci.com"
 	fi
 }
-	
 
 # MAIN
-case $1 in
-	editor)
-		ED=""
-		editor
-		;;
-	credential)
-		CR=""
-		credential
-		;;
-	*)
-		EM=""
-		editor
-esac
 
+GITCONFIG=${HOME}/.gitconfig
+ED=""
+CR=""
+EM=""
+editor
+credential
+email
+rm $GITCONFIG
+echo "[name]" >> $GITCONFIG
+echo "	name=Matt Ellis" >> $GITCONFIG
+echo "	email="$EM >> $GITCONFIG
+echo "[core]" >> $GITCONFIG
+echo "	editor="$ED >> $GITCONFIG
+echo "	trustctime=false" >> $GITCONFIG
+echo "[diff]" >> $GITCONFIG
+echo "	tool=vimdiff" >> $GITCONFIG
+echo "	prompt=false" >> $GITCONFIG
+echo "[merge]" >> $GITCONFIG
+echo "	tool=vimdiff" >> $GITCONFIG
+echo "	conflictstyle=diff3" >> $GITCONFIG
+echo "[mergetool "vimdiff"]" >> $GITCONFIG
+echo "	tool=vimdiff" >> $GITCONFIG
+echo "	keepBackup=false" >> $GITCONFIG
+echo "[credential]" >> $GITCONFIG
+echo "	helper=!'"$CR"'" >> $GITCONFIG
+echo "[alias]" >> $GITCONFIG
+echo "	d = diff" >> $GITCONFIG
+echo "	m = mergetool" >> $GITCONFIG
+echo "	list-conflicts = !git ls-files -u | cut -f 2 | sort -u" >> $GITCONFIG
