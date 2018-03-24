@@ -16,7 +16,7 @@ editor()
 credential()
 {
 	if [ "${HOSTNAME}" = "matty-2016" ]; then
-		CR="/usr/share/git/crendential/gnome-keyring/git-credential-gnome-keyring"
+		CR="/usr/share/git/credential/gnome-keyring/git-credential-gnome-keyring"
 	elif [ "${HOSTNAME}" = "matty-Gazelle-Professional" ]; then
 		CR="/usr/share/doc/git/contrib/credential/gnome-keyring/git-credential-gnome-keyring"
 	else
@@ -42,8 +42,8 @@ EM=""
 editor
 credential
 email
-rm $GITCONFIG
-echo "[name]" >> $GITCONFIG
+rm -f $GITCONFIG
+echo "[user]" >> $GITCONFIG
 echo "	name=Matt Ellis" >> $GITCONFIG
 echo "	email="$EM >> $GITCONFIG
 echo "[core]" >> $GITCONFIG
@@ -55,7 +55,7 @@ echo "	prompt=false" >> $GITCONFIG
 echo "[merge]" >> $GITCONFIG
 echo "	tool=vimdiff" >> $GITCONFIG
 echo "	conflictstyle=diff3" >> $GITCONFIG
-echo "[mergetool "vimdiff"]" >> $GITCONFIG
+echo '[mergetool "vimdiff"]' >> $GITCONFIG
 echo "	tool=vimdiff" >> $GITCONFIG
 echo "	keepBackup=false" >> $GITCONFIG
 echo "[credential]" >> $GITCONFIG
