@@ -1,60 +1,25 @@
 " ==============================================================================
 "  	 FILE:	.vimrc
 "  AUTHOR:	Matthew Ellis
-" CREATED:	2015-02-28
+"    DATE:	2018-03-24
 " ==============================================================================
-"
-" ------------------------------------------------------------------------------
-" Enable file type detection. Use the default filetype settings.
-" Also load indent files, to automatically do language-dependent indenting.
-" ------------------------------------------------------------------------------
-filetype  plugin on
-filetype  indent on
-"
-" ------------------------------------------------------------------------------
-" Switch syntax highlighting on.
-" ------------------------------------------------------------------------------
-syntax    on  
-" ------------------------------------------------------------------------------
-"set backupdir=$HOME/.vimbackup						" Back-up directory
-set dictionary=/usr/share/dict/words 				" Dictionary
-" ------------------------------------------------------------------------------
-set autoindent					" copy indent from current line
-set number						" line numbers
-set shiftwidth=4				" Number of spaces to use for each step of indent
-set smartindent					" Smart autoindenting when starting a new line
-set tabstop=4					" Number of spaces that a <Tab> counts for
-"set wildignore=*.bak,*.o,*.e,*~	" wildmenu: ignore these extensions
-" ------------------------------------------------------------------------------
-"
-" ------------------------------------------------------------------------------
-" comma always followed by a space
-" ------------------------------------------------------------------------------
-"inoremap  ,  ,<Space>
-"
-" ------------------------------------------------------------------------------
-" autocomplete parenthesis, brackets and braces
-" ------------------------------------------------------------------------------
-"inoremap ( ()<Left>
-"inoremap [ []<Left>
-"inoremap { {}<Left>
-"
-"vnoremap ( s()<Esc>P<Right>%
-"vnoremap [ s[]<Esc>P<Right>%
-"vnoremap { s{}<Esc>P<Right>%
-" ==============================================================================
-"  VARIOUS PLUGIN CONFIGURATIONS
-" ==============================================================================
-" 
-" ------------------------------------------------------------------------------
-" c.vim
-" ------------------------------------------------------------------------------
-helptags $HOME/.vim/doc			" Help tabs
-"let g:C_UseTool_doxygen='yes' 	" Doxygen 
-"
+
+" GENERAL CONFIGURATION
+
 " Use Vim settings, rather than Vi settings
 " This must be first, because it changes other options as a side effect.
 set nocompatible
+
+" Set the clipboard to use system clipboard
+set clipboard=unnamed
+
+" Enable file type detection. Use the default filetype settings.
+" Also load indent files, to automatically do language-dependent indenting.
+filetype  plugin on
+filetype  indent on
+
+" Switch syntax highlighting on.
+syntax    on  
 
 " allow backspacing over everything in insert mode
 set backspace=indent,eol,start
@@ -69,12 +34,18 @@ colorscheme darkblue
 set colorcolumn=110
 highlight ColorColumn ctermbg=darkgray
 
-" Tab
-set tabstop=4
+" Deal with the colors in vimdiff
+if &diff
+	colorscheme evening
+endif
+
+" TAB
+set tabstop=4					" Number of spaces that a <Tab> counts for
 set softtabstop=4
-set shiftwidth=4
+set shiftwidth=4				" Number of spaces to use for each step of indent
+set smartindent					" Smart autoindenting when starting a new line
 set noexpandtab
-set autoindent
+set autoindent					" copy indent from current line
 
 " Enable the mouse
 if has('mouse')
@@ -124,10 +95,16 @@ set wildmenu
 command! MakeTages !ctags -R .
 
 "autocmd BufEnter *.tex filetype plugin on|set shellslash| set grepprg=grep\ -nH\ $*|filetype indent on|let g:tex_flavor='latex'|set iskeyword+=: 
+
+if has('unix')
+	highlight Normal ctermbg=none
+	highlight NonText ctermbg=none
+endif
+
 "" -----------
 " Vim-Latex
-" Make vim invoke Latex-Suite when you open a tex file
-filetype plugin on
+" Make vim invoke Latex-Suite when you open a tex file - already active
+" filetype plugin on
 "
 "" grep will sometimes skip displaying the file name if you search in a single
 "" file. This will confuse Latex-Suite. Set your grep program to always
@@ -152,15 +129,13 @@ set iskeyword+=:
 
 let g:Tex_DefaultTargetFormat = 'pdf'
 let g:Tex_CompileRule_pdf = 'pdflatex -interaction=nonstopmode $*'
-let g:Tex_ViewRule_pdf = 'C:/Users/cellism7/AppData/Local/Apps/Evince-2.32.0.145/bin/evince.exe'
-
-"" -----------
-
-" Deal with the colors in vimdiff
-if &diff
-	colorscheme evening
+if has('win32')
+	let g:Tex_ViewRule_pdf = 'C:/Users/cellism7/AppData/Local/Apps/Evince-2.32.0.145/bin/evince.exe'
+elseif has('unix')
+	let g:Tex_ViewRule_pdf = 'evince'
 endif
 
+"" -----------
 
 " Matlab template - need to update
 function! s:insert_m_file_header()
