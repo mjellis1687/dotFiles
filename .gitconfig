@@ -1,0 +1,22 @@
+
+[user]
+	name = Matt Ellis
+[core]
+	editor='bin/findGitConfig.sh editor'
+	trustctime = false
+[diff]
+	tool=vimdiff
+	prompt=false
+[merge]
+	tool=vimdiff
+	conflictstyle=diff3
+[mergetool "vimdiff"]
+	keepBackup = false
+[credential]
+	helper = 'bin/findGitConfig.sh credential'
+[alias]
+	d = diff
+	m = mergetool
+
+	# List conflicted files
+	list-conflicts = !git ls-files -u | cut -f 2 | sort -u
