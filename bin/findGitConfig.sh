@@ -9,7 +9,7 @@ editor()
 	if [ "${HOSTNAME}" = "matty-2016" ] || [ "${HOSTNAME}" = "matty-Gazelle-Professional" ]; then
 		ED="vim"
 	else
-		ED="/cygdrive/c/cygdrive/bin/vim.exe"
+		ED="/cygdrive/c/cygwin64/bin/vim.exe"
 	fi
 }
 

@@ -129,7 +129,7 @@ set iskeyword+=:
 
 let g:Tex_DefaultTargetFormat = 'pdf'
 let g:Tex_CompileRule_pdf = 'pdflatex -interaction=nonstopmode -file-line-error-style $*'
-if has('win32')
+if has('win32unix')
 	let g:Tex_ViewRule_pdf = 'C:/Users/cellism7/AppData/Local/Apps/Evince-2.32.0.145/bin/evince.exe'
 elseif has('unix')
 	let g:Tex_ViewRule_pdf = 'evince'
