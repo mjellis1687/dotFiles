@@ -275,11 +275,11 @@ vman() { vim <(man $1); }
 # alias cd=cd_func
 
 # SET PATHS
-if [ -f /usr/local/lib/pkgconfig ]; then
-	export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig
+if [ -d /usr/local/lib/pkgconfig ]; then
+	export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/usr/local/lib/pkgconfig
 fi
-if [ -f /usr/local/python ]; then
-	export PYTHONPATH=/usr/local/python
+if [ -d /usr/local/python ]; then
+	export PYTHONPATH=$PYTHONPATH:/usr/local/python
 fi
 
 # EOF
