@@ -114,6 +114,10 @@ endif
 " Enable automatic indentation as you type
 "TODO: only enable for tex files
 "autocmd filetype latex indent on
+autocmd BufNewFile,BufRead *.tex set spell
+autocmd BufNewFile,BufRead *.tex set wrap
+autocmd BufNewFile,BufRead *.tex set linebreak
+
 
 " Starting with Vim 4, the filetype of empty .tex files defaults to 'plaintex'
 " instead of 'tex', which results in vim-latex not being loaded. The following
