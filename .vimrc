@@ -91,6 +91,9 @@ set path+=**
 " Display all matching files for tab complete
 set wildmenu
 
+" Case insensitive while searching for files
+set wildignorecase
+
 " TAG jumping 
 command! MakeTages !ctags -R .
 
