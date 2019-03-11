@@ -195,6 +195,11 @@ alias ls='ls -hF --color=tty'                 # classify files in colour
 # alias la='ls -A'                              # all but . and ..
 # alias l='ls -CF'                              #
 
+unameOut="$(uname -s)"
+case "${unameOut}" in
+	CYGWIN*)	alias python="python -i"
+esac
+
 # FUNCTIONS
 
 # Reading man pages with vim
