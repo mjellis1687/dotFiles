@@ -197,7 +197,7 @@ alias ls='ls -hF --color=tty'                 # classify files in colour
 
 unameOut="$(uname -s)"
 case "${unameOut}" in
-	CYGWIN*)	alias python="python -i"
+	CYGWIN*)	alias python="/cygdrive/c/Program\ Files/Python36/python.exe -i"
 esac
 
 # FUNCTIONS
