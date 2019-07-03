@@ -159,7 +159,7 @@ function! s:insert_m_file_header()
 	execute "normal! o% Revisions:"
 	execute "normal! o%   1.0." . strftime("%Y%m%d") . "	Original version"
 	execute "normal! o%"
-	execute "normal! o% © " . strftime("%Y") . ". Johnson Controls, Inc. All rights reserved."
+	execute "normal! o% © " . strftime("%Y") . ". University of California, Davis. All rights reserved."
 	execute "normal! o"
 	execute "normal! o	properties"
 	execute "normal! oend"
