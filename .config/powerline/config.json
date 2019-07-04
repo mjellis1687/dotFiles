@@ -1,0 +1,10 @@
+{
+	"ext": {
+		"shell": {
+			"theme": "default_leftonly"
+		},
+		"tmux": {
+			"theme": "matt_tmux"
+		}
+	}
+}

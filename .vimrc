@@ -1,10 +1,168 @@
 " ==============================================================================
 "  	 FILE:	.vimrc
 "  AUTHOR:	Matthew Ellis
-"    DATE:	2018-03-24
+"    DATE:	2019-07-02
 " ==============================================================================
 
+" Plug in part from:
+" Fisa-vim-config
+" http://fisadev.github.io/fisa-vim-config/
+" version: 8.3.1
+
+" ==============================================================================
+" VIM-PLUG INITIALIZATION
+" Avoid modify this section, unless you are very sure of what you are doing
+
+let vim_plug_just_installed = 0
+let vim_plug_path = expand('~/.vim/autoload/plug.vim')
+if !filereadable(vim_plug_path)
+    echo "Installing Vim-plug..."
+    echo ""
+    silent !mkdir -p ~/.vim/autoload
+    silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    let vim_plug_just_installed = 1
+endif
+
+" manually load vim-plug the first time
+if vim_plug_just_installed
+    :execute 'source '.fnameescape(vim_plug_path)
+endif
+
+" Obscure hacks done, you can now modify the rest of the .vimrc as you wish :)
+
+" ==============================================================================
+" ACTIVE PLUGINS
+" You can disable or add new ones here:
+
+" this needs to be here, so vim-plug knows we are declaring the plugins we
+" want to use
+call plug#begin('~/.vim/plugged')
+
+" Plugins from github repos:
+
+" Override configs by directory
+"Plug 'arielrossanigo/dir-configs-override.vim'
+" Better file browser
+"Plug 'scrooloose/nerdtree'
+" Using tabs
+"Plug 'jistr/vim-nerdtree-tabs'
+" Code commenter
+"Plug 'scrooloose/nerdcommenter'
+" Class/module browser
+"Plug 'majutsushi/tagbar'
+" Code and files fuzzy finder
+"Plug 'ctrlpvim/ctrlp.vim'
+" Extension to ctrlp, for fuzzy command finder
+"Plug 'fisadev/vim-ctrlp-cmdpalette'
+" Zen coding
+"Plug 'mattn/emmet-vim'
+" Git integration
+"Plug 'motemen/git-vim'
+" Tab list panel
+"Plug 'kien/tabman.vim'
+" Airline
+"Plug 'vim-airline/vim-airline'
+"Plug 'vim-airline/vim-airline-themes'
+" Terminal Vim with 256 colors colorscheme
+"Plug 'fisadev/fisa-vim-colorscheme'
+" Consoles as buffers
+"Plug 'rosenfeld/conque-term'
+" Pending tasks list
+"Plug 'fisadev/FixedTaskList.vim'
+" Surround
+"Plug 'tpope/vim-surround'
+" Autoclose
+"Plug 'Townk/vim-autoclose'
+" Indent text object
+"Plug 'michaeljsmith/vim-indent-object'
+" Indentation based movements
+"Plug 'jeetsukumaran/vim-indentwise'
+" Better autocompletion
+"Plug 'Shougo/neocomplcache.vim'
+" Snippets manager (SnipMate), dependencies, and snippets repo
+"Plug 'MarcWeber/vim-addon-mw-utils'
+"Plug 'tomtom/tlib_vim'
+"Plug 'honza/vim-snippets'
+"Plug 'garbas/vim-snipmate'
+" Git/mercurial/others diff icons on the side of the file lines
+"Plug 'mhinz/vim-signify'
+" Automatically sort python imports
+"Plug 'fisadev/vim-isort'
+" Drag visual blocks arround
+"Plug 'fisadev/dragvisuals.vim'
+" Window chooser
+"Plug 't9md/vim-choosewin'
+" Python and other languages code checker
+"Plug 'scrooloose/syntastic'
+" Paint css colors with the real color
+"Plug 'lilydjwg/colorizer'
+" Ack code search (requires ack installed in the system)
+"Plug 'mileszs/ack.vim'
+"if has('python')
+    " YAPF formatter for Python
+    "Plug 'pignacio/vim-yapf-format'
+"endif
+" Relative numbering of lines (0 is the current line)
+" (disabled by default because is very intrusive and can't be easily toggled
+" on/off. When the plugin is present, will always activate the relative
+" numbering every time you go to normal mode. Author refuses to add a setting
+" to avoid that)
+" Plug 'myusuf3/numbers.vim'
+
+" Python plug-ins
+" Indenting to conform to PEP8
+"Plug 'vim-scripts/indentpython.vim'
+" Autocomplete
+"Plug 'Valloric/YouCompleteMe'
+" Powerline
+"Plug 'Lokaltog/powerline', {'rtp': 'powerline/bindings/vim/'}
+
+
+" Plugins from vim-scripts repos:
+
+" Search results counter
+"Plug 'vim-scripts/IndexedSearch'
+" XML/HTML tags navigation
+"Plug 'vim-scripts/matchit.zip'
+" Gvim colorscheme
+"Plug 'vim-scripts/Wombat'
+" Yank history navigation
+"Plug 'vim-scripts/YankRing.vim'
+
+" For (Python) development:
+
+" Python autocompletion, go to definition.
+Plug 'davidhalter/jedi-vim'
+" PEP8 checking
+Plug 'nvie/vim-flake8'
+" Better file browser
+Plug 'scrooloose/nerdtree'
+" Using tabs
+Plug 'jistr/vim-nerdtree-tabs'
+" Full path fuzzy file, buffer, mru, tag, ... finder for Vim
+"Plug 'ctrlpvim/ctrlp.vim'
+" Powerline
+"Plug 'powerline/powerline'
+" Python Mode
+Plug 'python-mode/python-mode'
+
+
+" Tell vim-plug we finished declaring plugins, so it can load them
+call plug#end()
+
+" ==============================================================================
+" Install plugins the first time vim runs
+
+if vim_plug_just_installed
+    echo "Installing Bundles, please ignore key map error messages"
+    :PlugInstall
+endif
+
+" ==============================================================================
 " GENERAL CONFIGURATION
+
+" Use UTF-8 encoding
+set encoding=utf-8
 
 " Use Vim settings, rather than Vi settings
 " This must be first, because it changes other options as a side effect.
@@ -13,13 +171,13 @@ set nocompatible
 " Set the clipboard to use system clipboard
 set clipboard=unnamed
 
+" Leader key
+let mapleader=","
+
 " Enable file type detection. Use the default filetype settings.
 " Also load indent files, to automatically do language-dependent indenting.
 filetype  plugin on
 filetype  indent on
-
-" Switch syntax highlighting on.
-syntax    on  
 
 " allow backspacing over everything in insert mode
 set backspace=indent,eol,start
@@ -27,8 +185,70 @@ set backspace=indent,eol,start
 " line numbering
 set number
 
+" incremental search
+set incsearch
+
+" Switch syntax highlighting on, when the terminal has colors
+" Also switch on highlighting the last used search pattern
+if &t_Co > 2 || has("gui_running")
+	syntax on
+	set hlsearch
+endif
+
+" TAB
+set tabstop=4					" Number of spaces that a <Tab> counts for
+set softtabstop=4
+set shiftwidth=4				" Number of spaces to use for each step of indent
+set smartindent					" Smart autoindenting when starting a new line
+set noexpandtab					" Do not expand a tab to spaces
+set autoindent					" copy indent from current line
+
+" Comment this line to enable autocompletion preview window
+" (displays documentation related to the selected completion option)
+" Disabled by default because preview makes the window flicker
+"set completeopt-=preview
+
+" Enable the mouse
+if has('mouse')
+	set mouse=a
+endif
+
+" Add .m suffixes when searching for files
+set suffixesadd+=.m
+
+" Setup environment
+" Search down into subfolders
+" Provides tab-completion for all file-related tasks
+set path+=**
+
+" Display all matching files for tab complete
+set wildmenu
+
+" Case insensitive while searching for files
+set wildignorecase
+
+ " Build ignores
+set wildignore+=*.pyc
+set wildignore+=*_build_/*
+set wildignore+=*/coverage/*
+set wildignore+=*/venv/*
+
+" autocompletion of files and commands behaves like shell
+" (complete only the common part, list the options that match)
+set wildmode=list:longest
+
+" Paste Toggle
+set pastetoggle=<F2>
+
+" ==============================================================================
+" COLORS
+
 " Color scheme
-colorscheme darkblue
+" mkdir -p ~/.vim/colors && cd ~/.vim/colors
+" wget -O wombat256mod.vim http://www.vim.org/scripts/download_script.php?src_id=13400
+set t_Co=256
+"colorscheme darkblue
+color wombat256mod
 
 " Highlight end of column
 set colorcolumn=110
@@ -39,22 +259,36 @@ if &diff
 	colorscheme evening
 endif
 
-" TAB
-set tabstop=4					" Number of spaces that a <Tab> counts for
-set softtabstop=4
-set shiftwidth=4				" Number of spaces to use for each step of indent
-set smartindent					" Smart autoindenting when starting a new line
-set noexpandtab
-set autoindent					" copy indent from current line
+"if has('unix')
+"	highlight Normal ctermbg=none
+"	highlight NonText ctermbg=none
+"endif
 
-" Enable the mouse
-if has('mouse')
-	set mouse=a
-endif
+" ==============================================================================
+" COMMANDS
 
-"" Open NerdList
-"autocmd VimEnter * NERDTree
-autocmd VimEnter * wincmd p
+" TAG jumping
+command! MakeTags !ctags -R --exclude=.git --exclude=venv .
+
+" Automatic reloading of .vimrc
+autocmd! bufwritepost .vimrc source %
+
+" Mark extra whitespace
+highlight BadWhitespace ctermbg=red guibg=red
+au BufRead,BufNewFile *.py,*.pyw,*.c,*.h match BadWhitespace /\s\+$/
+
+" Gets rid of extra space
+autocmd BufWritePre * %s/\s\+$//e
+
+"autocmd BufEnter *.tex filetype plugin on|set shellslash| set grepprg=grep\ -nH\ $*|filetype indent on|let g:tex_flavor='latex'|set iskeyword+=:
+
+" Tab length exceptions on some file types
+"autocmd FileType html setlocal shiftwidth=4 tabstop=4 softtabstop=4
+"autocmd FileType htmldjango setlocal shiftwidth=4 tabstop=4 softtabstop=4
+"autocmd FileType javascript setlocal shiftwidth=4 tabstop=4 softtabstop=4
+
+" ==============================================================================
+" KEY MAPPINGS
 
 " Remap esc
 imap qq <Esc>
@@ -62,50 +296,81 @@ imap qq <Esc>
 " Remap for closing buffers
 "nnoremap <leader>q :bp<cr>:bd #<cr>
 
-" Remap keys for buffer switching
-map <F2> :bprevious<CR>
-map <F3> :bnext<CR>
+"" Remap keys for buffer switching
+"map <F2> :bprevious<CR>
+"map <F3> :bnext<CR>
 
-" Switch syntax highlighting on, when the terminal has colors
-" Also switch on highlighting the last used search pattern
-if &t_Co > 2 || has("gui_running")
-	syntax on
-	set hlsearch
+" Tab navigation mappings
+map tn :tabn<CR>
+map tp :tabp<CR>
+map tm :tabm
+map tt :tabnew
+map ts :tab split<CR>
+map <C-S-Right> :tabn<CR>
+imap <C-S-Right> <ESC>:tabn<CR>
+map <C-S-Left> :tabp<CR>
+imap <C-S-Left> <ESC>:tabp<CR>
+" Easier moving between tabs
+"map <Leader>n <esc>:tabprevious<CR>
+"map <Leader>m <esc>:tabnext<CR>
+
+" navigate windows with meta+arrows
+"map <M-Right> <c-w>l
+"map <M-Left> <c-w>h
+"map <M-Up> <c-w>k
+"map <M-Down> <c-w>j
+"imap <M-Right> <ESC><c-w>l
+"imap <M-Left> <ESC><c-w>h
+"imap <M-Up> <ESC><c-w>k
+"imap <M-Down> <ESC><c-w>j
+
+" old autocomplete keyboard shortcut
+"imap <C-J> <C-X><C-O>
+
+" ==============================================================================
+" BACK-UPS
+
+" better backup, swap and undos storage
+set directory=~/.vim/dirs/tmp     " directory to place swap files in
+set backup                        " make backup files
+set backupdir=~/.vim/dirs/backups " where to put backup files
+set undofile                      " persistent undos - undo after you re-open the file
+set undodir=~/.vim/dirs/undos
+set viminfo+=n~/.vim/dirs/viminfo
+" store yankring history file there too
+let g:yankring_history_dir = '~/.vim/dirs/'
+
+" create needed directories if they don't exist
+if !isdirectory(&backupdir)
+    call mkdir(&backupdir, "p")
+endif
+if !isdirectory(&directory)
+    call mkdir(&directory, "p")
+endif
+if !isdirectory(&undodir)
+    call mkdir(&undodir, "p")
 endif
 
-" Add .m suffixes when searching for files
-set suffixesadd+=.m
+" ==============================================================================
+" PLUG-INS
 
-" Setup environment
-" Search down into subfolders
-" Provides tab-completion for all file-related tasks
-set path+=**
-"function! SetupEnvironment()
-"	let l:path = expand( '%:p' )
-"	if l:path =~ '/cygdrive/d/MatlabKernels'
-"		let &path.="/cygdrive/d/MatlabKernels/**"
-"	endif
-"endfunction
-"autocmd! BufReadPost,BufNewFile * call SetupEnvironment()
+" Nerdtree ------------------------------
 
-" Display all matching files for tab complete
-set wildmenu
+" Automatically open NerdList on vim open and move cursor to first buffer
+"autocmd VimEnter * NERDTree
+"autocmd VimEnter * wincmd p
 
-" Case insensitive while searching for files
-set wildignorecase
+"" Move nerdtree to the right
+"let g:NERDTreeWinPos = "right"
+"" " move to the first buffer
+"autocmd VimEnter * wincmd p
 
-" TAG jumping 
-command! MakeTages !ctags -R .
+" Powerline ------------------------------
+let g:powerline_pycmd='py3'
+set laststatus=2
 
-"autocmd BufEnter *.tex filetype plugin on|set shellslash| set grepprg=grep\ -nH\ $*|filetype indent on|let g:tex_flavor='latex'|set iskeyword+=: 
+" Vim-Latex ------------------------------
 
-if has('unix')
-	highlight Normal ctermbg=none
-	highlight NonText ctermbg=none
-endif
-
-"" -----------
-" Vim-Latex
 " Make vim invoke Latex-Suite when you open a tex file - already active
 " filetype plugin on
 "
@@ -120,7 +385,6 @@ endif
 autocmd BufNewFile,BufRead *.tex set spell
 autocmd BufNewFile,BufRead *.tex set wrap
 autocmd BufNewFile,BufRead *.tex set linebreak
-
 
 " Starting with Vim 4, the filetype of empty .tex files defaults to 'plaintex'
 " instead of 'tex', which results in vim-latex not being loaded. The following
@@ -143,7 +407,50 @@ elseif has('unix')
 endif
 let g:Tex_MultipleCompileFormats='pdf,bibtex,pdf'
 
-"" -----------
+" Jedi-vim ------------------------------
+
+" Better navigating through omnicomplete option list
+" See http://stackoverflow.com/questions/2170023/how-to-map-keys-for-popup-menu-in-vim
+set completeopt=longest,menuone
+function! OmniPopup(action)
+  if pumvisible()
+    if a:action == 'j'
+      return "\<C-N>"
+    elseif a:action == 'k'
+      return "\<C-P>"
+    endif
+  endif
+  return a:action
+endfunction
+
+inoremap <silent><C-j> <C-R>=OmniPopup('j')<CR>
+inoremap <silent><C-k> <C-R>=OmniPopup('k')<CR>
+
+" All these mappings work only for python code:
+" Go to definition
+"let g:jedi#goto_command = ',d'
+" Find ocurrences
+"let g:jedi#usages_command = ',o'
+" Find assignments
+"let g:jedi#goto_assignments_command = ',a'
+" Go to definition in new tab
+"nmap ,D :tab split<CR>:call jedi#goto()<CR>
+
+" ==============================================================================
+" PYTHON SUPPORT
+
+"python with virtualenv support
+"py << EOF
+"import os
+"import sys
+"if 'VIRTUAL_ENV' in os.environ:
+"  project_base_dir = os.environ['VIRTUAL_ENV']
+"  activate_this = os.path.join(project_base_dir, 'bin/activate_this.py')
+"  execfile(activate_this, dict(__file__=activate_this))
+"EOF
+
+" ==============================================================================
+" FUNCTIONS
 
 " Matlab template - need to update
 function! s:insert_m_file_header()
@@ -166,7 +473,7 @@ function! s:insert_m_file_header()
 	execute "normal! o"
 	execute "normal! o	methods"
 	execute "normal! o	function obj = " . fname . "( argin )"
-	execute "normal! oend % " . fname 
+	execute "normal! oend % " . fname
 	execute "normal! o\<esc>xi	end"
 	execute "normal! o\<esc>xiend % " . fname
 	normal! gg
@@ -197,4 +504,13 @@ function! NERDTreeQuit()
 	endif
 endfunction
 autocmd WinEnter * call NERDTreeQuit()
+
+"function! SetupEnvironment()
+"	let l:path = expand( '%:p' )
+"	if l:path =~ '/cygdrive/d/MatlabKernels'
+"		let &path.="/cygdrive/d/MatlabKernels/**"
+"	endif
+"endfunction
+"autocmd! BufReadPost,BufNewFile * call SetupEnvironment()
+
 " EOF

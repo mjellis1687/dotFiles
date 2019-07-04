@@ -214,13 +214,13 @@ vman() { vim <(man $1); }
 # Some example functions:
 #
 # a) function settitle
-# settitle () 
-# { 
-#   echo -ne "\e]2;$@\a\e]1;$@\a"; 
+# settitle ()
+# {
+#   echo -ne "\e]2;$@\a\e]1;$@\a";
 # }
-# 
+#
 # b) function cd_func
-# This function defines a 'cd' replacement function capable of keeping, 
+# This function defines a 'cd' replacement function capable of keeping,
 # displaying and accessing history of visited directories, up to 10 entries.
 # To use it, uncomment it, source this file and try 'cd --'.
 # acd_func 1.0.5, 10-nov-2004
@@ -229,15 +229,15 @@ vman() { vim <(man $1); }
 # {
 #   local x2 the_new_dir adir index
 #   local -i cnt
-# 
+#
 #   if [[ $1 ==  "--" ]]; then
 #     dirs -v
 #     return 0
 #   fi
-# 
+#
 #   the_new_dir=$1
 #   [[ -z $1 ]] && the_new_dir=$HOME
-# 
+#
 #   if [[ ${the_new_dir:0:1} == '-' ]]; then
 #     #
 #     # Extract dir N from dirs
@@ -247,21 +247,21 @@ vman() { vim <(man $1); }
 #     [[ -z $adir ]] && return 1
 #     the_new_dir=$adir
 #   fi
-# 
+#
 #   #
 #   # '~' has to be substituted by ${HOME}
 #   [[ ${the_new_dir:0:1} == '~' ]] && the_new_dir="${HOME}${the_new_dir:1}"
-# 
+#
 #   #
 #   # Now change to the new dir and add to the top of the stack
 #   pushd "${the_new_dir}" > /dev/null
 #   [[ $? -ne 0 ]] && return 1
 #   the_new_dir=$(pwd)
-# 
+#
 #   #
 #   # Trim down everything beyond 11th entry
 #   popd -n +11 2>/dev/null 1>/dev/null
-# 
+#
 #   #
 #   # Remove any other occurence of this dir, skipping the top of the stack
 #   for ((cnt=1; cnt <= 10; cnt++)); do
@@ -273,10 +273,10 @@ vman() { vim <(man $1); }
 #       cnt=cnt-1
 #     fi
 #   done
-# 
+#
 #   return 0
 # }
-# 
+#
 # alias cd=cd_func
 
 # SET PATHS
@@ -286,5 +286,10 @@ fi
 if [ -d /usr/local/python ]; then
 	export PYTHONPATH=$PYTHONPATH:/usr/local/python
 fi
+
+powerline-daemon -q
+POWERLINE_BASH_CONTINUATION=1
+POWERLINE_BASH_SELECT=1
+. /usr/share/powerline/bindings/bash/powerline.sh
 
 # EOF

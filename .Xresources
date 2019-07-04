@@ -1,5 +1,15 @@
+! Appearance
+URxvt*font: xft:Source\ Code\ Pro\ Medium:pixelsize=13:antialias=true:hinting=true,xft:Source\ Code\ Pro\ Medium:pixelsize=13:antialias=true:hinting=true
+!urxvt*font: xft:Terminus:pixelsize=12,xft:Inconsolata\ for\ Powerline:pixelsize=12
+!URxvt.font: xft:Consolas:size=13, xft:Inconsolata for Powerline
+!URxvt.font:           xft:Terminus (TTF) for Powerline:MediumForPowerline:size=13:antialias=true,xft:Inconsolata\ For\ Powerline:size=13:antialias=true
+!URxvt.imFont:         xft:Terminus (TTF) for Powerline:MediumForPowerline:size=13:antialias=true,xft:Inconsolata\ For\ Powerline:size=13:antialias=true
+!URxvt.boldFont:       xft:Terminus (TTF) for Powerline:MediumForPowerline:size=13:antialias=true,xft:Inconsolata\ For\ Powerline:size=13:antialias=true
+!URxvt.italicFont:     xft:Terminus (TTF) for Powerline:MediumForPowerline:size=13:antialias=true,xft:Inconsolata\ For\ Powerline:size=13:antialias=true
+!URxvt.boldItalicFont: xft:Terminus (TTF) for Powerline:MediumForPowerline:size=13:antialias=true,xft:Inconsolata\ For\ Powerline:size=13:antialias=true
+
 URxvt.scrollBar:      false
-URxvt.font:           xft:monospace:size=10
+!URxvt.font:           xft:monospace:size=10
 URxvt.url-launcher:   /usr/bin/firefox
 URxvt*loginShell:     true
 URxvt*fading:         30
@@ -11,7 +21,7 @@ URxvt.secondaryScroll: 0
 
 !URxvt.depth: 32
 
-URxvt*background:					#000000
+!URxvt*background:					#000000
 URxvt*foreground:                   #00ff00
 !URxvt*background:                     #101218
 !URxvt*foreground:                     #d1d4e0
