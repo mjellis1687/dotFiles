@@ -113,7 +113,7 @@ call plug#begin('~/.vim/plugged')
 " Indenting to conform to PEP8
 "Plug 'vim-scripts/indentpython.vim'
 " Autocomplete
-"Plug 'Valloric/YouCompleteMe'
+Plug 'Valloric/YouCompleteMe'
 " Powerline
 "Plug 'Lokaltog/powerline', {'rtp': 'powerline/bindings/vim/'}
 
@@ -132,19 +132,22 @@ call plug#begin('~/.vim/plugged')
 " For (Python) development:
 
 " Python autocompletion, go to definition.
-Plug 'davidhalter/jedi-vim'
+"Plug 'davidhalter/jedi-vim'
+"Plug 'Valloric/YouCompleteMe'
 " PEP8 checking
-Plug 'nvie/vim-flake8'
+"Plug 'nvie/vim-flake8'
 " Better file browser
-Plug 'scrooloose/nerdtree'
+"Plug 'scrooloose/nerdtree'
 " Using tabs
 Plug 'jistr/vim-nerdtree-tabs'
 " Full path fuzzy file, buffer, mru, tag, ... finder for Vim
-"Plug 'ctrlpvim/ctrlp.vim'
+Plug 'ctrlpvim/ctrlp.vim'
 " Powerline
-"Plug 'powerline/powerline'
+Plug 'powerline/powerline'
 " Python Mode
-Plug 'python-mode/python-mode'
+Plug 'python-mode/python-mode', { 'for': 'python', 'branch': 'develop' }
+" Vim-LaTeX
+Plug 'vim-latex/vim-latex'
 
 
 " Tell vim-plug we finished declaring plugins, so it can load them
@@ -157,6 +160,7 @@ if vim_plug_just_installed
     echo "Installing Bundles, please ignore key map error messages"
     :PlugInstall
 endif
+set rtp+=~/.vim/plugged/powerline/powerline/bindings/vim
 
 " ==============================================================================
 " GENERAL CONFIGURATION
@@ -172,7 +176,7 @@ set nocompatible
 set clipboard=unnamed
 
 " Leader key
-let mapleader=","
+let mapleader="\\"
 
 " Enable file type detection. Use the default filetype settings.
 " Also load indent files, to automatically do language-dependent indenting.
@@ -203,11 +207,6 @@ set smartindent					" Smart autoindenting when starting a new line
 set noexpandtab					" Do not expand a tab to spaces
 set autoindent					" copy indent from current line
 
-" Comment this line to enable autocompletion preview window
-" (displays documentation related to the selected completion option)
-" Disabled by default because preview makes the window flicker
-"set completeopt-=preview
-
 " Enable the mouse
 if has('mouse')
 	set mouse=a
@@ -231,14 +230,23 @@ set wildignorecase
 set wildignore+=*.pyc
 set wildignore+=*_build_/*
 set wildignore+=*/coverage/*
-set wildignore+=*/venv/*
+set wildignore+=venv/*
 
 " autocompletion of files and commands behaves like shell
 " (complete only the common part, list the options that match)
-set wildmode=list:longest
+set wildmode=list:longest:full,full
 
 " Paste Toggle
 set pastetoggle=<F2>
+
+" Code folding
+"set foldmethod=indent
+"
+" Keep all folds open when a file is opened
+" augroup OpenAllFoldsOnFileOpen
+"	autocmd!
+"	autocmd BufRead * normal zR
+" augroup END
 
 " ==============================================================================
 " COLORS
@@ -251,7 +259,7 @@ set t_Co=256
 color wombat256mod
 
 " Highlight end of column
-set colorcolumn=110
+set colorcolumn=80
 highlight ColorColumn ctermbg=darkgray
 
 " Deal with the colors in vimdiff
@@ -279,8 +287,6 @@ au BufRead,BufNewFile *.py,*.pyw,*.c,*.h match BadWhitespace /\s\+$/
 
 " Gets rid of extra space
 autocmd BufWritePre * %s/\s\+$//e
-
-"autocmd BufEnter *.tex filetype plugin on|set shellslash| set grepprg=grep\ -nH\ $*|filetype indent on|let g:tex_flavor='latex'|set iskeyword+=:
 
 " Tab length exceptions on some file types
 "autocmd FileType html setlocal shiftwidth=4 tabstop=4 softtabstop=4
@@ -314,6 +320,9 @@ imap <C-S-Left> <ESC>:tabp<CR>
 "map <Leader>n <esc>:tabprevious<CR>
 "map <Leader>m <esc>:tabnext<CR>
 
+" Quick saving
+map <C-s> <ESC>:w<CR>
+imap <C-s> <ESC>:w<CR>jj
 " navigate windows with meta+arrows
 "map <M-Right> <c-w>l
 "map <M-Left> <c-w>h
@@ -327,6 +336,10 @@ imap <C-S-Left> <ESC>:tabp<CR>
 " old autocomplete keyboard shortcut
 "imap <C-J> <C-X><C-O>
 
+" Easier moving of code blocks
+vnoremap < <gv
+vnoremap > >gv
+
 " ==============================================================================
 " BACK-UPS
 
@@ -337,8 +350,6 @@ set backupdir=~/.vim/dirs/backups " where to put backup files
 set undofile                      " persistent undos - undo after you re-open the file
 set undodir=~/.vim/dirs/undos
 set viminfo+=n~/.vim/dirs/viminfo
-" store yankring history file there too
-let g:yankring_history_dir = '~/.vim/dirs/'
 
 " create needed directories if they don't exist
 if !isdirectory(&backupdir)
@@ -366,8 +377,29 @@ endif
 "autocmd VimEnter * wincmd p
 
 " Powerline ------------------------------
+
 let g:powerline_pycmd='py3'
 set laststatus=2
+
+" Python-mode ------------------------------
+
+" Map sort function to a key
+vnoremap <Leader>s :sort<CR>
+
+" Code folding
+let g:pymode_folding = 0
+let g:pymode_rope_complete_on_dot = 0
+let g:pymode_python = 'python3'
+" map <Leader>g :call RopeGotoDefinition()<CR>
+" let ropevim_enable_shortcuts = 1
+" let g:pymode_rope_goto_def_newwin = vnew
+" let g:pymode_rope_extended_complete = 1
+" let g:pymode_breakpoint = 0
+" let g:pymode_syntax = 1
+" let g:pymode_syntax_builtin_objs = 0
+" let g:pymode_syntax_builtin_funcs = 0
+" let g:pymode_rope_lookup_project = 0
+map <Leader>b Oimport ipdb; ipdb.set_trace() # BREAKPOINT<C-c>
 
 " Vim-Latex ------------------------------
 
@@ -382,9 +414,9 @@ set laststatus=2
 " Enable automatic indentation as you type
 "TODO: only enable for tex files
 "autocmd filetype latex indent on
-autocmd BufNewFile,BufRead *.tex set spell
-autocmd BufNewFile,BufRead *.tex set wrap
-autocmd BufNewFile,BufRead *.tex set linebreak
+autocmd BufNewFile,BufRead *.tex,*.md set spell
+autocmd BufNewFile,BufRead *.tex,*.md set wrap
+autocmd BufNewFile,BufRead *.tex,*.md set linebreak
 
 " Starting with Vim 4, the filetype of empty .tex files defaults to 'plaintex'
 " instead of 'tex', which results in vim-latex not being loaded. The following
@@ -407,47 +439,61 @@ elseif has('unix')
 endif
 let g:Tex_MultipleCompileFormats='pdf,bibtex,pdf'
 
+"autocmd BufEnter *.tex filetype plugin on|set shellslash| set grepprg=grep\ -nH\ $*|filetype indent on|let g:tex_flavor='latex'|set iskeyword+=:
+
 " Jedi-vim ------------------------------
 
 " Better navigating through omnicomplete option list
 " See http://stackoverflow.com/questions/2170023/how-to-map-keys-for-popup-menu-in-vim
-set completeopt=longest,menuone
-function! OmniPopup(action)
-  if pumvisible()
-    if a:action == 'j'
-      return "\<C-N>"
-    elseif a:action == 'k'
-      return "\<C-P>"
-    endif
-  endif
-  return a:action
-endfunction
-
-inoremap <silent><C-j> <C-R>=OmniPopup('j')<CR>
-inoremap <silent><C-k> <C-R>=OmniPopup('k')<CR>
+"set completeopt=longest,menuone
+"function! OmniPopup(action)
+"  if pumvisible()
+"    if a:action == 'j'
+"      return "\<C-N>"
+"    elseif a:action == 'k'
+"      return "\<C-P>"
+"    endif
+"  endif
+"  return a:action
+"endfunction
+"
+"inoremap <silent><C-j> <C-R>=OmniPopup('j')<CR>
+"inoremap <silent><C-k> <C-R>=OmniPopup('k')<CR>
 
 " All these mappings work only for python code:
 " Go to definition
 "let g:jedi#goto_command = ',d'
-" Find ocurrences
+""" Find ocurrences
 "let g:jedi#usages_command = ',o'
-" Find assignments
+""" Find assignments
 "let g:jedi#goto_assignments_command = ',a'
-" Go to definition in new tab
+""" Go to definition in new tab
 "nmap ,D :tab split<CR>:call jedi#goto()<CR>
+
+" YouCompleteMe ------------------------------
+
+" Comment this line to enable autocompletion preview window
+" (displays documentation related to the selected completion option)
+" Disabled by default because preview makes the window flicker
+"set completeopt-=preview
+
+let g:ycm_confirm_extra_conf = 0
+let g:ycm_autoclose_preview_window_after_completion = 0
+let g:ycm_add_preview_to_completeopt = 1
+"let g:ycm_global_ycm_extra_conf = '~/.vim/.ycm_extra_conf.py'
 
 " ==============================================================================
 " PYTHON SUPPORT
 
 "python with virtualenv support
-"py << EOF
-"import os
-"import sys
-"if 'VIRTUAL_ENV' in os.environ:
-"  project_base_dir = os.environ['VIRTUAL_ENV']
-"  activate_this = os.path.join(project_base_dir, 'bin/activate_this.py')
-"  execfile(activate_this, dict(__file__=activate_this))
-"EOF
+py << EOF
+import os
+import sys
+if 'VIRTUAL_ENV' in os.environ:
+  project_base_dir = os.environ['VIRTUAL_ENV']
+  activate_this = os.path.join(project_base_dir, 'bin/activate_this.py')
+  execfile(activate_this, dict(__file__=activate_this))
+EOF
 
 " ==============================================================================
 " FUNCTIONS

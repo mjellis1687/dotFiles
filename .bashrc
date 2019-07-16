@@ -292,4 +292,7 @@ POWERLINE_BASH_CONTINUATION=1
 POWERLINE_BASH_SELECT=1
 . /usr/share/powerline/bindings/bash/powerline.sh
 
+# Turn off flow control commands (prevent Ctrl+s from "freezing" vim)
+stty -ixon
+
 # EOF
