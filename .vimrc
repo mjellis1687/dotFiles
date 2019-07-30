@@ -148,6 +148,8 @@ Plug 'powerline/powerline'
 Plug 'python-mode/python-mode', { 'for': 'python', 'branch': 'develop' }
 " Vim-LaTeX
 Plug 'vim-latex/vim-latex'
+" Python imports
+Plug 'mgedmin/python-imports.vim'
 
 
 " Tell vim-plug we finished declaring plugins, so it can load them
@@ -549,7 +551,31 @@ function! NERDTreeQuit()
 		quitall
 	endif
 endfunction
-autocmd WinEnter * call NERDTreeQuit()
+"autocmd WinEnter * call NERDTreeQuit()
+"
+function! CheckLeftBuffers()
+	if tabpagenr('$') == 1
+		let i = 1
+		while i <= winnr('$')
+			if getbufvar(winbufnr(i), '&buftype') == 'help' ||
+				\ getbufvar(winbufnr(i), '&buftype') == 'quickfix' ||
+				\ exists('t:NERDTreeBufName') &&
+				\   bufname(winbufnr(i)) == t:NERDTreeBufName ||
+				\ bufname(winbufnr(i)) == '__Tag_List__' ||
+				\ bufname(winbufnr(i)) == '[Location List]'
+				let i += 1
+			else
+				break
+			endif
+		endwhile
+		if i == winnr('$') + 1
+			qall
+		endif
+		unlet i
+	endif
+endfunction
+autocmd BufEnter * call CheckLeftBuffers()
+
 
 "function! SetupEnvironment()
 "	let l:path = expand( '%:p' )
