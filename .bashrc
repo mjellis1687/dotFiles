@@ -195,11 +195,6 @@ alias ls='ls -hF --color=tty'                 # classify files in colour
 # alias la='ls -A'                              # all but . and ..
 # alias l='ls -CF'                              #
 
-unameOut="$(uname -s)"
-case "${unameOut}" in
-	CYGWIN*)	alias python="cygstart /cygdrive/c/Program\ Files/Python36/python.exe"
-esac
-
 # FUNCTIONS
 
 # Reading man pages with vim
@@ -284,7 +279,7 @@ if [ -d /usr/local/lib/pkgconfig ]; then
 	export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/usr/local/lib/pkgconfig
 fi
 if [ -d /usr/local/python ]; then
-	export PYTHONPATH=$PYTHONPATH:/usr/local/python
+	export PYTHONPATH=$PYTHONPATH:/usr/local/python:/usr/local/python3
 fi
 
 powerline-daemon -q

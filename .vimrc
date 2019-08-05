@@ -43,7 +43,7 @@ call plug#begin('~/.vim/plugged')
 " Override configs by directory
 "Plug 'arielrossanigo/dir-configs-override.vim'
 " Better file browser
-"Plug 'scrooloose/nerdtree'
+Plug 'scrooloose/nerdtree'
 " Using tabs
 "Plug 'jistr/vim-nerdtree-tabs'
 " Code commenter
@@ -204,7 +204,8 @@ set tabstop=4					" Number of spaces that a <Tab> counts for
 set softtabstop=4
 set shiftwidth=4				" Number of spaces to use for each step of indent
 set smartindent					" Smart autoindenting when starting a new line
-set noexpandtab					" Do not expand a tab to spaces
+"set noexpandtab					" Do not expand a tab to spaces
+set expandtab					" expand tabs
 set autoindent					" copy indent from current line
 
 " Enable the mouse
@@ -486,14 +487,14 @@ let g:ycm_add_preview_to_completeopt = 1
 " PYTHON SUPPORT
 
 "python with virtualenv support
-py << EOF
-import os
-import sys
-if 'VIRTUAL_ENV' in os.environ:
-  project_base_dir = os.environ['VIRTUAL_ENV']
-  activate_this = os.path.join(project_base_dir, 'bin/activate_this.py')
-  execfile(activate_this, dict(__file__=activate_this))
-EOF
+"py << EOF
+"import os
+"import sys
+"if 'VIRTUAL_ENV' in os.environ:
+"  project_base_dir = os.environ['VIRTUAL_ENV']
+"  activate_this = os.path.join(project_base_dir, 'bin/activate_this.py')
+"  execfile(activate_this, dict(__file__=activate_this))
+"EOF
 
 " ==============================================================================
 " FUNCTIONS
