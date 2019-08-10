@@ -3,5 +3,4 @@ edit mode sync
 edit home .
 EDITOR('vim > /dev/tty 2>&1 < /dev/tty %s')
 
-% addpath('~/Numerics/IpoptSrcCode/build/lib')
 addpath('/usr/local/lib')
