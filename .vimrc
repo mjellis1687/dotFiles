@@ -148,6 +148,8 @@ Plug 'powerline/powerline'
 Plug 'python-mode/python-mode', { 'for': 'python', 'branch': 'develop' }
 " Vim-LaTeX
 Plug 'vim-latex/vim-latex'
+" Language-tool
+Plug 'rhysd/vim-grammarous'
 
 
 " Tell vim-plug we finished declaring plugins, so it can load them
