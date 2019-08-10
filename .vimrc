@@ -146,11 +146,12 @@ Plug 'ctrlpvim/ctrlp.vim'
 Plug 'powerline/powerline'
 " Python Mode
 Plug 'python-mode/python-mode', { 'for': 'python', 'branch': 'develop' }
+" Python imports
+Plug 'mgedmin/python-imports.vim'
 " Vim-LaTeX
 Plug 'vim-latex/vim-latex'
 " Language-tool
 Plug 'rhysd/vim-grammarous'
-
 
 " Tell vim-plug we finished declaring plugins, so it can load them
 call plug#end()
@@ -206,8 +207,7 @@ set tabstop=4					" Number of spaces that a <Tab> counts for
 set softtabstop=4
 set shiftwidth=4				" Number of spaces to use for each step of indent
 set smartindent					" Smart autoindenting when starting a new line
-"set noexpandtab					" Do not expand a tab to spaces
-set expandtab					" expand tabs
+set expandtab					" expand tabs (noexpandtab for not too)
 set autoindent					" copy indent from current line
 
 " Enable the mouse
@@ -552,7 +552,31 @@ function! NERDTreeQuit()
 		quitall
 	endif
 endfunction
-autocmd WinEnter * call NERDTreeQuit()
+"autocmd WinEnter * call NERDTreeQuit()
+"
+function! CheckLeftBuffers()
+	if tabpagenr('$') == 1
+		let i = 1
+		while i <= winnr('$')
+			if getbufvar(winbufnr(i), '&buftype') == 'help' ||
+				\ getbufvar(winbufnr(i), '&buftype') == 'quickfix' ||
+				\ exists('t:NERDTreeBufName') &&
+				\   bufname(winbufnr(i)) == t:NERDTreeBufName ||
+				\ bufname(winbufnr(i)) == '__Tag_List__' ||
+				\ bufname(winbufnr(i)) == '[Location List]'
+				let i += 1
+			else
+				break
+			endif
+		endwhile
+		if i == winnr('$') + 1
+			qall
+		endif
+		unlet i
+	endif
+endfunction
+autocmd BufEnter * call CheckLeftBuffers()
+
 
 "function! SetupEnvironment()
 "	let l:path = expand( '%:p' )

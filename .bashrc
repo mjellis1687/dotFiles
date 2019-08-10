@@ -281,6 +281,7 @@ fi
 if [ -d /usr/local/python ]; then
 	export PYTHONPATH=$PYTHONPATH:/usr/local/python:/usr/local/python3
 fi
+export PATH=$PATH:$HOME/bin
 
 powerline-daemon -q
 POWERLINE_BASH_CONTINUATION=1
