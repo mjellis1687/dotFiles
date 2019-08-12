@@ -195,11 +195,6 @@ alias ls='ls -hF --color=tty'                 # classify files in colour
 # alias la='ls -A'                              # all but . and ..
 # alias l='ls -CF'                              #
 
-unameOut="$(uname -s)"
-case "${unameOut}" in
-	CYGWIN*)	alias python="cygstart /cygdrive/c/Program\ Files/Python36/python.exe"
-esac
-
 # FUNCTIONS
 
 # Reading man pages with vim
@@ -284,7 +279,7 @@ if [ -d /usr/local/lib/pkgconfig ]; then
 	export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/usr/local/lib/pkgconfig
 fi
 if [ -d /usr/local/python ]; then
-	export PYTHONPATH=$PYTHONPATH:/usr/local/python
+	export PYTHONPATH=$PYTHONPATH:/usr/local/python:/usr/local/python3
 fi
 export PATH=$PATH:$HOME/bin
 
@@ -295,5 +290,9 @@ POWERLINE_BASH_SELECT=1
 
 # Turn off flow control commands (prevent Ctrl+s from "freezing" vim)
 stty -ixon
+
+# if [[ -z "$TMUX" ]] && [ "$SSH_CONNECTION" != "" ]; then
+# 	tmux attach-session -t ssh_tmux || tmux new-session -s ssh_tmux
+# fi
 
 # EOF
