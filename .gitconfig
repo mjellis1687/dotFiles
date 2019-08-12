@@ -1,0 +1,21 @@
+[user]
+	name=Matt Ellis
+	email=ellis.matt.j@gmail.com
+[core]
+	editor=vim
+	trustctime=false
+[diff]
+	tool=vimdiff
+	prompt=false
+[merge]
+	tool=vimdiff
+	conflictstyle=diff3
+[mergetool "vimdiff"]
+	tool=vimdiff
+	keepBackup=false
+[credential]
+	helper=!'/usr/share/doc/git/contrib/credential/gnome-keyring/git-credential-gnome-keyring'
+[alias]
+	d = diff
+	m = mergetool
+	list-conflicts = !git ls-files -u | cut -f 2 | sort -u
