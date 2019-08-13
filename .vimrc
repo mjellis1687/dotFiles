@@ -343,6 +343,12 @@ imap <C-s> <ESC>:w<CR>jj
 vnoremap < <gv
 vnoremap > >gv
 
+"" Copy and paste to system clipboard
+"noremap <Leader>y "*y
+"noremap <Leader>p "*p
+noremap <Leader>y "+y
+noremap <Leader>p "+p
+
 " ==============================================================================
 " BACK-UPS
 

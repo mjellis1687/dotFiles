@@ -195,6 +195,8 @@ alias ls='ls -hF --color=tty'                 # classify files in colour
 # alias la='ls -A'                              # all but . and ..
 # alias l='ls -CF'                              #
 
+alias ct="$HOME/bin/change_terminal.sh"
+
 # FUNCTIONS
 
 # Reading man pages with vim
@@ -295,4 +297,3 @@ stty -ixon
 # 	tmux attach-session -t ssh_tmux || tmux new-session -s ssh_tmux
 # fi
 
-# EOF
