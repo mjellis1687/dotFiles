@@ -1,6 +1,6 @@
 [user]
 	name=Matt Ellis
-	email=ellis.matt.j@gmail.com
+	email=mjellis@ucdavis.edu
 [core]
 	editor=vim
 	trustctime=false
@@ -14,7 +14,7 @@
 	tool=vimdiff
 	keepBackup=false
 [credential]
-	helper=!'/usr/share/doc/git/contrib/credential/gnome-keyring/git-credential-gnome-keyring'
+	helper = store
 [alias]
 	d = diff
 	m = mergetool
