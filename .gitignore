@@ -35,6 +35,7 @@
 .texlive
 !.vim/
 .vim/*
+!.vim/after/
 !.vim/plugin/
 .vim/plugin/*
 !.vim/plugin/bclose.vim
