@@ -339,15 +339,22 @@ imap <C-s> <ESC>:w<CR>jj
 " old autocomplete keyboard shortcut
 "imap <C-J> <C-X><C-O>
 
-" Easier moving of code blocks
-vnoremap < <gv
-vnoremap > >gv
-
 "" Copy and paste to system clipboard
 "noremap <Leader>y "*y
 "noremap <Leader>p "*p
 noremap <Leader>y "+y
 noremap <Leader>p "+p
+
+" Close location lists and quick fix windows
+nmap <Leader>c <c-w>z :windo lcl\|ccl<CR>
+
+" VISUAL MODE
+" Easier moving of code blocks
+vnoremap < <gv
+vnoremap > >gv
+
+" Exit visual mode
+vnoremap qq <esc>
 
 " ==============================================================================
 " BACK-UPS
