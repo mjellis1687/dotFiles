@@ -1,5 +1,9 @@
 # Command Cheat Sheet
 
+```
+pip list --outdated --format=freeze | grep -v '^\-e' | cut -d = -f 1  | xargs -n1 pip install -U
+```
+
 ## Git Commands
 
 ### Diffs and Checkouts
@@ -134,8 +138,8 @@ $ find . -type f -name ".<file_type>"
 ## tmux
 - Create a new tab: Ctrl + B, C
 - Move to next/previous tab: Ctrl + B, N/P
-- Move window: 
-	- Let window number 3 and window number 1 swap positions: 
+- Move window:
+	- Let window number 3 and window number 1 swap positions:
 	```swap-window -s 3 -t 1```
 	- Swap the current window with the top window, do:
 	```swap-window -t 0```
