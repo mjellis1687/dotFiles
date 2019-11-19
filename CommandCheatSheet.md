@@ -1,5 +1,51 @@
 # Command Cheat Sheet
 
+## Setup Updates and Configuration Note
+
+### tmux
+
+Currently, `.tmux.conf` is manually configured to find the location of `powerline` within Python installed packages. This means every time Python is upgraded one has to update the configuration.
+
+### Vim
+
+#### Vim Plugin Manager
+
+Currently, using the vim plug-in manager found [here](https://github.com/junegunn/vim-plug). For updating plug-ins, use the command:
+```
+:PlugUpdate
+```
+
+#### Set-up YouCompleteMe Server
+
+`YouCompleteMe` is a plug-in that helps with auto-complete.
+```bash
+$ cd ~/.vim/plugged/YouCompleteMe
+$ ./install.py --clang-completer
+```
+
+### AUR/User Built Packages
+
+#### Atlas-Lapack
+
+Steps for disabling the CPU-governor:
+1.  Edit `/etc/default/grub`:
+```
+GRUB_CMDLINE_LINUX_DEFAULT="intel_pstate=disable"
+```
+1. Update grub:
+```bash
+# grub-mkconfig -o /boot/grub/grub.cfg
+```
+1. Enable `apci-cpufreq` module:
+```
+# echo "apci-cpufreq" > /etc/modules-load.d/acpi-cpufreq.conf
+```
+1. Restart
+1. Set governor via `cpupower`:
+```bash
+# cpupower frequency-set -g performance
+```
+
 ## Git Commands
 
 ### Diffs and Checkouts
@@ -87,7 +133,7 @@ set path+=**
 ```bash
 set wildmenu
 ```
-- Create the tages file (may need to install ctags first)
+- Create the tags file (may need to install ctags first)
 ```bash
 command! MakeTags !ctags -R .
 ```
@@ -134,8 +180,8 @@ $ find . -type f -name ".<file_type>"
 ## tmux
 - Create a new tab: Ctrl + B, C
 - Move to next/previous tab: Ctrl + B, N/P
-- Move window: 
-	- Let window number 3 and window number 1 swap positions: 
+- Move window:
+	- Let window number 3 and window number 1 swap positions:
 	```swap-window -s 3 -t 1```
 	- Swap the current window with the top window, do:
 	```swap-window -t 0```
