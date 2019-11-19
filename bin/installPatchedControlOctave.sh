@@ -32,15 +32,13 @@ hg update -r $version -C
 
 # This is the patch applied to slicot
 echo "Patching SLICOT for LAPACK ..."
-# tar zxvf .tmp/control.tar.gz
-# cd control/src
 cd src
-# tar zxvf slicot.tar.gz
-# sed -i'.orig' 's/DGEGS/DGGES/g' slicot/src/SG03AD.f slicot/src/SG03BD.f
-# sed -i'.orig' 's/DLATZM/DORMRZ/g' slicot/src/AB08NX.f slicot/src/AG08BY.f slicot/src/SB01BY.f slicot/src/SB01FY.f
+tar zxf slicot.tar.gz
+sed -i'.orig' 's/DGEGS/DGGES/g' slicot/src/SG03AD.f slicot/src/SG03BD.f
+sed -i'.orig' 's/DLATZM/DORMRZ/g' slicot/src/AB08NX.f slicot/src/AG08BY.f slicot/src/SB01BY.f slicot/src/SB01FY.f
 sed -i'.orig' '/tar -xzf slicot.tar.gz/d' Makefile
-# mv slicot.tar.gz slicot.tar.gz.orig
-# tar -czvf slicot.tar.gz slicot
+mv slicot.tar.gz slicot.tar.gz.orig
+tar -czf slicot.tar.gz slicot
 cd ..
 
 mkdir -p target/$version
