@@ -46,6 +46,10 @@ GRUB_CMDLINE_LINUX_DEFAULT="intel_pstate=disable"
 # cpupower frequency-set -g performance
 ```
 
+```
+pip list --outdated --format=freeze | grep -v '^\-e' | cut -d = -f 1  | xargs -n1 pip install -U
+```
+
 ## Git Commands
 
 ### Diffs and Checkouts

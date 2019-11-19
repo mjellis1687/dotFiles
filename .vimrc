@@ -153,6 +153,9 @@ Plug 'vim-latex/vim-latex'
 " Language-tool
 Plug 'rhysd/vim-grammarous'
 
+" Matlab
+Plug 'ebranlard/vim-matlab-behave'
+
 " Tell vim-plug we finished declaring plugins, so it can load them
 call plug#end()
 
@@ -207,8 +210,11 @@ set tabstop=4					" Number of spaces that a <Tab> counts for
 set softtabstop=4
 set shiftwidth=4				" Number of spaces to use for each step of indent
 set smartindent					" Smart autoindenting when starting a new line
-set expandtab					" expand tabs (noexpandtab for not too)
+set noexpandtab					" Do no expand tabs
 set autoindent					" copy indent from current line
+
+" Expand tabs for Python
+autocmd FileType py setlocal expandtab
 
 " Enable the mouse
 if has('mouse')
@@ -381,6 +387,13 @@ endif
 " ==============================================================================
 " PLUG-INS
 
+" Grammarous -----------------------------
+
+let g:grammarous#move_to_first_error = 0
+let g:grammarous#show_first_error = 1
+nmap <Leader>g <Plug>(grammarous-open-info-window)
+
+
 " Nerdtree ------------------------------
 
 " Automatically open NerdList on vim open and move cursor to first buffer
@@ -456,6 +469,7 @@ endif
 let g:Tex_MultipleCompileFormats='pdf,bibtex,pdf'
 
 "autocmd BufEnter *.tex filetype plugin on|set shellslash| set grepprg=grep\ -nH\ $*|filetype indent on|let g:tex_flavor='latex'|set iskeyword+=:
+let g:Tex_IgnoreLevel=0
 
 " Jedi-vim ------------------------------
 
@@ -510,6 +524,13 @@ let g:ycm_add_preview_to_completeopt = 1
 "  activate_this = os.path.join(project_base_dir, 'bin/activate_this.py')
 "  execfile(activate_this, dict(__file__=activate_this))
 "EOF
+
+" ==============================================================================
+" MATLAB SUPPORT
+
+source $VIMRUNTIME/macros/matchit.vim
+autocmd BufEnter *.m    compiler mlint
+
 
 " ==============================================================================
 " FUNCTIONS
