@@ -218,14 +218,13 @@ $ .install.py --clang-completer
 
 ## Casadi Installation
 
-- Could not get Casadi to build and install properly. `pip` installs everything directly into: `/usr/lib/python3.7/site-packages/casadi`
+- Could not get Casadi to build and install properly. `pip` installs everything directly into: `/usr/lib/python3.8/site-packages/casadi`
 - Swig 4 does not build Casadi properly, so need to manually point the build to use Swig 3.
 - Flags used during installation:
 ```console
 $ cmake -DWITH_PYTHON=ON -DWITH_PYTHON3=ON -DWITH_IPOPT=ON -DWITH_LAPACK=ON \
-    -DCMAKE_PREFIX:PATH=/usr/lib/python3.7/site-packages/casadi/cmake \
-    -DCMAKE_INSTALL_PREFIX:PATH=/usr/lib/python3.7/site-packages/casadi \
-    -DLIB_PREFIX:PATH='' \
+    -DCMAKE_PREFIX:PATH=/usr/lib/python3.8/site-packages/casadi/cmake \
+    -DCMAKE_INSTALL_PREFIX:PATH=/usr/lib/python3.8/site-packages/casadi \
     -DSWIG_DIR=/usr/share/swig/3.0.12 \
     -DSWIG_EXECUTABLE:FILEPATH=/usr/bin/swig-3 ..
 ```
@@ -234,6 +233,16 @@ $ cmake -DWITH_PYTHON=ON -DWITH_PYTHON3=ON -DWITH_IPOPT=ON -DWITH_LAPACK=ON \
 $ cat install_manifest.txt | sudo xargs rm -fv
 $ cat install_manifest.txt | xargs -L1 dirname | sudo xargs rmdir -p
 ```
+- For installing Casadi within a `virtualenv`, use the following:
+```console
+$ cmake -DWITH_PYTHON=ON -DWITH_PYTHON3=ON -DWITH_IPOPT=ON -DWITH_LAPACK=ON -DWITH_CPLEX=ON -DWITH_QPOASES=ON \
+    -DCPLEX_ROOT_DIR=/opt/ibm/ILOG/CPLEX_Studio129 \
+    -DCMAKE_PREFIX:PATH=${HOME}/Desktop/Repositories/python-optimal-control/venv/lib/python3.7/site-packages/casadi/cmake \
+    -DCMAKE_INSTALL_PREFIX:PATH=${HOME}/Desktop/Repositories/python-optimal-control/venv/lib/python3.7/site-packages/casadi \
+    -DSWIG_DIR=/usr/share/swig/3.0.12 \
+    -DSWIG_EXECUTABLE:FILEPATH=/usr/bin/swig-3 ..
+```
+- Note that this put all libraries in `venv/lib/python3.7/site-packages/casadi/lib`. For it to work properly, need it put in `casadi`. While there is probably an option to install these files into `casadi` instead of `casadi\lib`, I just copied the files into the root directory to fix it. It turns out need to delete the option `-DLIB_PREFIX:PATH=''`.
 
 ## Gitlab Setup
 

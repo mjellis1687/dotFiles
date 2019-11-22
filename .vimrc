@@ -42,10 +42,6 @@ call plug#begin('~/.vim/plugged')
 
 " Override configs by directory
 "Plug 'arielrossanigo/dir-configs-override.vim'
-" Better file browser
-Plug 'scrooloose/nerdtree'
-" Using tabs
-"Plug 'jistr/vim-nerdtree-tabs'
 " Code commenter
 "Plug 'scrooloose/nerdcommenter'
 " Class/module browser
@@ -112,11 +108,6 @@ Plug 'scrooloose/nerdtree'
 " Python plug-ins
 " Indenting to conform to PEP8
 "Plug 'vim-scripts/indentpython.vim'
-" Autocomplete
-Plug 'Valloric/YouCompleteMe'
-" Powerline
-"Plug 'Lokaltog/powerline', {'rtp': 'powerline/bindings/vim/'}
-
 
 " Plugins from vim-scripts repos:
 
@@ -133,19 +124,22 @@ Plug 'Valloric/YouCompleteMe'
 
 " Python autocompletion, go to definition.
 "Plug 'davidhalter/jedi-vim'
-"Plug 'Valloric/YouCompleteMe'
+" Autocomplete
+Plug 'Valloric/YouCompleteMe'
 " PEP8 checking
-"Plug 'nvie/vim-flake8'
+Plug 'nvie/vim-flake8'
 " Better file browser
-"Plug 'scrooloose/nerdtree'
+Plug 'scrooloose/nerdtree'
 " Using tabs
 Plug 'jistr/vim-nerdtree-tabs'
 " Full path fuzzy file, buffer, mru, tag, ... finder for Vim
 Plug 'ctrlpvim/ctrlp.vim'
 " Powerline
 Plug 'powerline/powerline'
-" Python Mode
-Plug 'python-mode/python-mode', { 'for': 'python', 'branch': 'develop' }
+" Python Mode - not supported in Python3.8
+" Plug 'python-mode/python-mode', { 'for': 'python', 'branch': 'develop' }
+" Syntax checker
+Plug 'vim-syntastic/syntastic'
 " Python imports
 Plug 'mgedmin/python-imports.vim'
 " Vim-LaTeX
@@ -410,15 +404,27 @@ nmap <Leader>g <Plug>(grammarous-open-info-window)
 let g:powerline_pycmd='py3'
 set laststatus=2
 
+" Syntastic ------------------------------
+
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+
 " Python-mode ------------------------------
 
 " Map sort function to a key
 vnoremap <Leader>s :sort<CR>
 
 " Code folding
-let g:pymode_folding = 0
-let g:pymode_rope_complete_on_dot = 0
-let g:pymode_python = 'python3'
+" let g:pymode_folding = 0
+" let g:pymode_rope_complete_on_dot = 0
+" let g:pymode_python = 'python3'
+" let g:pymode_virtualenv = 1
 " map <Leader>g :call RopeGotoDefinition()<CR>
 " let ropevim_enable_shortcuts = 1
 " let g:pymode_rope_goto_def_newwin = vnew
