@@ -6,6 +6,13 @@
 
 Currently, `.tmux.conf` is manually configured to find the location of `powerline` within Python installed packages. This means every time Python is upgraded one has to update the configuration.
 
+### Octave
+
+Update all packages:
+```
+pkg update
+```
+
 ### Vim
 
 #### Vim Plugin Manager
