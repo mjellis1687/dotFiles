@@ -251,3 +251,91 @@ $ cmake -DWITH_PYTHON=ON -DWITH_PYTHON3=ON -DWITH_IPOPT=ON -DWITH_LAPACK=ON -DWI
 # dpkg --force-unsafe-io --install gitlab-ce_12.1.4-ce.0_amd64.deb
 ```
 
+## Controls Server
+
+### Base Machine
+
+- I was going to install VirtualBox via the Oracle PPA (see "Manual Install") as I was assuming that I would not need to install extra things (e.g., X11). However, the PPA version also tried to install X11, so I decided to just install VirtualBox from the main repo.
+- Get the Ubuntu server iso:
+```bash
+$ wget -q http://releases.ubuntu.com/20.04/ubuntu-20.04-live-server-amd.iso
+```
+- Drive Partition
+	- 3 TB hard drive
+		- 512 MB: EFI
+		- 250 GB: Base partition
+	- 512 GB NVMe SSD drive
+		- 250 GB: Gitlab server
+		- 16 GB: Swap
+- Create NVMe partiion
+```bash
+$ sudo fdisk /dev/nvme0n1
+```
+	- Create GPT disklabel: `g`
+	- Create partition: `n`
+	- Create partition: `n` (for swap)
+- Create filesystem
+```bash
+$ sudo mkfs.ext4 /dev/nvme0n1p1
+$ sudo mkswap /dev/nvme0n1p2
+$ sudo swapon /dev/nvme0n1p2
+```
+- Mount
+```bash
+$ mkdir /home/controls/GitLabServer
+$ sudo mount /dev/nvme0n1p1 /home/controls/GitLabServer
+```
+
+#### VirtualBox - Manual Install
+
+- Installed it as headless
+- Necessary packages:
+```bash
+$ sudo apt install build-essential dkms unzip wget
+```
+- Make sure the two repositories are added:
+```bash
+$ sudo add-apt-repository universe
+$ sudo add-apt-repository multiverse
+```
+- Add a source to the source list:
+```bash
+$ sudo vim /etc/apt/sources.list
+```
+with
+```bash
+deb http://download.virtualbox.org/virtualbox/debian focal contrib
+```
+- Add the Oracle public key:
+```bash
+$ wget -q https://www.virtualbox.org/download/oracle_vbox_2016.asc -O- | sudo apt-key add -
+```
+
+#### GitLab Server Setup
+
+- Create the VM
+```bash
+VBoxManage createvm --name GitLabServer --ostype Ubuntu_64 --register --basefolder `pwd`
+```
+- Set memory and network
+```bash
+VBoxManage modifyvm GitLabServer --memory 16384 --vram 128
+VBoxManage modifyvm GitLabServer --ioapic on
+VBoxManage modifyvm GitLabServer --nic1 nat
+```
+- Create the disk and connect the CD ISO
+```bash
+VBoxManage createhd --filename `pwd`/GitLabServer/GitLabServer_Disk.vdi --size 250000 --format VDI
+VBoxManage storagectl GitLabServer --name "SATA Controller" --add sata --controller IntelAhci
+VBoxManage storageattach GitLabServer --storagectl "SATA Controller" --port 0 --device 0 --type hdd --medium  `pwd`/GitLabServer/GitLabServer_Disk.vdi
+VBoxManage storagectl GitLabServer --name "IDE Controller" --add ide --controller PIIX4
+VBoxManage storageattach GitLabServer --storagectl "IDE Controller" --port 1 --device 0 --type dvddrive --medium ~/ubuntu-20.04-live-server-amd64.iso
+VBoxManage modifyvm GitLabServer --boot1 dvd --boot2 disk --boot3 none --boot4 none
+```
+- Set RDP access and start the VM
+```bash
+VBoxManage modifyvm GitLabServer --vrde on
+VBoxManage modifyvm GitLabServer --vrdemulticon on --vrdeport 10001
+VBoxHeadless --startvm GitLabServer
+VBoxManage modifyvm GitLabServer --vrdeproperty VNCPassword=secret
+```
