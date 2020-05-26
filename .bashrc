@@ -297,3 +297,10 @@ stty -ixon
 # 	tmux attach-session -t ssh_tmux || tmux new-session -s ssh_tmux
 # fi
 
+# Get a bibtex citation from a DOI
+doi2bib()
+{
+		echo >> bib.bib;
+		curl -s "https://api.crossref.org/works/$1/transform/application/x-bibtex" >> bib.bib;
+		echo >> bib.bib;
+}

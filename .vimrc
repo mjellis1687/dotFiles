@@ -406,9 +406,9 @@ set laststatus=2
 
 " Syntastic ------------------------------
 
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
+" set statusline+=%#warningmsg#
+" set statusline+=%{SyntasticStatuslineFlag()}
+" set statusline+=%*
 
 let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
@@ -514,7 +514,7 @@ let g:Tex_IgnoreLevel=0
 "set completeopt-=preview
 
 let g:ycm_confirm_extra_conf = 0
-let g:ycm_autoclose_preview_window_after_completion = 0
+let g:ycm_autoclose_preview_window_after_completion = 1
 let g:ycm_add_preview_to_completeopt = 1
 "let g:ycm_global_ycm_extra_conf = '~/.vim/.ycm_extra_conf.py'
 
@@ -536,7 +536,6 @@ let g:ycm_add_preview_to_completeopt = 1
 
 source $VIMRUNTIME/macros/matchit.vim
 autocmd BufEnter *.m    compiler mlint
-
 
 " ==============================================================================
 " FUNCTIONS
@@ -594,29 +593,28 @@ function! NERDTreeQuit()
 endfunction
 "autocmd WinEnter * call NERDTreeQuit()
 "
-function! CheckLeftBuffers()
-	if tabpagenr('$') == 1
-		let i = 1
-		while i <= winnr('$')
-			if getbufvar(winbufnr(i), '&buftype') == 'help' ||
-				\ getbufvar(winbufnr(i), '&buftype') == 'quickfix' ||
-				\ exists('t:NERDTreeBufName') &&
-				\   bufname(winbufnr(i)) == t:NERDTreeBufName ||
-				\ bufname(winbufnr(i)) == '__Tag_List__' ||
-				\ bufname(winbufnr(i)) == '[Location List]'
-				let i += 1
-			else
-				break
-			endif
-		endwhile
-		if i == winnr('$') + 1
-			qall
-		endif
-		unlet i
-	endif
-endfunction
-autocmd BufEnter * call CheckLeftBuffers()
-
+" function! CheckLeftBuffers()
+" 	if tabpagenr('$') == 1
+" 		let i = 1
+" 		while i <= winnr('$')
+" 			if getbufvar(winbufnr(i), '&buftype') == 'help' ||
+" 				\ getbufvar(winbufnr(i), '&buftype') == 'quickfix' ||
+" 				\ exists('t:NERDTreeBufName') &&
+" 				\   bufname(winbufnr(i)) == t:NERDTreeBufName ||
+" 				\ bufname(winbufnr(i)) == '__Tag_List__' ||
+" 				\ bufname(winbufnr(i)) == '[Location List]'
+" 				let i += 1
+" 			else
+" 				break
+" 			endif
+" 		endwhile
+" 		if i == winnr('$') + 1
+" 			qall
+" 		endif
+" 		unlet i
+" 	endif
+" endfunction
+" autocmd BufEnter * call CheckLeftBuffers()
 
 "function! SetupEnvironment()
 "	let l:path = expand( '%:p' )
