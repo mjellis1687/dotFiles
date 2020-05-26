@@ -6,6 +6,13 @@
 
 Currently, `.tmux.conf` is manually configured to find the location of `powerline` within Python installed packages. This means every time Python is upgraded one has to update the configuration.
 
+### Octave
+
+Update all packages:
+```
+pkg update
+```
+
 ### Vim
 
 #### Vim Plugin Manager
@@ -22,6 +29,10 @@ Currently, using the vim plug-in manager found [here](https://github.com/junegun
 $ cd ~/.vim/plugged/YouCompleteMe
 $ ./install.py --clang-completer
 ```
+
+### Python
+
+- `matplotlib` requires `gobject` to show figures on screen.
 
 ### AUR/User Built Packages
 
