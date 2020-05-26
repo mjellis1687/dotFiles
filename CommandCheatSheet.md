@@ -30,6 +30,10 @@ $ cd ~/.vim/plugged/YouCompleteMe
 $ ./install.py --clang-completer
 ```
 
+### Python
+
+- `matplotlib` requires `gobject` to show figures on screen.
+
 ### AUR/User Built Packages
 
 #### Atlas-Lapack
