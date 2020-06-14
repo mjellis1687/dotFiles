@@ -4,6 +4,8 @@
 [core]
 	editor=vim
 	trustctime=false
+[pull]
+	rebase=false  # merge (the default strategy)
 [diff]
 	tool=vimdiff
 	prompt=false

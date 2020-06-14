@@ -187,16 +187,22 @@ export GDK_BACKEND=x11
 exec gnome-session
 ```
 - Enable (and start) GDM
-```console
+```bash
 $ sudo systemctl enable gdm
 $ sudo systemctl start gdm
 ```
 - For `Files` (`nautilus`) to add a `Empty Document` entry in the `New Document` of the right click menu, create an empty text file in `$HOME/Templates` called `Empty Document`
 - Setting the default terminal in Gnome. Actually, the below command has been depreciated and thus, does nothing.
-```console
+```bash
 $ gsettings set org.gnome.desktop.default-applications.terminal exec urxvt
 $ gsettings set org.gnome.desktop.default-applications.terminal exec-arg ''
 ```
+- Keyboard shortcut for moving a window to the workspace to the right/left (assuming horizontal workspaces):
+```bash
+$ gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-right "['<Control><Shift>Right']"
+$ gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-left "['<Control><Shift>Left']"
+```
+
 
 ## Dot files:
 
@@ -260,12 +266,22 @@ $ cmake -DWITH_PYTHON=ON -DWITH_PYTHON3=ON -DWITH_IPOPT=ON -DWITH_LAPACK=ON -DWI
 ```bash
 $ wget -q http://releases.ubuntu.com/20.04/ubuntu-20.04-live-server-amd.iso
 ```
+- hostname: ech-controls
 - Drive Partition
+	- 3 TB hard drive
+		- 512 MB: EFI
+		- 250 GB: Base partition (cannot boot the machine via NVMe SSD drive)
+	- 512 GB NVMe SSD drive
+		- 250 GB: Gitlab server
+		- 16 GB: Swap
+- Drive Partition (future plan)
 	- 3 TB hard drive
 		- 512 MB: EFI
 		- 250 GB: Base partition
 	- 512 GB NVMe SSD drive
 		- 250 GB: Gitlab server
+		- 80 GB: NextCloud (use harddrive for storage)
+		- 80 GB: Website
 		- 16 GB: Swap
 - Create NVMe partiion
 ```bash
@@ -322,6 +338,7 @@ VBoxManage createvm --name GitLabServer --ostype Ubuntu_64 --register --basefold
 VBoxManage modifyvm GitLabServer --memory 16384 --vram 128
 VBoxManage modifyvm GitLabServer --ioapic on
 VBoxManage modifyvm GitLabServer --nic1 nat
+VBoxManage modifyvm GitLabServer --nic1 bridged --bridgeadapter1 eno1
 ```
 - Create the disk and connect the CD ISO
 ```bash
@@ -336,6 +353,15 @@ VBoxManage modifyvm GitLabServer --boot1 dvd --boot2 disk --boot3 none --boot4 n
 ```bash
 VBoxManage modifyvm GitLabServer --vrde on
 VBoxManage modifyvm GitLabServer --vrdemulticon on --vrdeport 10001
-VBoxHeadless --startvm GitLabServer
 VBoxManage modifyvm GitLabServer --vrdeproperty VNCPassword=secret
+VBoxHeadless --startvm GitLabServer &
 ```
+- Turn off VM
+```bash
+VBoxManage controlvm GitLabServer poweroff
+```
+- Showing VM info
+```bash
+VBoxManage showvminfo GitLabServer
+```
+- [Setup and configure Postfix as a Send-Only SMTP](https://computingforgeeks.com/how-to-install-and-configure-postfix-as-a-send-only-smtp-server-on-ubuntu/)
