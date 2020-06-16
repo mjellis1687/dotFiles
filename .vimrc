@@ -146,9 +146,11 @@ Plug 'mgedmin/python-imports.vim'
 Plug 'vim-latex/vim-latex'
 " Language-tool
 Plug 'rhysd/vim-grammarous'
-
 " Matlab
 Plug 'ebranlard/vim-matlab-behave'
+" Vim-Pandoc
+Plug 'vim-pandoc/vim-pandoc'
+Plug 'vim-pandoc/vim-pandoc-syntax'
 
 " Tell vim-plug we finished declaring plugins, so it can load them
 call plug#end()
@@ -518,6 +520,9 @@ let g:ycm_autoclose_preview_window_after_completion = 1
 let g:ycm_add_preview_to_completeopt = 1
 "let g:ycm_global_ycm_extra_conf = '~/.vim/.ycm_extra_conf.py'
 
+" Vim-pandoc ------------------------------
+let g:pandoc#folding#level = 8
+
 " ==============================================================================
 " PYTHON SUPPORT
 
@@ -534,6 +539,7 @@ let g:ycm_add_preview_to_completeopt = 1
 " ==============================================================================
 " MATLAB SUPPORT
 
+" TODO: is this on git or can it be managed by the plug-in manager?
 source $VIMRUNTIME/macros/matchit.vim
 autocmd BufEnter *.m    compiler mlint
 

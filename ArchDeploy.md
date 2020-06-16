@@ -203,7 +203,6 @@ $ gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-right "['<Con
 $ gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-left "['<Control><Shift>Left']"
 ```
 
-
 ## Dot files:
 
 ```console
@@ -215,7 +214,7 @@ $ config checkout
 
 ## Vim Configuration
 
-- Most of it is done automatically
+- Most of it is done automatically using `PlugInstall` and `PlugUpdate`
 - YouCompleteMe server needs to be installed:
 ```console
 $ cd .vim/plugged/YouCompleteMe
