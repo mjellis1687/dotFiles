@@ -12,3 +12,5 @@ The fonts do not work, so use the git repo.
 
 - `qq' command in visual mode
 - Close Python warning window
+- Merge `ArchDeploy.md` and `CommandCheatSheet.md` (perhaps, into `README.md`?)
+- Clean-up of `.vimrc`

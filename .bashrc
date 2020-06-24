@@ -96,4 +96,4 @@ stty -ixon
 # fi
 
 # Open tmux by default
-# [[ $TERM != "screen" ]] && exec tmux
+[[ $TERM != "screen" ]] && exec tmux
