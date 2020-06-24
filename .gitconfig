@@ -1,0 +1,23 @@
+[user]
+	name=Matt Ellis
+	email=mjellis@ucdavis.edu
+[core]
+	editor=vim
+	trustctime=false
+[pull]
+	rebase=false  # merge (the default strategy)
+[diff]
+	tool=vimdiff
+	prompt=false
+[merge]
+	tool=vimdiff
+	conflictstyle=diff3
+[mergetool "vimdiff"]
+	tool=vimdiff
+	keepBackup=false
+[credential]
+	helper = store
+[alias]
+	d = diff
+	m = mergetool
+	list-conflicts = !git ls-files -u | cut -f 2 | sort -u
