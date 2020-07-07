@@ -1,0 +1,46 @@
+#!/bin/sh
+#
+# Get all source files by reading each file in directly and pulling files
+# with !build ... !end-build delimitors somewhere in the file
+
+usage() {
+	# Print usage
+	echo "Get all source files by reading each file in directory and returning"
+	echo "a list of files containing !build...!end-build delimitors somewhere"
+	echo "in the file"
+	echo
+	echo "Syntax: getallsrc [-h|-d directory]"
+	echo
+	echo "options:"
+	echo "h		Print this help"
+	echo "d		Directory to read (default is current directory"
+}
+
+DIR=.
+
+while [[ $# -gt 0 ]]
+do
+	key="$1"
+	case $key in
+		-d|--directory)			DIR="$2"
+								[[ -z "$DIR" ]] && echo "Must supply a directory" && usage && exit
+								shift
+								shift;;
+		-h|--help)				usage
+								exit ;;
+		*)						echo "Error: Unknown parameter given"
+								usage
+								exit
+	esac
+done
+
+SRC=
+ME=`basename "$0"`
+FILES=`find "$DIR" -maxdepth 1 -type f \( ! -iname "$ME" \) -exec grep -Iq . {} \; -print`
+while read file
+do
+	block=`./getblock -b "!build" -e "!end-build" "$file"`
+	[ ! -z  "$block" ] && SRC+="$file "
+done <<< "$FILES"
+
+echo "$SRC"

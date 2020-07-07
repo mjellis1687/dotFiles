@@ -1,0 +1,85 @@
+#!/bin/bash
+
+####  Constants
+
+# A POSIX variable
+OPTIND=1		# Reset in case getopts has been used previously in the shell.
+
+#### Variables
+
+BEGIN="<!--"
+END="-->"
+MULTILINE=true
+
+#### Functions
+
+usage()
+{
+	# Print usage
+	echo "Get text between two delimitors."
+	echo
+	echo "Syntax: getblock [[-b start_delim] [-e end_delim] [ -m (true|false) file1 [file2 ...] | [-h]]"
+	echo
+	echo "parameters"
+	echo "file1	File to search"
+	echo
+	echo "options:"
+	echo "b		Beginning delimitor"
+	echo "e		Ending delimitor"
+	echo "m		Look for multiline text blocks"
+	echo "h		Print this help"
+}
+
+#### Main
+
+while getopts "b:e:m:h" opt; do
+	case "$opt" in
+		h)
+			usage
+			exit 0
+			;;
+		b)	BEGIN="$OPTARG"
+			;;
+		e)	END="$OPTARG"
+			;;
+		m)	MULTILINE="$OPTARG"
+			;;
+		*)
+			usage
+			exit 1
+	esac
+done
+
+shift $((OPTIND-1))
+[ "${1:-}" = "--" ] && shift
+files=$@
+if [ -z "$files" ]
+then
+	echo 'Must specify file names'
+	usage
+	exit 1
+fi
+
+# Create sed command and execute sed
+SED_CMD='/'"$BEGIN"'.*'"$END"'/ {
+	s/'"$BEGIN"'[ \t]*\(.*\)'"$END"'/\1/ ; s/ *$//p
+	d
+}'
+if [ "$MULTILINE" == true ]
+then
+	SED_CMD+='
+	/'"$BEGIN"'/ {
+		# Label the flow sequence
+		: next
+		# Add a newline to the pattern space, append next line of input
+		N
+		# If $END - process
+		/'"$END"'/ {
+			s/^[^\n]*'"$BEGIN"'[ \t\n]*\(.*\)'"$END"'[^\n]*/\1/; s/[\n]*$//p
+			d
+		}
+		# If not end of file, go back to next
+		$! b next
+	}'
+fi
+sed -n "${SED_CMD}" "$files"
