@@ -59,8 +59,8 @@ HISTCONTROL=ignoreboth
 shopt -s histappend
 
 # for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
-HISTSIZE=1000
-HISTFILESIZE=2000
+HISTSIZE=100000
+HISTFILESIZE=200000
 
 # ALIAS
 
@@ -97,3 +97,6 @@ stty -ixon
 
 # Open tmux by default
 [[ $TERM != "screen" ]] && exec tmux
+
+# Bash completion for pandoc
+eval "$(pandoc --bash-completion)"

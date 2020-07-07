@@ -4,11 +4,6 @@
 "    DATE:	2019-07-02
 " ==============================================================================
 
-" Plug in part from:
-" Fisa-vim-config
-" http://fisadev.github.io/fisa-vim-config/
-" version: 8.3.1
-
 " ==============================================================================
 " VIM-PLUG INITIALIZATION
 " Avoid modify this section, unless you are very sure of what you are doing
@@ -39,91 +34,6 @@ endif
 call plug#begin('~/.vim/plugged')
 
 " Plugins from github repos:
-
-" Override configs by directory
-"Plug 'arielrossanigo/dir-configs-override.vim'
-" Code commenter
-"Plug 'scrooloose/nerdcommenter'
-" Class/module browser
-"Plug 'majutsushi/tagbar'
-" Code and files fuzzy finder
-"Plug 'ctrlpvim/ctrlp.vim'
-" Extension to ctrlp, for fuzzy command finder
-"Plug 'fisadev/vim-ctrlp-cmdpalette'
-" Zen coding
-"Plug 'mattn/emmet-vim'
-" Git integration
-"Plug 'motemen/git-vim'
-" Tab list panel
-"Plug 'kien/tabman.vim'
-" Airline
-"Plug 'vim-airline/vim-airline'
-"Plug 'vim-airline/vim-airline-themes'
-" Terminal Vim with 256 colors colorscheme
-"Plug 'fisadev/fisa-vim-colorscheme'
-" Consoles as buffers
-"Plug 'rosenfeld/conque-term'
-" Pending tasks list
-"Plug 'fisadev/FixedTaskList.vim'
-" Surround
-"Plug 'tpope/vim-surround'
-" Autoclose
-"Plug 'Townk/vim-autoclose'
-" Indent text object
-"Plug 'michaeljsmith/vim-indent-object'
-" Indentation based movements
-"Plug 'jeetsukumaran/vim-indentwise'
-" Better autocompletion
-"Plug 'Shougo/neocomplcache.vim'
-" Snippets manager (SnipMate), dependencies, and snippets repo
-"Plug 'MarcWeber/vim-addon-mw-utils'
-"Plug 'tomtom/tlib_vim'
-"Plug 'honza/vim-snippets'
-"Plug 'garbas/vim-snipmate'
-" Git/mercurial/others diff icons on the side of the file lines
-"Plug 'mhinz/vim-signify'
-" Automatically sort python imports
-"Plug 'fisadev/vim-isort'
-" Drag visual blocks arround
-"Plug 'fisadev/dragvisuals.vim'
-" Window chooser
-"Plug 't9md/vim-choosewin'
-" Python and other languages code checker
-"Plug 'scrooloose/syntastic'
-" Paint css colors with the real color
-"Plug 'lilydjwg/colorizer'
-" Ack code search (requires ack installed in the system)
-"Plug 'mileszs/ack.vim'
-"if has('python')
-    " YAPF formatter for Python
-    "Plug 'pignacio/vim-yapf-format'
-"endif
-" Relative numbering of lines (0 is the current line)
-" (disabled by default because is very intrusive and can't be easily toggled
-" on/off. When the plugin is present, will always activate the relative
-" numbering every time you go to normal mode. Author refuses to add a setting
-" to avoid that)
-" Plug 'myusuf3/numbers.vim'
-
-" Python plug-ins
-" Indenting to conform to PEP8
-"Plug 'vim-scripts/indentpython.vim'
-
-" Plugins from vim-scripts repos:
-
-" Search results counter
-"Plug 'vim-scripts/IndexedSearch'
-" XML/HTML tags navigation
-"Plug 'vim-scripts/matchit.zip'
-" Gvim colorscheme
-"Plug 'vim-scripts/Wombat'
-" Yank history navigation
-"Plug 'vim-scripts/YankRing.vim'
-
-" For (Python) development:
-
-" Python autocompletion, go to definition.
-"Plug 'davidhalter/jedi-vim'
 " Autocomplete
 Plug 'Valloric/YouCompleteMe'
 " PEP8 checking
@@ -244,23 +154,11 @@ set wildmode=list:longest:full,full
 " Paste Toggle
 set pastetoggle=<F2>
 
-" Code folding
-"set foldmethod=indent
-"
-" Keep all folds open when a file is opened
-" augroup OpenAllFoldsOnFileOpen
-"	autocmd!
-"	autocmd BufRead * normal zR
-" augroup END
-
 " ==============================================================================
 " COLORS
 
 " Color scheme
-" mkdir -p ~/.vim/colors && cd ~/.vim/colors
-" wget -O wombat256mod.vim http://www.vim.org/scripts/download_script.php?src_id=13400
 set t_Co=256
-"colorscheme darkblue
 color wombat256mod
 
 " Highlight end of column
@@ -271,11 +169,6 @@ highlight ColorColumn ctermbg=darkgray
 if &diff
 	colorscheme evening
 endif
-
-"if has('unix')
-"	highlight Normal ctermbg=none
-"	highlight NonText ctermbg=none
-"endif
 
 " ==============================================================================
 " COMMANDS
@@ -293,23 +186,15 @@ au BufRead,BufNewFile *.py,*.pyw,*.c,*.h match BadWhitespace /\s\+$/
 " Gets rid of extra space
 autocmd BufWritePre * %s/\s\+$//e
 
-" Tab length exceptions on some file types
-"autocmd FileType html setlocal shiftwidth=4 tabstop=4 softtabstop=4
-"autocmd FileType htmldjango setlocal shiftwidth=4 tabstop=4 softtabstop=4
-"autocmd FileType javascript setlocal shiftwidth=4 tabstop=4 softtabstop=4
-
 " ==============================================================================
 " KEY MAPPINGS
 
 " Remap esc
 imap qq <Esc>
 
-" Remap for closing buffers
-"nnoremap <leader>q :bp<cr>:bd #<cr>
-
 "" Remap keys for buffer switching
-"map <F2> :bprevious<CR>
-"map <F3> :bnext<CR>
+map <F2> :bprevious<CR>
+map <F3> :bnext<CR>
 
 " Tab navigation mappings
 map tn :tabn<CR>
@@ -322,28 +207,14 @@ imap <C-S-Right> <ESC>:tabn<CR>
 map <C-S-Left> :tabp<CR>
 imap <C-S-Left> <ESC>:tabp<CR>
 " Easier moving between tabs
-"map <Leader>n <esc>:tabprevious<CR>
-"map <Leader>m <esc>:tabnext<CR>
+map <Leader>n <esc>:tabprevious<CR>
+map <Leader>m <esc>:tabnext<CR>
 
 " Quick saving
 map <C-s> <ESC>:w<CR>
 imap <C-s> <ESC>:w<CR>jj
-" navigate windows with meta+arrows
-"map <M-Right> <c-w>l
-"map <M-Left> <c-w>h
-"map <M-Up> <c-w>k
-"map <M-Down> <c-w>j
-"imap <M-Right> <ESC><c-w>l
-"imap <M-Left> <ESC><c-w>h
-"imap <M-Up> <ESC><c-w>k
-"imap <M-Down> <ESC><c-w>j
-
-" old autocomplete keyboard shortcut
-"imap <C-J> <C-X><C-O>
 
 "" Copy and paste to system clipboard
-"noremap <Leader>y "*y
-"noremap <Leader>p "*p
 noremap <Leader>y "+y
 noremap <Leader>p "+p
 
@@ -357,6 +228,8 @@ vnoremap > >gv
 
 " Exit visual mode
 vnoremap qq <esc>
+
+nnoremap <Leader>t  :GetTemplate<Space>
 
 " ==============================================================================
 " BACK-UPS
@@ -408,10 +281,6 @@ set laststatus=2
 
 " Syntastic ------------------------------
 
-" set statusline+=%#warningmsg#
-" set statusline+=%{SyntasticStatuslineFlag()}
-" set statusline+=%*
-
 let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
@@ -436,7 +305,7 @@ vnoremap <Leader>s :sort<CR>
 " let g:pymode_syntax_builtin_objs = 0
 " let g:pymode_syntax_builtin_funcs = 0
 " let g:pymode_rope_lookup_project = 0
-map <Leader>b Oimport ipdb; ipdb.set_trace() # BREAKPOINT<C-c>
+autocmd FileType py map <Leader>b Oimport ipdb; ipdb.set_trace() # BREAKPOINT<C-c>
 
 " Vim-Latex ------------------------------
 
@@ -478,35 +347,6 @@ let g:Tex_MultipleCompileFormats='pdf,bibtex,pdf'
 
 "autocmd BufEnter *.tex filetype plugin on|set shellslash| set grepprg=grep\ -nH\ $*|filetype indent on|let g:tex_flavor='latex'|set iskeyword+=:
 let g:Tex_IgnoreLevel=0
-
-" Jedi-vim ------------------------------
-
-" Better navigating through omnicomplete option list
-" See http://stackoverflow.com/questions/2170023/how-to-map-keys-for-popup-menu-in-vim
-"set completeopt=longest,menuone
-"function! OmniPopup(action)
-"  if pumvisible()
-"    if a:action == 'j'
-"      return "\<C-N>"
-"    elseif a:action == 'k'
-"      return "\<C-P>"
-"    endif
-"  endif
-"  return a:action
-"endfunction
-"
-"inoremap <silent><C-j> <C-R>=OmniPopup('j')<CR>
-"inoremap <silent><C-k> <C-R>=OmniPopup('k')<CR>
-
-" All these mappings work only for python code:
-" Go to definition
-"let g:jedi#goto_command = ',d'
-""" Find ocurrences
-"let g:jedi#usages_command = ',o'
-""" Find assignments
-"let g:jedi#goto_assignments_command = ',a'
-""" Go to definition in new tab
-"nmap ,D :tab split<CR>:call jedi#goto()<CR>
 
 " YouCompleteMe ------------------------------
 
@@ -622,12 +462,11 @@ endfunction
 " endfunction
 " autocmd BufEnter * call CheckLeftBuffers()
 
-"function! SetupEnvironment()
-"	let l:path = expand( '%:p' )
-"	if l:path =~ '/cygdrive/d/MatlabKernels'
-"		let &path.="/cygdrive/d/MatlabKernels/**"
-"	endif
-"endfunction
-"autocmd! BufReadPost,BufNewFile * call SetupEnvironment()
+function GetTemplate(fname)
+	let fpath = findfile(a:fname, expand('$HOME/Templates').'/**')
+	execute '-1read ' . fpath
+	call feedkeys("\<C-j>")
+endfunction
+command! -nargs=1 GetTemplate call GetTemplate(<q-args>)
 
 " EOF

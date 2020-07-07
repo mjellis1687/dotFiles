@@ -1,0 +1,47 @@
+#!/bin/sh
+
+# Author: Matthew Ellis
+
+usage() {
+	# Print usage
+	echo "Copy the template file into a specified directory"
+	echo
+	echo "Syntax: gettemplate [-h|-t|-n|-m|-d]"
+	echo
+	echo "options:"
+	echo "h		Print this help"
+	echo "t		Template to get"
+	echo "n		Rename template file to"
+	echo "m		Include generic Makefile"
+	echo "d		Directory to copy file(s) into (default: current directory)"
+}
+
+SEARCH_DIR=$HOME/Templates
+DIR=`pwd`
+INC_MAKE=false
+TEMPLATE=
+OUTPUT=
+
+while getopts "d:t:n:mh" opt; do
+	case "$opt" in
+		h)
+			usage
+			exit 0
+			;;
+		t)	TEMPLATE="$OPTARG"
+			;;
+		n)	OUTPUT="$OPTARG"
+			;;
+		m)	INC_MAKE=true
+			;;
+		m)	DIR="$OPTARG"
+			;;
+		*)
+			usage
+			echo "Invalid option provided"
+			exit 1
+	esac
+done
+
+[ ! -z "$TEMPLATE" ] && cp `find "$SEARCH_DIR" -type f -name "$TEMPLATE"` "$DIR"/"$OUTPUT"
+[ "$INC_MAKE" == true ] && cp $SEARCH_DIR/Makefile .

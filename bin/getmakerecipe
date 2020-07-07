@@ -78,13 +78,13 @@ get_pandoc_options () {
 	# Get Pandoc options
 	[[ $(contains ${RECIPES} 'pandoc_tex') == false ]] && RECIPES+=('pandoc_tex')
 	FROM=$(get_instruction 'from' ${DEFAULT_FROM})
-	TEMPLATE="--template=$(get_instruction 'template' ${DEFAULT_TEMPLATE})"
+	TEMPLATE="--template=\${PANDOC_TEMPLATE_DIR}/$(get_instruction 'template' ${DEFAULT_TEMPLATE})"
 	ENGINE=$(get_instruction 'engine' ${DEFAULT_PDF_ENGINE})
 	BIB=$(get_instruction 'bib')
 	[[ ! -z ${BIB} ]] && CSL=$(get_instruction 'csl' ${DEFAULT_CSL}) && \
 		BIBLIOGRAPHY="--bibliography=${BIB} --filter pandoc-citeproc --csl ${CSL}"
 	HIGHLIGHT="--highlight-style $(get_instruction 'highligh' ${DEFAULT_HIGHLIGHT})"
-	BLD_DEPENDS=`./getblock -b "${DEP_START}" -e "${DEP_END}" ${SRC}`
+	BLD_DEPENDS=`getblock -b "${DEP_START}" -e "${DEP_END}" ${SRC}`
 	FLTRS=($(get_instruction 'filters'))
 	FILTERS=
 	for f in ${FLTRS[@]} ; do
@@ -143,7 +143,7 @@ else
 fi
 
 # Build instructions
-INSTRUCTIONS=`./getblock -b "${COMMENT_START}\s*!build" -e "${BUILD_END}" ${SRC}`
+INSTRUCTIONS=`getblock -b "${COMMENT_START}\s*!build" -e "${BUILD_END}" ${SRC}`
 PREFIX="s/\(${COMMENT_START}\)\?\s*\("
 SUFFIX="\)\s*//p"
 
