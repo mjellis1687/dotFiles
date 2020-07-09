@@ -22,6 +22,8 @@ DEFAULT_PDF_ENGINE="latexmk"
 DEFAULT_HIGHLIGHT="tango"
 DEFAULT_TEMPLATE="default.latex"
 BLDDIR=.make
+DISTDIR=dist
+DIST_TEX_SUPPORT='(eps|png|jpg|pdf|bib)'
 BUILD='.md,pdf,pandoc_pdf,<!--,-->,false,!include(",")
 .py,eps,python,#,#,true,,
 .m,eps,matlab,%,%,true,,
@@ -72,6 +74,38 @@ pandoc_tex () {
 pandoc_beamer () {
 	# Pandoc Beamer recipe
 	pandoc 'pdf' 'beamer'
+}
+
+pandoc_submission () {
+	# Create a packaged Latex for manuscript submission
+	local RECIPE="DIST_TEX += ${DISTDIR}/${BASE}.tex
+
+\${DISTDIR}/${BASE}.tex : ${SRC} ${BIB} ${DEPENDS} ${BLD_DEPENDS}
+	@echo \"Building \$@ with pandoc by converting \$< to latex\"
+	@mkdir -p \${DISTDIR}
+	@sed '/${COMMENT_START}/,/${COMMENT_END}/d' \$< | \${GPP} | \\
+		sed 's/fig\///g' | \\
+		\${PANDOC} --from ${FROM} \\
+			${TEMPLATE} \\
+			${HIGHLIGHT} \\"
+	[[ ! -z ${BIBLIOGRAPHY} ]] && RECIPE+="
+			${BIBLIOGRAPHY} \\"
+	[[ ! -z ${FILTERS} ]] && RECIPE+="
+			${FILTERS} \\"
+	[[ ${1} == 'pdf' ]] && RECIPE+="
+			--pdf-engine=${ENGINE} \\"
+	RECIPE+="
+			--to latex --output \$@
+	@cp \`grep -oE '[a-zA-Z0-9/_-]*\.${DIST_TEX_SUPPORT}' ${SRC}\` ${DISTDIR}
+	cd ${DISTDIR} ; \\
+		latexmk -pdf \${notdir \$@} ; \\
+		sed -i -ne '/\\\\bibliographystyle/ {r \${basename \$<}.bbl' -e ':a; n; /\.bib\}/ {b}; ba}; p' \${notdir \$@} ; \\
+		latexmk -C \${notdir \$@} ; \\
+		latexmk -pdf \${notdir \$@} ; \\
+		latexmk -c \${notdir \$@} ; \\
+		rm -rf *.bbl *.spl *-eps-converted-to.pdf *.nlo *.nls
+	"
+	echo "${RECIPE}" >> ${BLDDIR}/${SRC}.make
 }
 
 get_pandoc_options () {
@@ -130,6 +164,7 @@ contains () {
 BASE=${SRC%.*}
 EXT=.${SRC##*.}
 SRC_BUILD=`echo "$BUILD" | grep -E $EXT`
+SRCDIR=$(dirname "${SRC}")
 
 # Get all properties
 read DEFAULT_EXT DEFAULT_RECIPE COMMENT_START COMMENT_END AFTER_MARK DEP_START DEP_END \
@@ -150,7 +185,7 @@ SUFFIX="\)\s*//p"
 # Basic requirements for building
 TO=$(get_instruction 'to')
 DEPENDS=$(get_instruction 'depends')
-RECIPES=($(get_instruction 'recipe' ${DEFAULT_RECIPE}))
+RECIPES=($(get_instruction 'recipes' ${DEFAULT_RECIPE}))
 
 # Load a bunch of stuff for pandoc recipe
 [[ $(contains ${RECIPES} 'pandoc') == true ]] && get_pandoc_options
