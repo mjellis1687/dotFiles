@@ -43,5 +43,5 @@ while getopts "d:t:n:mh" opt; do
 	esac
 done
 
-[ ! -z "$TEMPLATE" ] && cp `find "$SEARCH_DIR" -type f -name "$TEMPLATE"` "$DIR"/"$OUTPUT"
+[ ! -z "$TEMPLATE" ] && cp `find "$SEARCH_DIR" -type f -not -path "$SEARCH_DIR/pandoc/*" -name "$TEMPLATE"` "$DIR"/"$OUTPUT"
 [ "$INC_MAKE" == true ] && cp $SEARCH_DIR/Makefile .
