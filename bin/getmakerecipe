@@ -41,6 +41,9 @@ pandoc () {
 	#	$2: to
 	local BLD_TO=`echo "${TO}" | tr ' ' '\n' | grep "*.${1}"`
 	[[ -z ${BLD_TO} ]] && BLD_TO=${BASE}.${1}
+	# Note: build depends are specified by !include(" ... ")
+	#  depends is the concatenation of that specified in !build
+	#  and grepped from the src
 	local RECIPE="${BLD_TO} : ${SRC} ${BIB} ${DEPENDS} ${BLD_DEPENDS}
 	@echo \"Building \$@ with pandoc by converting \$< to ${1}\"
 	@sed '/${COMMENT_START}/,/${COMMENT_END}/d' \$< | \${GPP} | \\
@@ -116,7 +119,7 @@ get_pandoc_options () {
 	ENGINE=$(get_instruction 'engine' ${DEFAULT_PDF_ENGINE})
 	BIB=$(get_instruction 'bib')
 	[[ ! -z ${BIB} ]] && CSL=$(get_instruction 'csl' ${DEFAULT_CSL}) && \
-		BIBLIOGRAPHY="--bibliography=${BIB} --filter pandoc-citeproc --csl ${CSL}"
+		BIBLIOGRAPHY="--bibliography=${BIB} --filter pandoc-citeproc --csl \${PANDOC_TEMPLATE_DIR}/${CSL}"
 	HIGHLIGHT="--highlight-style $(get_instruction 'highligh' ${DEFAULT_HIGHLIGHT})"
 	BLD_DEPENDS=`getblock -b "${DEP_START}" -e "${DEP_END}" ${SRC}`
 	FLTRS=($(get_instruction 'filters'))
@@ -124,12 +127,34 @@ get_pandoc_options () {
 	for f in ${FLTRS[@]} ; do
 		FILTERS+="--filter $f "
 	done
+
+	# Grep figure depends from file
+	GPP='gpp -U "!" "" "(" "," ")" "(" ")" "" ""'
+	FIGS=`sed "/${COMMENT_START}/,/${COMMENT_END}/d" "${SRC}" | ${GPP} | \
+		grep -oE '[a-zA-Z0-9/_-]*\.(eps|png|jpg|pdf)'`
+
+	DEPENDS=$(echo "$DEPENDS" | tr ' ' '\n')
+	DEPENDS+="
+${FIGS}"
+	DEPENDS=$(echo "${DEPENDS}" | sort -u | tr '\n' ' ')
 }
 
 python () {
 	[[ -z ${TO} ]] && TO=${BASE}.${DEFAULT_EXT}
 	local RECIPE="${TO} : ${SRC} ${DEPENDS}
-	\${PYTHON} ${SRC}
+	@echo \"Ruuning python on \$<.\"
+	@\${PYTHON} ${SRC}
+	"
+	echo "DEST += ${TO}
+	" >> ${BLDDIR}/${SRC}.make
+	echo "${RECIPE}" >> ${BLDDIR}/${SRC}.make
+}
+
+matlab () {
+	[[ -z ${TO} ]] && TO=${BASE}.${DEFAULT_EXT}
+	local RECIPE="${TO} : ${SRC} ${DEPENDS}
+	\${MATLAB} -log -nodesktop -nosplash -noFigureWindows -sd \"\$(dir \$<)\" \\
+		-r \"try, run('\$<'); catch err, disp(err.message); quit(1); end, quit(0)\"
 	"
 	echo "DEST += ${TO}
 	" >> ${BLDDIR}/${SRC}.make
@@ -163,12 +188,12 @@ contains () {
 # Base and extension
 BASE=${SRC%.*}
 EXT=.${SRC##*.}
-SRC_BUILD=`echo "$BUILD" | grep -E $EXT`
+SRC_BUILD=`echo "$BUILD" | grep -E $EXT,`
 SRCDIR=$(dirname "${SRC}")
 
 # Get all properties
 read DEFAULT_EXT DEFAULT_RECIPE COMMENT_START COMMENT_END AFTER_MARK DEP_START DEP_END \
-	<<< $(echo $SRC_BUILD | awk -F ',' '{print $2" "$3" "$4" "$5" "$6" "$7" "$8}')
+	<<< $(echo "${SRC_BUILD}" | awk -F ',' '{print $2" "$3" "$4" "$5" "$6" "$7" "$8}')
 
 if [ "${AFTER_MARK}" == "true" ]
 then

@@ -197,8 +197,14 @@ $ find . -type f -name ".<file_type>"
 - Move to next/previous tab: Ctrl + B, N/P
 - Move window:
 	- Let window number 3 and window number 1 swap positions:
-	```swap-window -s 3 -t 1```
+	```
+	swap-window -s 3 -t 1
+	```
 	- Swap the current window with the top window, do:
-	```swap-window -t 0```
+	```
+	swap-window -t 0
+	```
 	- Move current window back three:
-	```swap-window -t -3```
+	```
+	swap-window -t -3
+	```
