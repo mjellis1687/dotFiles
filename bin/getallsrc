@@ -14,9 +14,11 @@ usage() {
 	echo "options:"
 	echo "h		Print this help"
 	echo "d		Directory to read (default is current directory"
+	echo "m		Max search depth (default 1)"
 }
 
 DIR=.
+SRCH_DEPTH='-maxdepth 1'
 
 while [[ $# -gt 0 ]]
 do
@@ -24,6 +26,9 @@ do
 	case $key in
 		-d|--directory)			DIR="$2"
 								[[ -z "$DIR" ]] && echo "Must supply a directory" && usage && exit
+								shift
+								shift;;
+		-m|--maxdepth)			SRCH_DEPTH='-maxdepth '"$2"
 								shift
 								shift;;
 		-h|--help)				usage
@@ -36,7 +41,7 @@ done
 
 SRC=
 ME=`basename "$0"`
-FILES=`find "$DIR" -maxdepth 1 -type f \( ! -iname "$ME" \) -exec grep -Iq . {} \; -print`
+FILES=`find "$DIR" $SRCH_DEPTH -type f \( ! -iname "$ME" \) -exec grep -Iq . {} \; -print`
 while read file
 do
 	block=`getblock -b "!build" -e "!end-build" "$file"`
