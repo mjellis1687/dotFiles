@@ -305,7 +305,7 @@ vnoremap <Leader>s :sort<CR>
 " let g:pymode_syntax_builtin_objs = 0
 " let g:pymode_syntax_builtin_funcs = 0
 " let g:pymode_rope_lookup_project = 0
-autocmd FileType py map <Leader>b Oimport ipdb; ipdb.set_trace() # BREAKPOINT<C-c>
+autocmd FileType python map <Leader>b Oimport ipdb; ipdb.set_trace() # BREAKPOINT<C-c>
 
 " Vim-Latex ------------------------------
 
