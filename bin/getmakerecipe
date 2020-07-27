@@ -24,8 +24,11 @@ DEFAULT_TEMPLATE="default.latex"
 BLDDIR=.make
 DISTDIR=dist
 DIST_TEX_SUPPORT='(eps|png|jpg|jpeg|pdf|bib)'
+# ext,default output, default recipe, start comment, end comment,
+# !end-build before or after comment mark, find other dependencies
 BUILD='.md,pdf,pandoc_pdf,<!--,-->,false,!include(",")
 .py,eps,python,#,#,true,,
+.ipynb,eps,jupyter_notebooks,<!--,-->,false,,
 .m,eps,matlab,%,%,true,,
 .tex,pdf,latex_pdf,%,%,true,,'
 
@@ -84,7 +87,7 @@ pandoc_pptx () {
 	pandoc 'pptx' 'pptx'
 }
 
-pandoc_homework () {
+pandoc_assignment () {
 	# Pandoc homework
 
 	# Problem statements
@@ -195,7 +198,7 @@ latex_png () {
 python () {
 	[[ -z ${TO} ]] && TO=${BASE}.${DEFAULT_EXT}
 	local RECIPE="${TO} : ${SRC} ${DEPENDS}
-	@echo \"Ruuning python on \$<.\"
+	@echo \"Running python on \$<.\"
 	@\${PYTHON} ${SRC}
 	"
 	echo "DEST += ${TO}
@@ -203,10 +206,26 @@ python () {
 	echo "${RECIPE}" >> "${MAKEH}"
 }
 
+jupyter_notebooks () {
+	TO=$(sed 's/^[ \s\t]*"\([a-zA-Z1-9./_ ]*\)\\n",[ \s\t]*/\1/' <<<${TO})
+	DEPENDS=$(sed 's/^[ \s\t]*"\([a-zA-Z1-9./_ ]*\)\\n",[ \s\t]*$/\1/' <<<${DEPENDS})
+	local RECIPE="${TO} : ${SRC} ${DEPENDS}
+	@echo \"Running Jupyter-notebook conversion on \$<.\"
+	\$(eval PY_FILE := \$(<:.ipynb=.py))
+	@jupyter-nbconvert --to python --stdout \$< >> \${PY_FILE}
+	cd \$(dir \$<); \${PYTHON} \${notdir \${PY_FILE}}
+	@rm -rf \${PY_FILE}
+	"
+	echo "DEST += ${TO}
+	" >> "${MAKEH}"
+	echo "${RECIPE}" >> "${MAKEH}"
+
+}
+
 matlab () {
-	# -sd \"\$(dir \$(abspath \$<))\"
 	[[ -z ${TO} ]] && TO=${BASE}.${DEFAULT_EXT}
 	local RECIPE="${TO} : ${SRC} ${DEPENDS}
+	@echo \"Running Matlab on \$<.\"
 	\${MATLAB} -log -nodesktop -nosplash -noFigureWindows \\
 		-r \"try, run('\$<'); catch err, disp(err.message); quit(1); end, quit(0)\"
 	"
@@ -218,6 +237,7 @@ matlab () {
 octave () {
 	[[ -z ${TO} ]] && TO=${BASE}.${DEFAULT_EXT}
 	local RECIPE="${TO} : ${SRC} ${DEPENDS}
+	@echo \"Running Matlab on \$<.\"
 	\${OCTAVE} --no-gui --no-window-system \\
 		--eval \"try, run('\$<'); catch err, disp(err.message); quit(1); end, quit(0)\"
 	"
