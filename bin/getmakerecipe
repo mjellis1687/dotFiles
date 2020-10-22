@@ -74,7 +74,9 @@ pandoc_pdf () {
 
 pandoc_tex () {
 	# Pandoc TEX (notes) recipe
-	pandoc 'tex' 'latex'
+	TO='latex'
+	[ $(contains ${RECIPES} 'pandoc_beamer') == true ] && TO='beamer'
+	pandoc 'tex' ${TO}
 }
 
 pandoc_beamer () {
@@ -105,6 +107,7 @@ pandoc_assignment () {
 pandoc_submission () {
 	# Create a packaged Latex for manuscript submission
 	local RECIPE="DIST_TEX += ${DISTDIR}/${BASE}.tex
+depends:
 
 \${DISTDIR}/${BASE}.tex : ${SRC} ${BIB} ${DEPENDS} ${BLD_DEPENDS}
 	@echo \"Building \$@ with pandoc by converting \$< to latex\"

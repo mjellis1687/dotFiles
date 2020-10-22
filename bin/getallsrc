@@ -14,11 +14,13 @@ usage() {
 	echo "options:"
 	echo "h		Print this help"
 	echo "d		Directory to read (default is current directory"
+	echo "e		Directory to exclude"
 	echo "m		Max search depth (default 1)"
 }
 
 DIR=.
 SRCH_DEPTH='-maxdepth 1'
+ARGS=(-not -path "*.git*" )
 
 while [[ $# -gt 0 ]]
 do
@@ -31,6 +33,9 @@ do
 		-m|--maxdepth)			SRCH_DEPTH='-maxdepth '"$2"
 								shift
 								shift;;
+		-e|--exclude)			[ ! -z "$2" ] && ARGS+=( -not -path "*$2*" )
+								[ $# -eq 2 ] && shift
+								shift;;
 		-h|--help)				usage
 								exit ;;
 		*)						echo "Error: Unknown parameter given"
@@ -41,7 +46,7 @@ done
 
 SRC=
 ME=`basename "$0"`
-FILES=`find "$DIR" $SRCH_DEPTH -type f \( ! -iname "$ME" \) -exec grep -Iq . {} \; -print`
+FILES=`find "$DIR" $SRCH_DEPTH -type f "${ARGS[@]}" \( ! -iname "$ME" \) -exec grep -Iq . {} \; -print`
 while read file
 do
 	block=`getblock -b "!build" -e "!end-build" "$file"`
