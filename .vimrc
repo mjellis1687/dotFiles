@@ -338,15 +338,17 @@ set iskeyword+=:
 
 let g:Tex_DefaultTargetFormat = 'pdf'
 let g:Tex_CompileRule_pdf = 'pdflatex -interaction=nonstopmode -file-line-error-style $*'
-if has('win32unix')
-	let g:Tex_ViewRule_pdf = 'C:/Users/cellism7/AppData/Local/Apps/Evince-2.32.0.145/bin/evince.exe'
-elseif has('unix')
-	let g:Tex_ViewRule_pdf = 'evince'
-endif
+let g:Tex_ViewRule_pdf = 'evince'
 let g:Tex_MultipleCompileFormats='pdf,bibtex,pdf'
 
 "autocmd BufEnter *.tex filetype plugin on|set shellslash| set grepprg=grep\ -nH\ $*|filetype indent on|let g:tex_flavor='latex'|set iskeyword+=:
 let g:Tex_IgnoreLevel=0
+
+" Markdown ------------------------------
+autocmd FileType markdown noremap <Leader>c i::: {.columns}<CR>:::: {.column width=<++>%}<CR><CR><++><CR><CR>::::<CR>:::: {.column width=<++>%}<CR><CR><++><CR><CR>::::<CR>:::<Esc>11k2h
+autocmd FileType markdown noremap <Leader>lv :!xdg-open %:r.pdf<CR><CR>
+noremap <Leader>w :w<CR>
+autocmd FileType markdown noremap <Leader>w :w<CR>:make<CR>
 
 " YouCompleteMe ------------------------------
 
