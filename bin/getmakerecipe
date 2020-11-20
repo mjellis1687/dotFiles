@@ -24,13 +24,13 @@ DEFAULT_TEMPLATE="default.latex"
 BLDDIR=.make
 DISTDIR=dist
 DIST_TEX_SUPPORT='(eps|png|jpg|jpeg|pdf|bib)'
-# ext,default output, default recipe, start comment, end comment,
-# !end-build before or after comment mark, find other dependencies
-BUILD='.md,pdf,pandoc_pdf,<!--,-->,false,!include(",")
-.py,eps,python,#,#,true,,
-.ipynb,eps,jupyter_notebooks,<!--,-->,false,,
-.m,eps,matlab,%,%,true,,
-.tex,pdf,latex_pdf,%,%,true,,'
+# ext, default output, default recipe, start comment, end comment,
+# !end-build before or after comment mark
+BUILD='.md,pdf,pandoc_pdf,<!--,-->,false
+.py,eps,python,#,#,true
+.ipynb,eps,jupyter_notebooks,<!--,-->,false
+.m,eps,matlab,%,%,true
+.tex,pdf,latex_pdf,%,%,true'
 
 # Parse inputs
 [[ -z "$1" || "$1" == "-h" || "$1" == "--help" ]] && usage && exit
@@ -47,7 +47,10 @@ pandoc () {
 	# Note: build depends are specified by !include(" ... ")
 	#  depends is the concatenation of that specified in !build
 	#  and grepped from the src
-	local RECIPE="${BLD_TO} : ${SRC} ${BIB} ${DEPENDS} ${BLD_DEPENDS}
+	ALL_DEPENDS=${SRC}
+	[[ ! -z ${BIB} ]] && ALL_DEPENDS+=' '${BIB}
+	[[ ! -z ${DEPENDS} ]] && ALL_DEPENDS+=' '${DEPENDS}
+	local RECIPE="${BLD_TO} : ${ALL_DEPENDS}
 	@echo \"Building \$@ with pandoc by converting \$< to ${1}\"
 	@sed '/${COMMENT_START}/,/${COMMENT_END}/d${SED_CMD}' \$< | \${GPP} | \\
 		\${PANDOC} --from ${FROM} \\
@@ -109,7 +112,7 @@ pandoc_submission () {
 	local RECIPE="DIST_TEX += ${DISTDIR}/${BASE}.tex
 depends:
 
-\${DISTDIR}/${BASE}.tex : ${SRC} ${BIB} ${DEPENDS} ${BLD_DEPENDS}
+\${DISTDIR}/${BASE}.tex : ${SRC} ${BIB} ${DEPENDS}
 	@echo \"Building \$@ with pandoc by converting \$< to latex\"
 	@mkdir -p \${DISTDIR}
 	@sed '/${COMMENT_START}/,/${COMMENT_END}/d' \$< | \${GPP} | \\
@@ -147,7 +150,6 @@ get_pandoc_options () {
 	[[ ! -z ${BIB} ]] && CSL=$(get_instruction 'csl' ${DEFAULT_CSL}) && \
 		BIBLIOGRAPHY=`echo --bibliography=${BIB} | sed 's/\s/ --bibliography=/g'`" --citeproc --csl=\${PANDOC_TEMPLATE_DIR}/${CSL}"
 	HIGHLIGHT="--highlight-style $(get_instruction 'highligh' ${DEFAULT_HIGHLIGHT})"
-	BLD_DEPENDS=`getblock -b "${DEP_START}" -e "${DEP_END}" ${SRC}`
 	FLTRS=($(get_instruction 'filters'))
 	FILTERS=
 	for f in ${FLTRS[@]} ; do
@@ -155,13 +157,21 @@ get_pandoc_options () {
 	done
 
 	# Grep figure depends from file
-	GPP='gpp -U "!" "" "(" "," ")" "(" ")" "" ""'
-	FIGS=`sed "/${COMMENT_START}/,/${COMMENT_END}/d" "${SRC}" | ${GPP} | \
-		grep -oE '[a-zA-Z0-9/_-]*\.(eps|png|jpg|jpeg|pdf)'`
+	# 1. ![...](...) with file name in parenthesis
+	CMD1='s/.*[!\]include\(graphics\)\?\(\[.*\]\)\?[({]\"\?\([^\"]*\)\"\?[)}].*/\3/p'
+	# 2. [!\]include[graphics][][({]...[})]
+	CMD2='s/.*\!\[.*\](\(.*\)).*/\1/p'
+	# 3. \input{}
+	CMD3='s/.*\\input{\(.*\)}/\1/p'
 
+	# grepping for figs - is this needed?
+	# grep -oE '[a-zA-Z0-9/_-]*\.(eps|png|jpg|jpeg|pdf)'`
+
+	# Make a list of depends
 	DEPENDS=$(echo "$DEPENDS" | tr ' ' '\n')
-	DEPENDS+="
-${FIGS}"
+	NEW_DEPENDS=`sed -n "${CMD1}; ${CMD2}; ${CMD3}" "${SRC}"`
+	[[ ! -z ${NEW_DEPENDS} ]] && DEPENDS+="
+${NEW_DEPENDS}"
 	DEPENDS=$(echo "${DEPENDS}" | sort -u | tr '\n' ' ')
 }
 
@@ -281,8 +291,8 @@ SRCDIR=$(dirname "${SRC}")
 MAKEH=${BLDDIR}/${SRC}.make
 
 # Get all properties
-read DEFAULT_EXT DEFAULT_RECIPE COMMENT_START COMMENT_END AFTER_MARK DEP_START DEP_END \
-	<<< $(echo "${SRC_BUILD}" | awk -F ',' '{print $2" "$3" "$4" "$5" "$6" "$7" "$8}')
+read DEFAULT_EXT DEFAULT_RECIPE COMMENT_START COMMENT_END AFTER_MARK \
+	<<< $(echo "${SRC_BUILD}" | awk -F ',' '{print $2" "$3" "$4" "$5" "$6}')
 
 if [ "${AFTER_MARK}" == "true" ]
 then

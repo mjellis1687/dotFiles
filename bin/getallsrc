@@ -49,7 +49,7 @@ ME=`basename "$0"`
 FILES=`find "$DIR" $SRCH_DEPTH -type f "${ARGS[@]}" \( ! -iname "$ME" \) -exec grep -Iq . {} \; -print`
 while read file
 do
-	block=`getblock -b "!build" -e "!end-build" "$file"`
+	block=`grep '!build' "$file"`
 	[ ! -z  "$block" ] && SRC+="$file "
 done <<< "$FILES"
 
