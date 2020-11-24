@@ -1,2 +1,2 @@
-" Disable EMP because use it alot for EMPC
+" Disable EMP because use it often for EMPC
 call IUNMAP('EMP', 'tex')
