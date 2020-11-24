@@ -219,7 +219,7 @@ noremap <Leader>y "+y
 noremap <Leader>p "+p
 
 " Close location lists and quick fix windows
-nmap <Leader>c <c-w>z :windo lcl\|ccl<CR>
+autocmd FileType python nmap <Leader>c <c-w>z :windo lcl\|ccl<CR>
 
 " VISUAL MODE
 " Easier moving of code blocks
