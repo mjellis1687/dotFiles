@@ -1,0 +1,63 @@
+#!/bin/sh
+
+# Updates default.latex from the main pandoc repository
+# Author: Matthew Ellis
+
+usage() {
+	# Print usage
+	echo "Updates default.latex from the main pandoc repository"
+	echo
+	echo "Syntax: updateDefaultLatexTemplate [-h|-d|-c]"
+	echo
+	echo "options:"
+	echo "h		Print this help"
+	echo "c		Automatically commit the file"
+	echo "d		Dry-run (prints diff, but does not make any other changes)"
+}
+
+DRY_RUN=false
+AUTO_COMMIT=false
+
+while getopts "cdh" opt; do
+	case "$opt" in
+		h)
+			usage
+			exit 0
+			;;
+		c)	AUTO_COMMIT=true
+			;;
+		d)	DRY_RUN=true
+			;;
+		*)
+			usage
+			echo "Invalid option provided"
+			exit 1
+	esac
+done
+
+TEMPLATES=$HOME/Templates/pandoc-templates
+TEMPLATE_FILE=default.latex
+PANDOC_TMP_FMT=pandoc-repo-
+
+get_pandoc_dir() {
+	# Check if the directory already exists - if so, use it
+	# Else create a new one
+	POSSIBLE_REPOS=`ls -c /tmp | grep "${PANDOC_TMP_FMT}.*"`
+	REPO=
+	for f in $POSSIBLE_REPOS ; do
+		[ -d "/tmp/$f/.git" ] && REPO="/tmp/$f" && echo "Found repo ${REPO}" && break
+	done
+	[ -z $REPO ] && REPO=$(mktemp -d -t ${PANDOC_TMP_FMT}XXXXXXXXX) && git clone https://github.com/jgm/pandoc.git $REPO
+}
+
+get_pandoc_dir
+cd $REPO; git pull
+
+cp $REPO/data/templates/$TEMPLATE_FILE $TEMPLATES
+cd $TEMPLATES && git diff $TEMPLATE_FILE
+
+# If dry-run, checkout the previous version
+[ "$DRY_RUN" = true ] && cd $TEMPLATES && git checkout -- $TEMPLATE_FILE && exit 0
+
+# If auto-commit, commit
+[ "$AUTO_COMMIT" = true ] && cd $TEMPLATES && git add $TEMPLATE_FILE && git commit -m "Auto-update default.latex"
