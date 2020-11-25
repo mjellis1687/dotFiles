@@ -6,14 +6,15 @@ usage() {
 	# Print usage
 	echo "Copy the template file into a specified directory"
 	echo
-	echo "Syntax: gettemplate [-h|-t|-n|-m|-d]"
+	echo "Syntax: gettemplate [-h|-l|-t [TEMPLATE]|-n [OUTPUT]|-m|-d [DIR]]"
 	echo
 	echo "options:"
-	echo "h		Print this help"
-	echo "t		Template to get"
-	echo "n		Rename template file to"
-	echo "m		Include generic Makefile"
-	echo "d		Directory to copy file(s) into (default: current directory)"
+	echo "  h	Print this help"
+	echo "  l	List all templates"
+	echo "  t	Template to get"
+	echo "  n	Rename template file to"
+	echo "  m	Include generic Makefile"
+	echo "  d	Directory to copy file(s) into (default: current directory)"
 }
 
 SEARCH_DIR=$HOME/Templates
@@ -22,10 +23,18 @@ INC_MAKE=false
 TEMPLATE=
 OUTPUT=
 
-while getopts "d:t:n:mh" opt; do
+list_all_templates() {
+	ls ${SEARCH_DIR}/pandoc-templates
+}
+
+while getopts "d:t:n:mlh" opt; do
 	case "$opt" in
 		h)
 			usage
+			exit 0
+			;;
+		l)
+			list_all_templates
 			exit 0
 			;;
 		t)	TEMPLATE="$OPTARG"
