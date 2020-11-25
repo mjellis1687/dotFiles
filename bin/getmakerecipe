@@ -103,7 +103,8 @@ pandoc_assignment () {
 	SED_CMD=
 	OLD_BASE="${BASE}"
 	BASE="${BASE}-solution"
-	pandoc 'pdf' 'pdf'
+	# Build if solution is present
+	grep "\begin{solution}" ${SRC} > /dev/null && pandoc 'pdf' 'pdf'
 	BASE="${OLD_BASE}"
 }
 
