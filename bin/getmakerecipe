@@ -62,6 +62,8 @@ pandoc () {
 			${FILTERS} \\"
 	[[ ${1} == 'pdf' ]] && RECIPE+="
 			--pdf-engine=${ENGINE} \\"
+	[[ ${1} == 'pdf' ]] && [[ ! -z ${ENGINE_OPTS} ]] && RECIPE+="
+			--pdf-engine-opt=${ENGINE_OPTS} \\"
 	RECIPE+="
 			--to ${2} --output \$@
 	"
@@ -104,7 +106,7 @@ pandoc_assignment () {
 	OLD_BASE="${BASE}"
 	BASE="${BASE}-solution"
 	# Build if solution is present
-	grep "\begin{solution}" ${SRC} > /dev/null && pandoc 'pdf' 'pdf'
+	grep '\\begin{solution}' ${SRC} > /dev/null && pandoc 'pdf' 'pdf'
 	BASE="${OLD_BASE}"
 }
 
@@ -147,6 +149,7 @@ get_pandoc_options () {
 	FROM=$(get_instruction 'from' ${DEFAULT_FROM})
 	TEMPLATE="--template=\${PANDOC_TEMPLATE_DIR}/$(get_instruction 'template' ${DEFAULT_TEMPLATE})"
 	ENGINE=$(get_instruction 'engine' ${DEFAULT_PDF_ENGINE})
+	ENGINE_OPTS=$(get_instruction 'engine-opt' '')
 	BIB=$(get_instruction 'bib')
 	[[ ! -z ${BIB} ]] && CSL=$(get_instruction 'csl' ${DEFAULT_CSL}) && \
 		BIBLIOGRAPHY=`echo --bibliography=${BIB} | sed 's/\s/ --bibliography=/g'`" --citeproc --csl=\${PANDOC_TEMPLATE_DIR}/${CSL}"
