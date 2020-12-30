@@ -308,7 +308,7 @@ fi
 # Build instructions
 INSTRUCTIONS=`getblock -b "${COMMENT_START}\s*!build" -e "${BUILD_END}" ${SRC}`
 PREFIX="s/\(${COMMENT_START}\)\?\s*\("
-SUFFIX="\)\s*//p"
+SUFFIX="\)\s*//pI"
 
 # Basic requirements for building
 TO=$(get_instruction 'to')
