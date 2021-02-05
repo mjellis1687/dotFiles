@@ -36,6 +36,80 @@ BUILD='.md,pdf,pandoc_pdf,<!--,-->,false
 [[ -z "$1" || "$1" == "-h" || "$1" == "--help" ]] && usage && exit
 SRC="$1"
 
+
+## Utility functions
+get_instruction () {
+	# Get the instruction from the instruction list
+	local result=`echo "${INSTRUCTIONS}" | sed -n "${PREFIX}${1}:${SUFFIX}" | tr '\n' ' '`
+	[[ -z ${result} ]] && result=$2
+	echo "${result}"
+}
+
+contains () {
+	# Array contains function
+	local n=$#
+	local value=${!n}
+	local length=`echo -n $value | wc -c`
+	for ((i=1;i<$#;i++)) {
+		val=`echo "${!i}" | cut -c1-$length`
+		if [[ "${val}" == "${value}" ]]; then
+			echo true
+			return 0
+		fi
+	}
+	echo false
+}
+
+MAX_DEPTH=5
+
+get_dependencies ()
+{
+	# Recursively get dependencies from file
+	if [ "$2" -gt "$MAX_DEPTH" ]; then
+		echo "Recursive dependency finder hit maximum depth" 1>&2
+		exit 1
+	fi
+	if [[ ! -f $1 ]]; then
+		echo "File ${1} does not exist"
+		return
+	fi
+	if [[ "${SEARCHED}" =~ "$1" ]]; then
+		echo "File $1 has already been searched"
+		return
+	fi
+
+	# Grep figure depends from file
+	# 1. ![...](...) with file name in parenthesis
+	CMD1='s/.*[!\]include\(graphics\)\?\(\[.*\]\)\?[({]\"\?\([^\"]*\)\"\?[)}].*/\3/p'
+	# 2. [!\]include[graphics][][({]...[})]
+	CMD2='s/.*\!\[.*\](\(.*\)).*/\1/p'
+	# 3. \input{}
+	CMD3='s/.*\\input{\(.*\)}/\1/p'
+
+	# grepping for figs - is this needed?
+	# grep -oE '[a-zA-Z0-9/_-]*\.(eps|png|jpg|jpeg|pdf)'`
+
+	# Make a list of depends
+	CUR_DEPS=`sed -n "${CMD1}; ${CMD2}; ${CMD3}" $1`
+	CUR_DEPS=`get_unique_list "${CUR_DEPS}"`
+	SEARCHED=`get_unique_list "${SEARCHED} $1"`
+	DEPS=`get_unique_list "${DEPS} ${CUR_DEPS}"`
+
+	for d in ${CUR_DEPS}
+	do
+		if [[ ! "${SEARCHED}" =~ "${d}" ]]; then
+			get_dependencies "${d}" $(( $2 + 1 ))
+		fi
+	done
+}
+
+get_unique_list ()
+{
+	# From a space separated list, generate a unique list
+	echo `echo "$1" | tr ' ' '\n' | sort -u | tr '\n' ' '`
+}
+
+## Recipe builders
 pandoc () {
 	# General pandoc recipe handler
 	#
@@ -52,7 +126,7 @@ pandoc () {
 	[[ ! -z ${DEPENDS} ]] && ALL_DEPENDS+=' '${DEPENDS}
 	local RECIPE="${BLD_TO} : ${ALL_DEPENDS}
 	@echo \"Building \$@ with pandoc by converting \$< to ${1}\"
-	@sed '/${COMMENT_START}/,/${COMMENT_END}/d${SED_CMD}' \$< | \${GPP} | \\
+	@\${GPP} \$< | sed '/${COMMENT_START}/,/${COMMENT_END}/d${SED_CMD}' | \\
 		\${PANDOC} --from ${FROM} \\
 			${TEMPLATE} \\
 			${HIGHLIGHT} \\"
@@ -94,11 +168,11 @@ pandoc_pptx () {
 	pandoc 'pptx' 'pptx'
 }
 
-pandoc_assignment () {
+pandoc_course () {
 	# Pandoc homework
 
 	# Problem statements
-	SED_CMD="; /\\\\begin{solution}/,/\\\\end{solution}/d"
+	SED_CMD="; /\\\\begin{solution}/,/\\\\end{solution}/d; /\\\\bsol/,/\\\\esol/d"
 	pandoc 'pdf' 'pdf'
 
 	# Reset
@@ -106,7 +180,8 @@ pandoc_assignment () {
 	OLD_BASE="${BASE}"
 	BASE="${BASE}-solution"
 	# Build if solution is present
-	grep '\\begin{solution}' ${SRC} > /dev/null && pandoc 'pdf' 'pdf'
+	PWD=`pwd`
+	gpp -x -U "!" "" "(" "," ")" "(" ")" "" "" -I "${PWD}" ${SRC} | grep -E '(\\begin{solution}|\\bsol)' > /dev/null && pandoc 'pdf' 'pdf'
 	BASE="${OLD_BASE}"
 }
 
@@ -160,23 +235,11 @@ get_pandoc_options () {
 		FILTERS+="--filter $f "
 	done
 
-	# Grep figure depends from file
-	# 1. ![...](...) with file name in parenthesis
-	CMD1='s/.*[!\]include\(graphics\)\?\(\[.*\]\)\?[({]\"\?\([^\"]*\)\"\?[)}].*/\3/p'
-	# 2. [!\]include[graphics][][({]...[})]
-	CMD2='s/.*\!\[.*\](\(.*\)).*/\1/p'
-	# 3. \input{}
-	CMD3='s/.*\\input{\(.*\)}/\1/p'
-
-	# grepping for figs - is this needed?
-	# grep -oE '[a-zA-Z0-9/_-]*\.(eps|png|jpg|jpeg|pdf)'`
-
 	# Make a list of depends
 	DEPENDS=$(echo "$DEPENDS" | tr ' ' '\n')
-	NEW_DEPENDS=`sed -n "${CMD1}; ${CMD2}; ${CMD3}" "${SRC}"`
-	[[ ! -z ${NEW_DEPENDS} ]] && DEPENDS+="
-${NEW_DEPENDS}"
-	DEPENDS=$(echo "${DEPENDS}" | sort -u | tr '\n' ' ')
+	SEARCHED=
+	get_dependencies "${SRC}" 0
+	DEPENDS=`get_unique_list "${DEPENDS} ${DEPS}"`
 }
 
 latex_pdf () {
@@ -241,7 +304,7 @@ jupyter_notebooks () {
 
 matlab () {
 	[[ -z ${TO} ]] && TO=${BASE}.${DEFAULT_EXT}
-	local RECIPE="${TO} : ${SRC} ${DEPENDS}
+	RECIPE="${TO} : ${SRC} ${DEPENDS}
 	@echo \"Running Matlab on \$<.\"
 	\${MATLAB} -log -nodesktop -nosplash -noFigureWindows \\
 		-r \"try, run('\$<'); catch err, disp(err.message); quit(1); end, quit(0)\"
@@ -263,29 +326,7 @@ octave () {
 	echo "${RECIPE}" >> "${MAKEH}"
 }
 
-#TODO: do-latex, do-matlab (or octave); automatic builds of virtualenvs
-
-get_instruction () {
-	# Get the instruction from the instruction list
-	local result=`echo "${INSTRUCTIONS}" | sed -n "${PREFIX}${1}:${SUFFIX}"`
-	[[ -z ${result} ]] && result=$2
-	echo "$result"
-}
-
-contains () {
-	# Array contains function
-	local n=$#
-	local value=${!n}
-	local length=`echo -n $value | wc -c`
-	for ((i=1;i<$#;i++)) {
-		val=`echo "${!i}" | cut -c1-$length`
-		if [[ "${val}" == "${value}" ]]; then
-			echo true
-			return 0
-		fi
-	}
-	echo false
-}
+#TODO: automatic builds of virtualenvs
 
 # Base and extension
 BASE=${SRC%.*}

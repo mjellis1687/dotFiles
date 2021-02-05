@@ -7,12 +7,13 @@
 For automatic recipe of Matlab scripts, include a comment block starting with `% !build` and ending with `% !end-build`. For example, the following:
 ```matlab
 % !build
-% DEPENDS: src/script1.m
+% depends: src/script1.m
+% to: figure.eps table.md
 % !end-build
 ```
 where:
 
-- `DEPENDS: src/script1.m` means that the artifacts produced by the script depend on the `script1.m`. Make will automatically reproduce the artifacts if there is a change in `script1.m` even if no changes were made to the original script. Matlab has a built-in command to determine the dependencies of a script:
+- `depends: src/script1.m` means that the artifacts produced by the script depend on the `script1.m`. In other words, `make` will automatically reproduce the artifacts if there is a change in `script1.m` even if no changes were made to the original script. To determine the dependencies of a script, Matlab has a built-in command:
 ```matlab
 fList = matlab.codetools.requiredFilesAndProducts('myScript.m');
 for ind = 1:numel(fList)-1
@@ -21,11 +22,12 @@ end
 ```
 which produces a list of user-generated dependencies (does not include built-in or toolbox commands). The list of dependencies can be generated at the command line via:
 ```bash
-DEPS=`matlab -batch "fList = matlab.codetools.requiredFilesAndProducts('script.m');
+DEPS=`matlab -batch "fList = matlab.codetools.requiredFilesAndProducts('script.m'); \
 	for ind = 1:numel(fList)-1; disp(fList{ind}); end; exit;"
 	| sed 's/MATLAB is selecting SOFTWARE OPENGL rendering.//'
 ```
 This command takes some time to open Matlab and so is not included in the automatic recipe generation process. In the future, perhaps, this could be modified to find all Matlab source files and then, call Matlab once.
+- `to: figure.eps table.md` means that the artifacts produced by the script are `figure.eps` and `table.md`.
 
 
 ### Pandoc Markdown
@@ -51,6 +53,25 @@ The recipe generation currently supports automatically adding dependencies by re
 1. Input Latex command:
 	```latex
 	\input{file.tex}
+	```
+
+### Problems with Files with CRLF Line Terminators
+
+- If the source file has CRLF line terminators, the recipe generation may give unexpected results.
+- To check for CRLF Line Terminators, run:
+```bash
+file test.m
+```
+- If the command returns `test.m: ASCII text, with CRLF line terminators`, the file has CRLF line terminators.
+- Currently, `getmakerecipe` does not automatically get rid of CRLF line terminators. There many ways to get rid of them. Here are two examples:
+	1. Open source file in `vim` and run the command: `:set fileformat=unix` and save the file.
+	1. Overwrite all CRLF line terminators:
+	```bash
+	tr '^M' '\n' <test.m >test.m
+	```
+	or
+	```bash
+	tr '\r' '\n' <test.m >test.m
 	```
 
 ## Powerline Install on Arch
