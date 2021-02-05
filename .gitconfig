@@ -6,6 +6,8 @@
 	trustctime=false
 [pull]
 	rebase=false  # merge (the default strategy)
+[init]
+	defaultBranch = main
 [diff]
 	tool=vimdiff
 	prompt=false
