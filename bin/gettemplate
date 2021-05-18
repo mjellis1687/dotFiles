@@ -11,6 +11,7 @@ usage() {
 	echo "options:"
 	echo "  h	Print this help"
 	echo "  l	List all templates"
+	echo "  s	List all skeletons"
 	echo "  t	Template to get"
 	echo "  n	Rename template file to"
 	echo "  m	Include generic Makefile"
@@ -27,7 +28,11 @@ list_all_templates() {
 	ls ${SEARCH_DIR}/pandoc-templates
 }
 
-while getopts "d:t:n:mlh" opt; do
+list_all_skeletons() {
+	ls ${SEARCH_DIR}/markdown
+}
+
+while getopts "d:t:n:mlsh" opt; do
 	case "$opt" in
 		h)
 			usage
@@ -35,6 +40,10 @@ while getopts "d:t:n:mlh" opt; do
 			;;
 		l)
 			list_all_templates
+			exit 0
+			;;
+		s)
+			list_all_skeletons
 			exit 0
 			;;
 		t)	TEMPLATE="$OPTARG"
@@ -52,5 +61,6 @@ while getopts "d:t:n:mlh" opt; do
 	esac
 done
 
+[ -z "$TEMPLATE" ] && [ "$INC_MAKE" == false ] && echo "No arguments provided" && usage
 [ ! -z "$TEMPLATE" ] && cp `find "$SEARCH_DIR" -type f -not -path "$SEARCH_DIR/pandoc/*" -name "$TEMPLATE"` "$DIR"/"$OUTPUT"
 [ "$INC_MAKE" == true ] && cp $SEARCH_DIR/Makefile .
