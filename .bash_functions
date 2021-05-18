@@ -11,3 +11,8 @@ doi2bib()
 		curl -s "https://api.crossref.org/works/$1/transform/application/x-bibtex" >> bib.bib;
 		echo >> bib.bib;
 }
+
+fcd()
+{
+	cd $(fd -t d $1 | head -n 1)
+}
