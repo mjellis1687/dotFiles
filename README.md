@@ -1,5 +1,9 @@
 # Dot Files
 
+## Installation and Basis
+
+This approach for storing dotfiles was inspired by [https://www.atlassian.com/git/tutorials/dotfiles](https://www.atlassian.com/git/tutorials/dotfiles).
+
 ## Automatic Make Recipe Generation
 
 ### Matlab
