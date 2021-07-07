@@ -134,6 +134,8 @@ pandoc () {
 			${BIBLIOGRAPHY} \\"
 	[[ ! -z ${FILTERS} ]] && RECIPE+="
 			${FILTERS} \\"
+	[[ ! -z ${OPTIONS} ]] && RECIPE+="
+			${OPTIONS[@]} \\"
 	[[ ${1} == 'pdf' ]] && RECIPE+="
 			--pdf-engine=${ENGINE} \\"
 	[[ ${1} == 'pdf' ]] && [[ ! -z ${ENGINE_OPTS} ]] && RECIPE+="
@@ -234,6 +236,7 @@ get_pandoc_options () {
 	for f in ${FLTRS[@]} ; do
 		FILTERS+="--filter $f "
 	done
+	OPTIONS=($(get_instruction 'options'))
 
 	# Make a list of depends
 	DEPENDS=$(echo "$DEPENDS" | tr ' ' '\n')
@@ -276,10 +279,14 @@ latex_png () {
 }
 
 python () {
+	# Poor man's check for virtualenvs
+	# TODO: implement something that is not terrible
+	VENV=`ls | grep ".*v.*env"`
+	[[ ! -z ${VENV} ]] && VENV="source ${VENV}/bin/activate; "
 	[[ -z ${TO} ]] && TO=${BASE}.${DEFAULT_EXT}
 	local RECIPE="${TO} : ${SRC} ${DEPENDS}
 	@echo \"Running python on \$<.\"
-	@\${PYTHON} ${SRC}
+	@${VENV}\${PYTHON} ${SRC}
 	"
 	echo "DEST += ${TO}
 	" >> "${MAKEH}"
