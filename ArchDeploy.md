@@ -1,3 +1,12 @@
+---
+title: Arch Installation/Deploy Notes
+author: M. Ellis
+geometry: margin=1in
+...
+
+<!-- !build
+!end-build -->
+
 # Arch Installation / Deploy Notes
 
 ## Pre-installation
