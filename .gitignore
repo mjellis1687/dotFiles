@@ -23,7 +23,8 @@
 .kde4
 .keras
 .lesshst
-.local
+.local/lib
+.local/share
 .macromedia
 .mixxx
 .mozilla

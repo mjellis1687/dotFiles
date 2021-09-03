@@ -77,15 +77,6 @@ HISTFILESIZE=200000
 
 [[ -f ~/.bash_functions ]] && . ~/.bash_functions
 
-# SET PATHS
-if [ -d /usr/local/lib/pkgconfig ]; then
-	export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/usr/local/lib/pkgconfig
-fi
-if [ -d /usr/local/python ]; then
-	export PYTHONPATH=$PYTHONPATH:/usr/local/python:/usr/local/python3
-fi
-export PATH=$PATH:$HOME/bin
-
 # powerline-daemon -q
 POWERLINE_BASH_CONTINUATION=1
 POWERLINE_BASH_SELECT=1
