@@ -1,0 +1,33 @@
+# Octave RC
+# M. Ellis
+
+# Load in system-wide rc file
+mkdir('~/.local/share/octave')
+source /usr/share/octave/site/m/startup/octaverc
+pkg prefix ~/.local/share/octave/packages ~/.local/share/octave/packages;
+pkg local_list ~/.local/share/octave/octave_packages
+
+# Change editor
+edit mode sync
+edit home .
+EDITOR('vim > /dev/tty 2>&1 < /dev/tty %s')
+
+# Add IPOPT location
+addpath('/usr/local/lib')
+
+# Packages that should be installed
+function checkPackages()
+	# Checks to make sure all the required packages are installed
+	# Installs missing packages
+	pkgs = {'control', 'io', 'statistics', 'optim', 'struct'};
+	installed = pkg('list');
+	for index = 1:length(installed)
+		installed{1, index} = installed{1, index}.name;
+	end
+	isInstalled = ismember(pkgs, installed);
+	for pkgName = pkgs(1, ~isInstalled)
+		disp(['Installing package: ', pkgName])
+		pkg('install', '-forge', pkgName{1})
+	end
+end
+checkPackages()
