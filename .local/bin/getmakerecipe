@@ -170,6 +170,11 @@ pandoc_pptx () {
 	pandoc 'pptx' 'pptx'
 }
 
+pandoc_docx () {
+	# Pandoc docx recipe
+	pandoc 'docx' 'docx'
+}
+
 pandoc_course () {
 	# Pandoc homework
 

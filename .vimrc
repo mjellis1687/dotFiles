@@ -63,6 +63,8 @@ Plug 'vim-pandoc/vim-pandoc'
 Plug 'vim-pandoc/vim-pandoc-syntax'
 " Color scheme
 Plug 'KyleOndy/wombat256mod'
+" Character diff
+Plug 'rickhowe/diffchar.vim'
 
 " Tell vim-plug we finished declaring plugins, so it can load them
 call plug#end()
