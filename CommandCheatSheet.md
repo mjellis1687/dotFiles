@@ -1,6 +1,49 @@
-# Command Cheat Sheet
+#. Command Cheat Sheet
 
 ## Setup Updates and Configuration Note
+
+### `$HOME` Clean-up Notes
+
+- `BCL` - Building component library from `OpenStudio`?
+- `.cmake` - Builds of CasADi created this (moved to backup)
+- `.code42` - UI logs (not sure if this path can be reconfigure?)
+- `.eclipse` - Not sure which program installed this (moved to backup)
+
+Files that cannot move:
+
+- `.netrc`
+
+### Code42 (CrashPlan)
+
+Using Code42, formally CrashPlan, to backup computer. Code42 does not officially support Arch Linux. Thus, it will try to install a SYSV start script into `/etc/init.d`. Thus, I manually create a service file based on one someone posted for CrashPlan [here](https://gist.github.com/takitani/c1fc85bbc410e219fea3caf45a014f7d)
+
+The script is:
+```bash
+# Paste this into:
+# /usr/lib/systemd/system/crashplan.service
+#
+# Then:
+# sudo systemctl enable crashplan.service
+# sudo systemctl start crashplan.service
+#
+# Based on: https://gist.github.com/qertoip/f670594c81bf90565805c28530280fc8
+
+[Unit]
+Description=Code42 Backup Engine
+After=network.target
+
+[Service]
+
+Type=forking
+WorkingDirectory=/usr/local/crashplan
+PIDFile=/usr/local/crashplan/Code42Service.pid
+
+ExecStart=/usr/local/crashplan/bin/service.sh start
+ExecStop=/usr/local/crashplan/bin/service.sh stop
+
+[Install]
+WantedBy=multi-user.target
+```
 
 ### tmux
 
@@ -59,6 +102,21 @@ GRUB_CMDLINE_LINUX_DEFAULT="intel_pstate=disable"
 
 ```
 pip list --outdated --format=freeze | grep -v '^\-e' | cut -d = -f 1  | xargs -n1 pip install -U
+```
+
+## Pacman Tips and Tricks
+
+- Print out user installed packages (excluding packages from `base` and `base-devel`
+```bash
+comm -23 <(pacman -Qqett | sort) <(pacman -Qqg base -g base-devel | sort | uniq)
+```
+- Print out comma-separated package name and description
+```bash
+pacman -Qi zoom | awk -F' [:<=>] ' '/^Name/{name=$2} /^Description/{print name"," $2}'
+```
+- To browse all installed packages with an instant preview of each package:
+```bash
+pacman -Qq | fzf --preview 'pacman -Qil {}' --layout=reverse --bind 'enter:execute(pacman -Qil {} | less)'
 ```
 
 ## Git Commands
