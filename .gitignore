@@ -23,6 +23,7 @@
 .lesshst
 .local/lib
 .local/share
+!.local/share/texmf/tex/latex/local
 .macromedia
 .mixxx
 .mozilla
