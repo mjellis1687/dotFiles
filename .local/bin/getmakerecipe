@@ -246,8 +246,10 @@ get_pandoc_options () {
 	# Make a list of depends
 	DEPENDS=$(echo "$DEPENDS" | tr ' ' '\n')
 	SEARCHED=
+	# TODO: do not include additional dependencies for pandoc_tex
 	get_dependencies "${SRC}" 0
 	DEPENDS=`get_unique_list "${DEPENDS} ${DEPS}"`
+	# TODO: add auto-build to pandoc_tex
 }
 
 latex_pdf () {
@@ -285,8 +287,8 @@ latex_png () {
 
 python () {
 	# Poor man's check for virtualenvs
-	# TODO: implement something that is not terrible
-	VENV=`ls | grep ".*v.*env"`
+	# TODO: implement something that is not terrible (will not work with multiple venv's)
+	VENV=`ls -a | grep ".*v.*env"`
 	[[ ! -z ${VENV} ]] && VENV="source ${VENV}/bin/activate; "
 	[[ -z ${TO} ]] && TO=${BASE}.${DEFAULT_EXT}
 	local RECIPE="${TO} : ${SRC} ${DEPENDS}
