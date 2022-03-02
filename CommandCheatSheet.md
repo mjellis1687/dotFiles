@@ -266,3 +266,10 @@ $ find . -type f -name ".<file_type>"
 	```
 	swap-window -t -3
 	```
+
+## Converting Files
+
+- Convert `.bib` file to `.xml` that can be imported in Word:
+```
+bib2xml mybib.bib | xml2wordbib | sed -e 's/PeriodicalName/PeriodicalTitle/g' -e 's/>Proceedings/>ConferenceProceedings/g' > word.xml
+```
