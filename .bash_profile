@@ -16,7 +16,7 @@ export XDG_CACHE_HOME="$HOME/.cache"
 export XDG_DATA_HOME="$HOME/.local/share"
 
 # Programs that partially support XDG
-export XINITRC="$XDG_CONFIG_HOME/x11/xinitrc"
+export XINITRC="${XDG_CONFIG_HOME:-$HOME/.config}/x11/xinitrc"
 export OCTAVE_HISTFILE="$XDG_CACHE_HOME/octave/octave_hist"
 export OCTAVE_SITE_INITFILE="$XDG_CONFIG_HOME/octave/octaverc"
 export TEXMFHOME="${XDG_DATA_HOME}/texmf"

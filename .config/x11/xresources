@@ -49,30 +49,49 @@ URxvt.background:				[70]#000000
 URxvt.secondaryScreen:			1
 URxvt.secondaryScroll:			0
 
-! Perl extensions
-URxvt.perl-ext-common:			default,matcher,clipboard,fullscreen,resize-font,url-select,keyboard-select
-URxvt.url-launcher:				/usr/bin/xdg-open
-URxvt.matcher.button:			1
-! Color for links
-URxvt.matcher.rend.0:			Uline Bold fg5
-URxvt.url-select.launcher:		/usr/bin/xdg-open
-URxvt.url-select.underline:		true
+! Perl extensions: requires urxvt-perls, urxvt-fullscreen, urxvt-resize-font
+URxvt.perl-ext-common:			default,selection-to-clipboard,fullscreen,resize-font,url-select,keyboard-select
 
-! Keybindings
-URxvt.keysym.Shift-Control-Escape:perl:keyboard-select:activate
-URxvt.keysym.M-u:				perl:url-select:select_next
-! Resize fond
-URxvt.resize-font.smaller:		C-Down
-URxvt.resize-font.bigger:		C-Up
-! Open and list the recent URLs
-URxvt.keysum.C-Delete:			perl:matcher:last
-URxvt.keysum.M-Delete:			perl:matcher:last
-URxvt.keysym.F11:				perl:fullscreen:switch
+! Selection-to-clipboard
+URxvt.clipboard.autocopy:		true
 ! For the Ctrl+Shift bindings to work
 URxvt.iso14755:					False
 URxvt.iso14755_52:				False
-URxvt.clipboard.autocopy:		true
 URxvt.keysym.Shift-Control-C:	perl:clipboard:copy
 URxvt.keysym.Shift-Control-V:	perl:clipboard:paste
 URxvt.clipboard.copycmd:		xsel -ib
 URxvt.clipboard.pastecmd:		xsel -ob
+
+! Fullscreen
+URxvt.keysym.F11:				perl:fullscreen:switch
+
+! Resize-font
+URxvt.resize-font.smaller:		C-Down
+URxvt.resize-font.bigger:		C-Up
+
+! URL select
+! Key commands (from wiki):
+!  Alt+u	Enter selection mode
+!  k		Select next upward URL
+!  j		Select next downward URL
+!  Return	Open selected URL in browser / quit selection mode
+!  o		Open selected URL in browser / do not quit selection mode
+!  y		Yank selected URL
+!  Esc		Cancel URL selection mode
+URxvt.url-select.launcher:		/usr/bin/xdg-open
+URxvt.url-select.underline:		true
+URxvt.url-select.button:		1
+URxvt.keysym.M-u:				perl:url-select:select_next
+
+! Keyboard-select
+URxvt.keysym.Shift-Control-Escape:perl:keyboard-select:activate
+
+! Dealing with URLS using matcher (conflicts with url-select)
+! ! Open URL links in default browser with left mouse button
+! URxvt.url-launcher:				/usr/bin/xdg-open
+! URxvt.matcher.button:			1
+! ! Open and list the recent URLs
+! URxvt.keysum.C-Delete:			perl:matcher:last
+! URxvt.keysum.M-Delete:			perl:matcher:list
+! ! Color for links
+! URxvt.matcher.rend.0:			Uline Bold fg5
