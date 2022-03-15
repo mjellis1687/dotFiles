@@ -19,7 +19,7 @@ addpath('/usr/local/lib')
 function checkPackages()
 	# Checks to make sure all the required packages are installed
 	# Installs missing packages
-	pkgs = {'control', 'io', 'statistics', 'optim', 'struct'};
+	pkgs = {'control', 'io', 'statistics', 'struct', 'optim'};
 	installed = pkg('list');
 	for index = 1:length(installed)
 		installed{1, index} = installed{1, index}.name;
