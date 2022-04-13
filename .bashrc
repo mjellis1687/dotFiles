@@ -71,16 +71,16 @@ HISTFILESIZE=200000
 # You may want to put all your additions into a separate file like
 # ~/.bash_aliases, instead of adding them here directly.
 # See /usr/share/doc/bash-doc/examples in the bash-doc package.
-[[ -f ~/.bash_aliases ]] && . ~/.bash_aliases
+[[ -f ${XDG_CONFIG_HOME}/shell/aliases ]] && . ${XDG_CONFIG_HOME}/shell/aliases
 
 # FUNCTIONS
 
-[[ -f ~/.bash_functions ]] && . ~/.bash_functions
+[[ -f ${XDG_CONFIG_HOME}/shell/functions ]] && . ${XDG_CONFIG_HOME}/shell/functions
 
 # powerline-daemon -q
 POWERLINE_BASH_CONTINUATION=1
 POWERLINE_BASH_SELECT=1
-. /usr/share/powerline/bindings/bash/powerline.sh
+# . /usr/share/powerline/bindings/bash/powerline.sh
 
 # Turn off flow control commands (prevent Ctrl+s from "freezing" vim)
 stty -ixon
@@ -90,7 +90,7 @@ stty -ixon
 # fi
 
 # Open tmux by default
-[[ $TERM != "screen" ]] && exec tmux
+# [[ $TERM != "screen" ]] && exec tmux
 
 # Bash completion for pandoc
 eval "$(pandoc --bash-completion)"
