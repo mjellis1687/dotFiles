@@ -5,13 +5,23 @@
 ### `$HOME` Clean-up Notes
 
 - `BCL` - Building component library from `OpenStudio`?
-- `.cmake` - Builds of CasADi created this (moved to backup)
+- `.cmake` - Used for the user registry (hardcoded). Builds of CasADi created this (moved to backup)
 - `.code42` - UI logs (not sure if this path can be reconfigure?)
 - `.eclipse` - Not sure which program installed this (moved to backup)
 
 Files that cannot move:
 
 - `.netrc`
+
+### TODO
+
+- Verify that `.profile` works (for some reason it was not getting loaded properly in the quake terminal)
+- Make sure that `~/.zoom` does not come back
+	- My thought is that it is getting regenerated since the profile is not being loaded correctly (related to point one or a gnome crash?)
+- Move git location
+- Move location of markdown files
+- Move vim
+
 
 ### Code42 (CrashPlan)
 
@@ -57,6 +67,15 @@ pkg update
 ```
 
 ### Vim
+
+#### Getting Clipboard Working
+
+- Need `+clipboard` feature enabled. Check via:
+```
+vim --version
+```
+- From Arch wiki, the `vim` package is build without `Xorg` support; specifically, the `+clipboard` feature is missing.
+- Install `gvim` (needed for the system clipboard; this will actually report that `vim` and `gvim` are in conflict, which is fine - `gvim` will install both `vim` and `gvim`)
 
 #### Vim Plugin Manager
 

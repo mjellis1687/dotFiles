@@ -1,7 +1,7 @@
 #!/bin/sh
 
-# According to Luke Smith, "This file runs when a DM logs you into a graphical session.
-# If you use startx/xinit like a Chad, this file will also be sourced.
+# This file runs when a DM logs you into a graphical session.
+# If you use startx/xinit, this file will also be sourced.
 
 userresources=${HOME}/.config/x11/xresources
 usermodmap=${HOME}/.config/x11/xmodmap
@@ -24,11 +24,3 @@ fi
 if [ -f "$usermodmap" ]; then
     xmodmap "$usermodmap"
 fi
-
-# # start some nice programs
-# if [ -d /etc/X11/xinit/xinitrc.d ] ; then
-#  for f in /etc/X11/xinit/xinitrc.d/?*.sh ; do
-#   [ -x "$f" ] && . "$f"
-#  done
-#  unset f
-# fi
