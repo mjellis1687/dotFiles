@@ -47,7 +47,7 @@ Plug 'ctrlpvim/ctrlp.vim'
 " Powerline
 Plug 'powerline/powerline'
 " Python Mode - not supported in Python3.8
-" Plug 'python-mode/python-mode', { 'for': 'python', 'branch': 'develop' }
+Plug 'python-mode/python-mode', { 'for': 'python', 'branch': 'develop' }
 " Syntax checker
 Plug 'vim-syntastic/syntastic'
 " Python imports
