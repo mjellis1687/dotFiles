@@ -274,13 +274,24 @@ latex_eps () {
 	echo "${RECIPE}" >> "${MAKEH}"
 }
 
-latex_png () {
+pdf2png () {
 	#TODO: automatically add latex_pdf if needed
 	RECIPE="${BASE}.png : ${BASE}.pdf
 	@echo \"Building \$@\"
 	@cd $(dirname ${SRC}) ; convert -density 800 \$(notdir \$<) \$(notdir \$@)
 	"
 	echo "DEST += ${BASE}.png
+	" >> "${MAKEH}"
+	echo "${RECIPE}" >> "${MAKEH}"
+}
+
+pdf2jpg () {
+	#TODO: automatically add latex_pdf if needed
+	RECIPE="${BASE}.jpg : ${BASE}.pdf
+	@echo \"Building \$@\"
+	@cd $(dirname ${SRC}) ; convert -density 800 \$(notdir \$<) \$(notdir \$@)
+	"
+	echo "DEST += ${BASE}.jpg
 	" >> "${MAKEH}"
 	echo "${RECIPE}" >> "${MAKEH}"
 }
