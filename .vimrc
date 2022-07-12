@@ -48,6 +48,7 @@ Plug 'ctrlpvim/ctrlp.vim'
 Plug 'powerline/powerline'
 " Python Mode - not supported in Python3.8
 Plug 'python-mode/python-mode', { 'for': 'python', 'branch': 'develop' }
+Plug 'python-rope/ropevim'
 " Syntax checker
 Plug 'vim-syntastic/syntastic'
 " Python imports
@@ -298,8 +299,8 @@ vnoremap <Leader>s :sort<CR>
 " Code folding
 " let g:pymode_folding = 0
 " let g:pymode_rope_complete_on_dot = 0
-" let g:pymode_python = 'python3'
-" let g:pymode_virtualenv = 1
+let g:pymode_python = 'python3'
+let g:pymode_virtualenv = 1
 " map <Leader>g :call RopeGotoDefinition()<CR>
 " let ropevim_enable_shortcuts = 1
 " let g:pymode_rope_goto_def_newwin = vnew

@@ -1,0 +1,75 @@
+#!/bin/bash
+
+# have
+
+set -e
+
+#### Variables
+
+SECONDS=0
+
+#### Functions
+
+usage()
+{
+	# Print usage
+	echo "Command-line timer."
+	echo
+	echo "Syntax: countdown [[-s seconds] [-m minutes] [-H hours] | [-h]]"
+	echo
+	echo "options:"
+	echo "s		seconds"
+	echo "m		minutes"
+	echo "H		hours"
+	echo "h		Print this help"
+}
+
+timer()
+{
+	start="$(( $(date '+%s') + $1))"
+	while [ $start -ge $(date +%s) ]; do
+		time="$(( $start - $(date +%s) ))"
+		printf '%s\r' "$(date -u -d "@$time" +%H:%M:%S)"
+	done
+	notify-send "Time is up!!"
+}
+
+notnumber()
+{
+	echo "Error: After $1, must specify integer. $2 is not an integer"
+	usage
+	exit 1
+}
+
+#### Main
+
+re='^[0-9]+$'
+
+# parse command-line arguments
+while getopts "s:m:H:h" opt; do
+	case "$opt" in
+		h)
+			usage
+			exit 0
+			;;
+		s)
+			! [[ $OPTARG =~ $re ]] && notnumber "-s" $OPTARG
+			SECONDS=$(expr $OPTARG + $SECONDS)
+			;;
+		m)
+			! [[ $OPTARG =~ $re ]] && notnumber "-m" $OPTARG
+			SECONDS=$(expr $SECONDS + $(expr $OPTARG \* 60))
+			;;
+		H)
+			! [[ $OPTARG =~ $re ]] && notnumber "-H" $OPTARG
+			SECONDS=$(expr $SECONDS + $(expr $OPTARG \* 3600))
+			;;
+		*)
+			usage
+			exit 1
+	esac
+done
+
+[[ "$SECONDS" = 0 ]] && echo "No time specified" && usage && exit 1
+echo "Running a time for ${SECONDS} seconds."
+timer $SECONDS

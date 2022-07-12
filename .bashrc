@@ -80,7 +80,7 @@ HISTFILESIZE=200000
 # powerline-daemon -q
 POWERLINE_BASH_CONTINUATION=1
 POWERLINE_BASH_SELECT=1
-# . /usr/share/powerline/bindings/bash/powerline.sh
+. /usr/share/powerline/bindings/bash/powerline.sh
 
 # Turn off flow control commands (prevent Ctrl+s from "freezing" vim)
 stty -ixon
@@ -90,7 +90,7 @@ stty -ixon
 # fi
 
 # Open tmux by default
-# [[ $TERM != "screen" ]] && exec tmux
+if [ -t 0 ] && [[ -z $TMUX ]] && [[ $- = *i* ]]; then exec tmux; fi
 
 # Bash completion for pandoc
 eval "$(pandoc --bash-completion)"
