@@ -214,6 +214,8 @@ imap <C-S-Left> <ESC>:tabp<CR>
 " Easier moving between tabs
 map <Leader>n <esc>:tabprevious<CR>
 map <Leader>m <esc>:tabnext<CR>
+" Open tag in new tab
+nnoremap <silent><Leader><C-]> <C-w><C-]><C-w>T
 
 " Quick saving
 map <C-s> <ESC>:w<CR>

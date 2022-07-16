@@ -89,7 +89,7 @@ Currently, using the vim plug-in manager found [here](https://github.com/junegun
 `YouCompleteMe` is a plug-in that helps with auto-complete.
 ```bash
 $ cd ~/.vim/plugged/YouCompleteMe
-$ ./install.py --clang-completer
+$ ./install.py
 ```
 
 ### Python
