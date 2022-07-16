@@ -11,7 +11,7 @@
 !.config/octave/config
 !.config/python/pythonrc
 !.config/pulse/default.pa
-!.config/readline
+!.config/readline/inputrc
 !.config/shell
 !.config/tmux
 !.config/wget
@@ -54,7 +54,6 @@ Documents
 Downloads
 Dropbox
 node_modules
-[Nn]umerics
 Pictures
 Storage
 Templates
