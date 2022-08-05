@@ -9,6 +9,7 @@
 !.config/ipython/profile_default/ipython_config.py
 !.config/latexmk
 !.config/octave/config
+!.config/pandoc
 !.config/python/pythonrc
 !.config/pulse/default.pa
 !.config/readline/inputrc
@@ -33,7 +34,6 @@
 .matlab
 .mozilla
 .netrc
-.pandoc
 .pulse_secure
 .rnd
 .ssh
