@@ -66,6 +66,8 @@ Plug 'vim-pandoc/vim-pandoc-syntax'
 Plug 'KyleOndy/wombat256mod'
 " Character diff
 Plug 'rickhowe/diffchar.vim'
+" Vim-tables
+Plug 'dhruvasagar/vim-table-mode'
 
 " Tell vim-plug we finished declaring plugins, so it can load them
 call plug#end()

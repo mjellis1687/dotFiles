@@ -1,22 +1,14 @@
 """Python RC"""
-import os
 import atexit
+import os
 import readline
 
 
 history = os.path.join(os.environ['XDG_CACHE_HOME'], 'python_history')
 try:
 	readline.read_history_file(history)
-except OSError:
+	readline.set_history_length(10000)
+except FileNotFoundError:
 	pass
 
-
-def write_history():
-	"""Write history file"""
-	try:
-		readline.write_history_file(history)
-	except OSError:
-		pass
-
-
-atexit.register(write_history)
+atexit.register(readline.write_history_file, history)

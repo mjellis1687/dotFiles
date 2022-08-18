@@ -1,6 +1,6 @@
 !! Appearance
-! Font
-*font: xft:Source\ Code\ Pro\ Medium:pixelsize=13:antialias=true:hinting=true,xft:Source\ Code\ Pro\ Medium:pixelsize=13:antialias=true:hinting=true
+! Font for Urxvt
+URxvt*font: xft:Source\ Code\ Pro\ Medium:pixelsize=13:antialias=true:hinting=true
 !
 ! Fade the text by the given percentage when focus is lost
 *fading:						30
