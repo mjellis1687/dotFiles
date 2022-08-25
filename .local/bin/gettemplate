@@ -10,8 +10,8 @@ usage() {
 	echo
 	echo "options:"
 	echo "  h	Print this help"
-	echo "  l	List all templates"
-	echo "  s	List all skeletons"
+	echo "  l	List all Pandoc templates"
+	echo "  s	List all Markdown templates"
 	echo "  t	Template to get"
 	echo "  n	Rename template file to"
 	echo "  m	Include generic Makefile"
@@ -52,7 +52,7 @@ while getopts "d:t:n:mlsh" opt; do
 			;;
 		m)	INC_MAKE=true
 			;;
-		m)	DIR="$OPTARG"
+		d)	DIR="$OPTARG"
 			;;
 		*)
 			usage
@@ -63,4 +63,4 @@ done
 
 [ -z "$TEMPLATE" ] && [ "$INC_MAKE" == false ] && echo "No arguments provided" && usage
 [ ! -z "$TEMPLATE" ] && cp `find "$SEARCH_DIR" -type f -not -path "$SEARCH_DIR/pandoc/*" -name "$TEMPLATE"` "$DIR"/"$OUTPUT"
-[ "$INC_MAKE" == true ] && cp $SEARCH_DIR/Makefile .
+[ "$INC_MAKE" == true ] && cp $SEARCH_DIR/Makefile "$DIR"
