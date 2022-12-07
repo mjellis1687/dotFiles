@@ -1,7 +1,10 @@
 #!/bin/bash
 
-# have
+# Author: Matthew J. Ellis
+# Description: Simple CLI timer
 
+# exit immediately if a pipeline, a list, or a compound command returns
+# non-zero status
 set -e
 
 #### Variables
