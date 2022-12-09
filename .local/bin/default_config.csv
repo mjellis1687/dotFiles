@@ -1,6 +1,6 @@
 Extension,Default Output,Default Recipe,Start Comment,End Comment,Instructions Terminated by !end-build ,Default Behavior Description
-.md,pdf,pandoc_beamer,<!--,-->,FALSE,Converts Markdown to a PDF using Pandoc
+.md,pdf,pandoc_pdf,<!--,-->,FALSE,Converts Markdown to a PDF using Pandoc
 .py,eps,python,#,#,TRUE,Runs the Python file as a script to generate an EPS image
 .ipynb,eps,jupyter_notebooks,<!--,-->,FALSE,Runs the Python Jupyter notebook to generate an EPS image
 .m,eps,matlab,%,%,TRUE,Runs the Matlab m-file as a script to generate an EPS image
-.tex,pdf,latex_pdf,%,%,TRUE,Complies the tex file into a PDF using LaTeX 
+.tex,pdf,latex_pdf,%,%,TRUE,Complies the tex file into a PDF using LaTeX

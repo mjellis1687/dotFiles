@@ -173,7 +173,7 @@ pandoc_docx () {
 }
 
 pandoc_course () {
-	# Pandoc homework
+	# Pandoc homework/exam
 
 	# Problem statements
 	SED_CMD="; /\\\\begin{solution}/,/\\\\end{solution}/d; /\\\\bsol/,/\\\\esol/d"
@@ -187,6 +187,22 @@ pandoc_course () {
 	PWD=`pwd`
 	gpp -x -U "!" "" "(" "," ")" "(" ")" "" "" -I "${PWD}" ${SRC} | grep -E '(\\begin{solution}|\\bsol)' > /dev/null && pandoc 'pdf' 'pdf'
 	BASE="${OLD_BASE}"
+}
+
+pandoc_lecture() {
+	# To lecture presentation
+	SED_CMD="; /^[ \t]*\([0-9]*\.\|\-\)z.*/d"
+	pandoc 'pdf' 'beamer'
+
+	# To lecture notes
+	SED_CMD="; s/\(^[ \t]*\)\([0-9]*\.\|\-\)z/\1\2/"
+	OLD_BASE="${BASE}"
+	BASE="${BASE}-notes"
+	OLD_OPTIONS=("${OPTIONS[@]}")
+	OPTIONS+=("-V cmdline-header-includes='\usepackage{beamerarticle}'")
+	pandoc 'pdf' 'pdf'
+	BASE="${OLD_BASE}"
+	OPTIONS=("${OLD_OPTIONS[@]}")
 }
 
 pandoc_submission () {
