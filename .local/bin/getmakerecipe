@@ -15,6 +15,7 @@ DEFAULT_FROM="markdown+latex_macros+link_attributes"
 DEFAULT_PDF_ENGINE="latexmk"
 DEFAULT_HIGHLIGHT="tango"
 DEFAULT_TEMPLATE="default.latex"
+COURSE_TEMPLATE="course-material.tex"
 CONFIG="${HOME}/.local/bin/default_config.csv"
 BLDDIR=.make
 DISTDIR=dist
@@ -196,13 +197,23 @@ pandoc_lecture() {
 
 	# To lecture notes
 	SED_CMD="; s/\(^[ \t]*\)\([0-9]*\.\|\-\)z/\1\2/"
+
+	# TODO: This is really jenky...
+	# Save current variables
 	OLD_BASE="${BASE}"
-	BASE="${BASE}-notes"
 	OLD_OPTIONS=("${OPTIONS[@]}")
+	OLD_TEMPATE="${TEMPLATE}"
+
+	TEMPLATE="--template=\${PANDOC_TEMPLATE_DIR}/${COURSE_TEMPLATE}"
+	BASE="${BASE}-notes"
 	OPTIONS+=("-V cmdline-header-includes='\usepackage{beamerarticle}'")
 	pandoc 'pdf' 'pdf'
-	BASE="${OLD_BASE}"
-	OPTIONS=("${OLD_OPTIONS[@]}")
+
+	# For now, call pandoc-tex to create {BASE}-notes.tex
+	# # Reset variables for later use
+	# BASE="${OLD_BASE}"
+	# OPTIONS=("${OLD_OPTIONS[@]}")
+	# TEMPLATE="${OLD_TEMPATE}"
 }
 
 pandoc_submission () {
