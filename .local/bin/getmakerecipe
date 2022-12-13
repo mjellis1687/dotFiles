@@ -192,11 +192,12 @@ pandoc_course () {
 
 pandoc_lecture() {
 	# To lecture presentation
-	SED_CMD="; /^[ \t]*\([0-9]*\.\|\-\)z.*/d"
+	SED_CMD="; /^[ \t]*\([0-9]*\.\|\-\)z.*/d; /\$\$z/,/\$\$z/d"
 	pandoc 'pdf' 'beamer'
 
 	# To lecture notes
-	SED_CMD="; s/\(^[ \t]*\)\([0-9]*\.\|\-\)z/\1\2/"
+	# Better solution for guarding other things (equations)
+	SED_CMD="; s/\(^[ \t]*\)\([0-9]*\.\|\-\)z/\1\2/; s/\$\$z/\$\$/"
 
 	# TODO: This is really jenky...
 	# Save current variables
