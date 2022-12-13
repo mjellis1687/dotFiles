@@ -85,10 +85,6 @@ POWERLINE_BASH_SELECT=1
 # Turn off flow control commands (prevent Ctrl+s from "freezing" vim)
 stty -ixon
 
-# if [[ -z "$TMUX" ]] && [ "$SSH_CONNECTION" != "" ]; then
-# 	tmux attach-session -t ssh_tmux || tmux new-session -s ssh_tmux
-# fi
-
 # Open tmux by default
 if [ -t 0 ] && [[ -z $TMUX ]] && [[ $- = *i* ]]; then exec tmux; fi
 
