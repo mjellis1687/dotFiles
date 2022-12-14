@@ -27,7 +27,7 @@ alias gd="git diff"
 # switch to rxvt-unicode
 alias ct="$HOME/.local/bin/change_terminal.sh"
 
-# Alias make
+# "Alias" make
 function make() {
 	# Alias make to use the default Makefile if none is provided and
 	# Templates/Makefile is available
