@@ -1,0 +1,8 @@
+.exclude_dirs
+dist
+.make
+slides.pdf
+slides.tex
+tags
+*.zip
+*-eps-converted-to.pdf
