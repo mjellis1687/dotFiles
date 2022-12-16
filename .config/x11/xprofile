@@ -9,12 +9,12 @@ sysresources=/etc/X11/xinit/.Xresources
 sysmodmap=/etc/X11/xinit/.Xmodmap
 
 # merge in defaults and keymaps
-if [ -f $sysresources ]; then
-    xrdb -merge $sysresources
+if [ -f "$sysresources" ]; then
+    xrdb -merge "$sysresources"
 fi
 
-if [ -f $sysmodmap ]; then
-    xmodmap $sysmodmap
+if [ -f "$sysmodmap" ]; then
+    xmodmap "$sysmodmap"
 fi
 
 if [ -f "$userresources" ]; then
@@ -23,4 +23,12 @@ fi
 
 if [ -f "$usermodmap" ]; then
     xmodmap "$usermodmap"
+fi
+
+if [ "$GDMSESSION" == "dwm" ]; then
+	source ${HOME}/.bash_profile
+	xrandr --output DP-4 --auto --output HDMI-0 --left-of DP-4 --auto --output DP-3 --right-of DP-4 --auto
+	{ killall dunst ; setsid -f dunst ;} >/dev/null 2>&1
+	setbg &
+	remaps &
 fi

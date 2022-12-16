@@ -65,8 +65,8 @@ HISTFILESIZE=200000
 
 # ALIAS and FUNCTIONS
 
-[[ -f ${XDG_CONFIG_HOME:-$HOME/.config}/shell/aliases ]] && . ${XDG_CONFIG_HOME:-$HOME/.config}/shell/aliases
-[[ -f ${XDG_CONFIG_HOME:-$HOME/.config}/shell/functions ]] && . ${XDG_CONFIG_HOME:-$HOME/.config}/shell/functions
+[[ -f "${XDG_CONFIG_HOME:-$HOME/.config}/shell/aliases" ]] && . "${XDG_CONFIG_HOME:-$HOME/.config}/shell/aliases"
+[[ -f "${XDG_CONFIG_HOME:-$HOME/.config}/shell/functions" ]] && . "${XDG_CONFIG_HOME:-$HOME/.config}/shell/functions"
 
 # powerline-daemon -q
 POWERLINE_BASH_CONTINUATION=1
