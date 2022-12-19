@@ -39,7 +39,8 @@ SRC="$1"
 
 ## Utility functions
 get_instruction () {
-	# Get the instruction from the instruction list
+	# Get the instruction from the instruction list. If not present, returns
+	# the default value provided
 	local result=`echo "${INSTRUCTIONS}" | sed -n "${PREFIX}${1}:${SUFFIX}" | tr '\n' ' '`
 	[[ -z ${result} ]] && result=$2
 	echo "${result}"
