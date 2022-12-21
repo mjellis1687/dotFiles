@@ -48,6 +48,9 @@ fi
 # Ignore case in tab complete
 bind "set completion-ignore-case on"
 
+# Do not tab complete to a PDF when using vim
+complete -f -X "*.pdf" vim
+
 # Show if ambiguous
 bind "set show-all-if-ambiguous on"
 
