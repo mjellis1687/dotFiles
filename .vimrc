@@ -1,7 +1,6 @@
 " ==============================================================================
 "  	 FILE:	.vimrc
 "  AUTHOR:	Matthew Ellis
-"    DATE:	2019-07-02
 " ==============================================================================
 
 " ==============================================================================
@@ -94,6 +93,9 @@ set nocompatible
 " Set the clipboard to use system clipboard
 set clipboard=unnamed
 
+" Be able to use shell aliases in vim
+let $BASH_ENV = "~/.config/shell/aliases"
+
 " Leader key
 let mapleader="\\"
 
@@ -181,7 +183,7 @@ endif
 " COMMANDS
 
 " TAG jumping
-command! MakeTags !ctags -R --exclude=.git --exclude=venv .
+command! MakeTags !ctags -R --exclude=.git --exclude=*venv* .
 
 " Automatic reloading of .vimrc
 autocmd! bufwritepost .vimrc source %
