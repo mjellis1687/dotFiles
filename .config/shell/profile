@@ -31,7 +31,6 @@ export OCTAVE_HISTFILE="${XDG_CACHE_HOME}"/octave/octave_hist
 export OCTAVE_SITE_INITFILE="${XDG_CONFIG_HOME}"/octave/octaverc
 export PASSWORD_STORE_DIR="${XDG_DATA_HOME}"/pass
 export PYTHONSTARTUP="${XDG_CONFIG_HOME}"/python/pythonrc
-# export SSB_HOME="${XDG_DATA_HOME}"/zoom
 export TEXMFCONFIG=$XDG_CONFIG_HOME/texlive/texmf-config
 export TEXMFHOME="${XDG_DATA_HOME}"/texmf
 export TEXMFVAR=$XDG_CACHE_HOME/texlive/texmf-var
