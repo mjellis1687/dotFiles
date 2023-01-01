@@ -5,24 +5,29 @@
 # If not running interactively, don't do anything
 [[ "$-" != *i* ]] && return
 
+# Open tmux by default in uxrvt
+# Putting this command at the top prevents sourcing the rest twice
+[ "$TERM" == "rxvt-unicode-256color" ] && [ -t 0 ] && [[ -z $TMUX ]] && exec tmux
+
 # SHELL OPTIONS
 
 # Vi mode in bash
 set -o vi
 
-# If this is an xterm set the title to user@host:dir
-case "$TERM" in
-xterm*|rxvt*|screen*)
-	reset=$(tput sgr0)
-	red=$(tput setaf 1)
-	blue=$(tput setaf 4)
-	green=$(tput setaf 7)
-	PS1='\[$red\][\u@\h\[$reset\] \[$blue\]\W\[$reset\]\[$red\]]\$ \[$reset\]\[$green\]'
-    ;;
-*)
-	PS1="\u@\h:\W$ "
-    ;;
-esac
+# Use powerline so this is worthless
+# # If this is an xterm set the title to user@host:dir
+# case "$TERM" in
+# xterm*|rxvt*|screen*)
+# 	reset=$(tput sgr0)
+# 	red=$(tput setaf 1)
+# 	blue=$(tput setaf 4)
+# 	green=$(tput setaf 7)
+# 	PS1='\[$red\][\u@\h\[$reset\] \[$blue\]\W\[$reset\]\[$red\]]\$ \[$reset\]\[$green\]'
+#     ;;
+# *)
+# 	PS1="\u@\h:\W$ "
+#     ;;
+# esac
 
 # check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
@@ -34,16 +39,16 @@ shopt -s cdspell
 
 # COMPLETION OPTIONS
 
-# enable programmable completion features (you don't need to enable
-# this, if it's already enabled in /etc/bash.bashrc and /etc/profile
-# sources /etc/bash.bashrc).
-if ! shopt -oq posix; then
-  if [ -f /usr/share/bash-completion/bash_completion ]; then
-    . /usr/share/bash-completion/bash_completion
-  elif [ -f /etc/bash_completion ]; then
-    . /etc/bash_completion
-  fi
-fi
+# # enable programmable completion features (you don't need to enable
+# # this, if it's already enabled in /etc/bash.bashrc and /etc/profile
+# # sources /etc/bash.bashrc).
+# if ! shopt -oq posix; then
+#   if [ -f /usr/share/bash-completion/bash_completion ]; then
+#     . /usr/share/bash-completion/bash_completion
+#   elif [ -f /etc/bash_completion ]; then
+#     . /etc/bash_completion
+#   fi
+# fi
 
 # Ignore case in tab complete
 bind "set completion-ignore-case on"
@@ -78,9 +83,6 @@ POWERLINE_BASH_SELECT=1
 
 # Turn off flow control commands (prevent Ctrl+s from "freezing" vim)
 stty -ixon
-
-# Open tmux by default
-if [ -t 0 ] && [[ -z $TMUX ]] && [[ $- = *i* ]]; then exec tmux; fi
 
 # Bash completion for pandoc
 eval "$(pandoc --bash-completion)"
