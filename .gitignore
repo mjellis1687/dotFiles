@@ -62,6 +62,7 @@
 .dropbox*
 .hplip
 .java
+.keras
 .local/bin/booksplit
 .local/bin/compiler
 .local/bin/coverage
