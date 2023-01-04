@@ -1,7 +1,6 @@
 " ==============================================================================
 "  	 FILE:	.vimrc
 "  AUTHOR:	Matthew Ellis
-"    DATE:	2019-07-02
 " ==============================================================================
 
 " ==============================================================================
@@ -94,6 +93,9 @@ set nocompatible
 " Set the clipboard to use system clipboard
 set clipboard=unnamed
 
+" Be able to use shell aliases in vim
+let $BASH_ENV = "~/.config/shell/aliases"
+
 " Leader key
 let mapleader="\\"
 
@@ -181,7 +183,7 @@ endif
 " COMMANDS
 
 " TAG jumping
-command! MakeTags !ctags -R --exclude=.git --exclude=venv .
+command! MakeTags !ctags -R --exclude=.git --exclude=*venv* .
 
 " Automatic reloading of .vimrc
 autocmd! bufwritepost .vimrc source %
@@ -347,16 +349,22 @@ set iskeyword+=:
 
 let g:Tex_DefaultTargetFormat = 'pdf'
 " let g:Tex_CompileRule_pdf = 'pdflatex -interaction=nonstopmode -file-line-error-style $*'
+" TODO: get forward and backward search set-up (seems to require synctex)
+" Seems possible with zathura; see: https://tex.stackexchange.com/questions/584529/setting-up-synctex-with-vim-and-zathura
+" Seems partially possible with markdown as well; see: https://groups.google.com/g/pandoc-discuss/c/IFN1QN3gh14/m/87hLeyc7BwAJ
 let g:Tex_CompileRule_pdf = 'latexmk -pdf $*'
 let g:Tex_ViewRule_pdf = 'evince'
 let g:Tex_MultipleCompileFormats='pdf,bibtex,pdf'
+
+" let g:Tex_CompileRule_pdf = 'latexmk -pdf -pdflatex="pdflatex -synctex=1 -src-specials -interaction=nonstopmode" $*'
+" let g:Tex_ViewRule_pdf = 'zathura'
 
 "autocmd BufEnter *.tex filetype plugin on|set shellslash| set grepprg=grep\ -nH\ $*|filetype indent on|let g:tex_flavor='latex'|set iskeyword+=:
 let g:Tex_IgnoreLevel=0
 
 " Markdown ------------------------------
 autocmd FileType markdown noremap <Leader>c i::: {.columns}<CR>:::: {.column width=<++>%}<CR><CR><++><CR><CR>::::<CR>:::: {.column width=<++>%}<CR><CR><++><CR><CR>::::<CR>:::<Esc>11k2h
-autocmd FileType markdown noremap <Leader>lv :!xdg-open %:r.pdf<CR><CR>
+autocmd FileType markdown noremap <Leader>lv :!xdg-open %:r.pdf &<CR><CR>
 noremap <Leader>w :w<CR>
 autocmd FileType markdown noremap <Leader>w :w<CR>:make<CR>
 

@@ -1,0 +1,4 @@
+audio_quality = high
+user = <your-email@here.com>
+password_command = pass pianobar
+event_command = ~/.local/bin/pianobar-notify

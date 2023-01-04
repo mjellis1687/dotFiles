@@ -1,26 +1,33 @@
+# ~/.bashrc: executed by bash(1) for non-login shells.
+#
 # Author: Matt Ellis (based on several .bashrc examples)
 
 # If not running interactively, don't do anything
 [[ "$-" != *i* ]] && return
+
+# Open tmux by default in uxrvt
+# Putting this command at the top prevents sourcing the rest twice
+[ "$TERM" == "rxvt-unicode-256color" ] && [ -t 0 ] && [[ -z $TMUX ]] && exec tmux
 
 # SHELL OPTIONS
 
 # Vi mode in bash
 set -o vi
 
-# If this is an xterm set the title to user@host:dir
-case "$TERM" in
-xterm*|rxvt*|screen*)
-	reset=$(tput sgr0)
-	red=$(tput setaf 1)
-	blue=$(tput setaf 4)
-	green=$(tput setaf 7)
-	PS1='\[$red\][\u@\h\[$reset\] \[$blue\]\W\[$reset\]\[$red\]]\$ \[$reset\]\[$green\]'
-    ;;
-*)
-	PS1="\u@\h:\W$ "
-    ;;
-esac
+# Use powerline so this is worthless
+# # If this is an xterm set the title to user@host:dir
+# case "$TERM" in
+# xterm*|rxvt*|screen*)
+# 	reset=$(tput sgr0)
+# 	red=$(tput setaf 1)
+# 	blue=$(tput setaf 4)
+# 	green=$(tput setaf 7)
+# 	PS1='\[$red\][\u@\h\[$reset\] \[$blue\]\W\[$reset\]\[$red\]]\$ \[$reset\]\[$green\]'
+#     ;;
+# *)
+# 	PS1="\u@\h:\W$ "
+#     ;;
+# esac
 
 # check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
@@ -32,19 +39,22 @@ shopt -s cdspell
 
 # COMPLETION OPTIONS
 
-# enable programmable completion features (you don't need to enable
-# this, if it's already enabled in /etc/bash.bashrc and /etc/profile
-# sources /etc/bash.bashrc).
-if ! shopt -oq posix; then
-  if [ -f /usr/share/bash-completion/bash_completion ]; then
-    . /usr/share/bash-completion/bash_completion
-  elif [ -f /etc/bash_completion ]; then
-    . /etc/bash_completion
-  fi
-fi
+# # enable programmable completion features (you don't need to enable
+# # this, if it's already enabled in /etc/bash.bashrc and /etc/profile
+# # sources /etc/bash.bashrc).
+# if ! shopt -oq posix; then
+#   if [ -f /usr/share/bash-completion/bash_completion ]; then
+#     . /usr/share/bash-completion/bash_completion
+#   elif [ -f /etc/bash_completion ]; then
+#     . /etc/bash_completion
+#   fi
+# fi
 
 # Ignore case in tab complete
 bind "set completion-ignore-case on"
+
+# Do not tab complete to a PDF when using vim
+complete -f -X "*.pdf" vim
 
 # Show if ambiguous
 bind "set show-all-if-ambiguous on"
@@ -61,17 +71,10 @@ shopt -s histappend
 HISTSIZE=100000
 HISTFILESIZE=200000
 
-# ALIAS
+# ALIAS and FUNCTIONS
 
-# Alias definitions.
-# You may want to put all your additions into a separate file like
-# ~/.bash_aliases, instead of adding them here directly.
-# See /usr/share/doc/bash-doc/examples in the bash-doc package.
-[[ -f ${XDG_CONFIG_HOME}/shell/aliases ]] && . ${XDG_CONFIG_HOME}/shell/aliases
-
-# FUNCTIONS
-
-[[ -f ${XDG_CONFIG_HOME}/shell/functions ]] && . ${XDG_CONFIG_HOME}/shell/functions
+[[ -f "${XDG_CONFIG_HOME:-$HOME/.config}/shell/aliases" ]] && . "${XDG_CONFIG_HOME:-$HOME/.config}/shell/aliases"
+[[ -f "${XDG_CONFIG_HOME:-$HOME/.config}/shell/functions" ]] && . "${XDG_CONFIG_HOME:-$HOME/.config}/shell/functions"
 
 # powerline-daemon -q
 POWERLINE_BASH_CONTINUATION=1
@@ -80,13 +83,6 @@ POWERLINE_BASH_SELECT=1
 
 # Turn off flow control commands (prevent Ctrl+s from "freezing" vim)
 stty -ixon
-
-# if [[ -z "$TMUX" ]] && [ "$SSH_CONNECTION" != "" ]; then
-# 	tmux attach-session -t ssh_tmux || tmux new-session -s ssh_tmux
-# fi
-
-# Open tmux by default
-if [ -t 0 ] && [[ -z $TMUX ]] && [[ $- = *i* ]]; then exec tmux; fi
 
 # Bash completion for pandoc
 eval "$(pandoc --bash-completion)"

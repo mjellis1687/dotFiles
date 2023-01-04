@@ -1,7 +1,32 @@
 #!/bin/sh
 
 # Author: Matthew Ellis
+# Description: Build a make recipe from a source file
 
+# exit immediately if a pipeline, a list, or a compound command returns
+# non-zero status
+set -e
+
+#### Variables
+
+# Defaults
+DEFAULT_CSL="journal-of-process-control.csl"
+DEFAULT_FROM="markdown+latex_macros+link_attributes"
+DEFAULT_PDF_ENGINE="latexmk"
+DEFAULT_HIGHLIGHT="tango"
+DEFAULT_TEMPLATE="default.latex"
+PANDOC_TEMPLATE_DIR="${HOME}/Templates/pandoc-templates"
+COURSE_TEMPLATE="course-material.tex"
+LECTURE_TEMPLATE="lecture.latex"
+CONFIG="${HOME}/.local/bin/default_config.csv"
+BLDDIR=.make
+DISTDIR=dist
+DIST_TEX_SUPPORT='(eps|png|jpg|jpeg|pdf|bib)'
+MAX_DEPTH=5
+
+#### Functions
+
+## Utility functions
 usage() {
 	# Print usage
 	echo "Automatically generate a make recipe from a source file"
@@ -15,31 +40,9 @@ usage() {
 	echo "h		Print this help"
 }
 
-# Defaults
-DEFAULT_CSL="journal-of-process-control.csl"
-DEFAULT_FROM="markdown+latex_macros+link_attributes"
-DEFAULT_PDF_ENGINE="latexmk"
-DEFAULT_HIGHLIGHT="tango"
-DEFAULT_TEMPLATE="default.latex"
-BLDDIR=.make
-DISTDIR=dist
-DIST_TEX_SUPPORT='(eps|png|jpg|jpeg|pdf|bib)'
-# ext, default output, default recipe, start comment, end comment,
-# !end-build before or after comment mark
-BUILD='.md,pdf,pandoc_pdf,<!--,-->,false
-.py,eps,python,#,#,true
-.ipynb,eps,jupyter_notebooks,<!--,-->,false
-.m,eps,matlab,%,%,true
-.tex,pdf,latex_pdf,%,%,true'
-
-# Parse inputs
-[[ -z "$1" || "$1" == "-h" || "$1" == "--help" ]] && usage && exit
-SRC="$1"
-
-
-## Utility functions
 get_instruction () {
-	# Get the instruction from the instruction list
+	# Get the instruction from the instruction list. If not present, returns
+	# the default value provided
 	local result=`echo "${INSTRUCTIONS}" | sed -n "${PREFIX}${1}:${SUFFIX}" | tr '\n' ' '`
 	[[ -z ${result} ]] && result=$2
 	echo "${result}"
@@ -59,8 +62,6 @@ contains () {
 	}
 	echo false
 }
-
-MAX_DEPTH=5
 
 get_dependencies ()
 {
@@ -156,7 +157,9 @@ pandoc_pdf () {
 pandoc_tex () {
 	# Pandoc TEX (notes) recipe
 	TO='latex'
-	[ $(contains ${RECIPES} 'pandoc_beamer') == true ] && TO='beamer'
+	([ $(contains ${RECIPES} 'pandoc_beamer') == true ] || \
+		[ $(contains ${RECIPES} 'pandoc_lecture') == true ]) \
+		&& TO='beamer'
 	pandoc 'tex' ${TO}
 }
 
@@ -176,7 +179,7 @@ pandoc_docx () {
 }
 
 pandoc_course () {
-	# Pandoc homework
+	# Pandoc homework/exam
 
 	# Problem statements
 	SED_CMD="; /\\\\begin{solution}/,/\\\\end{solution}/d; /\\\\bsol/,/\\\\esol/d"
@@ -190,6 +193,47 @@ pandoc_course () {
 	PWD=`pwd`
 	gpp -x -U "!" "" "(" "," ")" "(" ")" "" "" -I "${PWD}" ${SRC} | grep -E '(\\begin{solution}|\\bsol)' > /dev/null && pandoc 'pdf' 'pdf'
 	BASE="${OLD_BASE}"
+}
+
+pandoc_lecture() {
+	# To lecture presentation
+	TEMPLATE="--template=\${PANDOC_TEMPLATE_DIR}/${LECTURE_TEMPLATE}"
+	SED_CMD="; /^[ \t]*\([0-9]*\.\|\-\)z.*/d; /\\$\$\$\$z/,/\\$\$\$\$z/d"
+	pandoc 'pdf' 'beamer'
+
+	# To lecture handout
+	OLD_BASE="${BASE}"
+	OLD_OPTIONS=("${OPTIONS[@]}")
+
+	BASE="${BASE}-handout"
+	OPTIONS+=("-V handout")
+	SED_CMD="; /^[ \t]*\([0-9]*\.\|\-\)z.*/d; /\\$\$\$\$z/,/\\$\$\$\$z/d"
+	pandoc 'pdf' 'beamer'
+
+	BASE="${OLD_BASE}"
+	OPTIONS=("${OLD_OPTIONS[@]}")
+
+	# To lecture notes
+	# Better solution for guarding other things (equations)
+	# Deal with Make/Bash expanding $ (https://stackoverflow.com/a/3141015)
+	SED_CMD="; s/\(^[ \t]*\)\([0-9]*\.\|\-\)z/\1\2/; s/\\$\$\$\$z/\\$\$\$\$/"
+
+	# TODO: This is really jenky...
+	# Save current variables
+	OLD_BASE="${BASE}"
+	OLD_OPTIONS=("${OPTIONS[@]}")
+	OLD_TEMPATE="${TEMPLATE}"
+
+	TEMPLATE="--template=\${PANDOC_TEMPLATE_DIR}/${COURSE_TEMPLATE}"
+	BASE="${BASE}-notes"
+	OPTIONS+=("-V cmdline-header-includes='\usepackage{beamerarticle}'")
+	pandoc 'pdf' 'beamer'
+
+	# For now, call pandoc-tex to create {BASE}-notes.tex
+	# # Reset variables for later use
+	# BASE="${OLD_BASE}"
+	# OPTIONS=("${OLD_OPTIONS[@]}")
+	# TEMPLATE="${OLD_TEMPATE}"
 }
 
 pandoc_submission () {
@@ -353,16 +397,23 @@ octave () {
 
 #TODO: automatic builds of virtualenvs
 
+#### Parse inputs
+
+# Parse inputs
+[[ -z "$1" || "$1" == "-h" || "$1" == "--help" ]] && usage && exit
+SRC="$1"
+
+#### Main
+
 # Base and extension
 BASE=${SRC%.*}
 EXT=.${SRC##*.}
-SRC_BUILD=`echo "$BUILD" | grep -E $EXT,`
 SRCDIR=$(dirname "${SRC}")
 MAKEH=${BLDDIR}/${SRC}.make
 
 # Get all properties
 read DEFAULT_EXT DEFAULT_RECIPE COMMENT_START COMMENT_END AFTER_MARK \
-	<<< $(echo "${SRC_BUILD}" | awk -F ',' '{print $2" "$3" "$4" "$5" "$6}')
+	<<< $(grep "$EXT," "$CONFIG" | awk -F ',' '{print $2" "$3" "$4" "$5" "$6}')
 
 if [ "${AFTER_MARK}" == "true" ]
 then

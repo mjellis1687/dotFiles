@@ -23,9 +23,18 @@ alias brc="vim ${HOME}/.bashrc"
 alias vrc="vim ${HOME}/.vimrc"
 alias gd="git diff"
 
+# Make xget use the history file in $XDG_CACHE_HOME
+alias wget='wget --hsts-file="$XDG_CACHE_HOME/wget-hsts"'
+
 # When opening a terminal from a folder, it will open GNOME terminal. ct will
 # switch to rxvt-unicode
-alias ct="$HOME/bin/change_terminal.sh"
+alias ct="$HOME/.local/bin/change_terminal.sh"
 
-# Have subversion use config in $XDG_CONFIG_HOME directory
-alias svn="svn --config-dir \"$XDG_CONFIG_HOME\"/subversion"
+# "Alias" make
+function make() {
+	# Alias make to use the default Makefile if none is provided and
+	# Templates/Makefile is available
+	([[ ! -f Makefile ]] && [[ -f "${HOME}/Templates/Makefile" ]] \
+	&& /usr/bin/make -f "${HOME}/Templates/Makefile" "$@")  \
+	|| /usr/bin/make "$@"
+}
