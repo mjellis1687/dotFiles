@@ -198,7 +198,7 @@ pandoc_course () {
 pandoc_lecture() {
 	# To lecture presentation
 	TEMPLATE="--template=\${PANDOC_TEMPLATE_DIR}/${LECTURE_TEMPLATE}"
-	SED_CMD="; /^[ \t]*\([0-9]*\.\|\-\)z.*/d; /\$\$z/,/\$\$z/d"
+	SED_CMD="; /^[ \t]*\([0-9]*\.\|\-\)z.*/d; /\\$\$\$\$z/,/\\$\$\$\$z/d"
 	pandoc 'pdf' 'beamer'
 
 	# To lecture handout
@@ -207,7 +207,7 @@ pandoc_lecture() {
 
 	BASE="${BASE}-handout"
 	OPTIONS+=("-V handout")
-	SED_CMD="; /^[ \t]*\([0-9]*\.\|\-\)z.*/d; /\$\$z/,/\$\$z/d"
+	SED_CMD="; /^[ \t]*\([0-9]*\.\|\-\)z.*/d; /\\$\$\$\$z/,/\\$\$\$\$z/d"
 	pandoc 'pdf' 'beamer'
 
 	BASE="${OLD_BASE}"
@@ -215,7 +215,8 @@ pandoc_lecture() {
 
 	# To lecture notes
 	# Better solution for guarding other things (equations)
-	SED_CMD="; s/\(^[ \t]*\)\([0-9]*\.\|\-\)z/\1\2/; s/\$\$z/\$\$/"
+	# Deal with Make/Bash expanding $ (https://stackoverflow.com/a/3141015)
+	SED_CMD="; s/\(^[ \t]*\)\([0-9]*\.\|\-\)z/\1\2/; s/\\$\$\$\$z/\\$\$\$\$/"
 
 	# TODO: This is really jenky...
 	# Save current variables
