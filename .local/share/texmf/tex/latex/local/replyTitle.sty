@@ -1,0 +1,36 @@
+% Title for reply
+\ProvidesPackage{replyTitle}[2020/06/01 v1.0 Reply title block]
+\RequirePackage{titlesec}
+\RequirePackage{array}
+\titlelabel{\thetitle}
+\titleformat*{\section}{\centering\large\bfseries}
+\titleformat*{\subsection}{\bfseries}
+\newcommand{\ttl}[1]{\section*{#1}%
+	\phantomsection%
+	\addcontentsline{toc}{section}{#1}%
+	\markboth{#1}{#1}\bigskip}
+\makeatletter
+\newcommand{\printthechanges}{\section{List of Changes}%
+	\vspace{\baselineskip}\@starttoc{changes}\clearpage}
+\newcommand{\l@reviewer}[2]{\medskip\noindent Following the suggestions of the #1:%
+	\par\vspace{\baselineskip}}
+\newcounter{changecounter}
+%\newcommand{\l@change}[2]{#1 \par\vspace{\baselineskip}}
+% \newcommand{\l@change}[2]{%
+% 	\begin{tabular}{p{0.25in}>{\raggedleft}p{\columnwidth-0.25in}}%
+% 		#1 & #2
+% 	\end{tabular}\par}
+\setlength{\tabcolsep}{2pt}
+\newcommand{\l@change}[2]{#1 \par\vspace{\baselineskip}}
+\newcommand{\addreviewer}[2][]{\setcounter{changecounter}{0}%
+	\newpage\ttl{Reply to #1#2}%
+	\addcontentsline{changes}{reviewer}{#2}}
+\newcommand{\addchange}[1]{\addtocounter{changecounter}{1}%
+	\addcontentsline{changes}{change}{%
+		\begin{tabular}{>{\raggedleft}p{0.25in}p{6.22in}}%
+			\thechangecounter. & #1
+		\end{tabular}}}
+%\newcommand{\addchange}[1]{\addtocounter{changecounter}{1}%
+%	\addcontentsline{changes}{change}{\hspace{12pt}\thechangecounter.\hspace{3pt}#1}}
+\makeatother
+\endinput
