@@ -27,12 +27,15 @@ HPWH
 HPWHs
 HVAC
 Jupyter
+LHB
+LOI
 LTV
 Liu
 Lyapunov
 MFHP
 MPC
 Mande
+NPSH
 Nael
 Narasimhan
 Narayanan
@@ -45,6 +48,7 @@ PI's
 PID
 PSE
 PTW
+PV
 QP
 RBC
 SPC
@@ -52,6 +56,7 @@ Shanno
 Subhrajit
 TBD
 TEMA
+TES
 TODO
 Turton
 UC
@@ -67,7 +72,9 @@ downcomer
 feedforward
 flowsheet
 flowsheets
+intercooling
 nonisothermal
+polytropic
 psia
 psig
 setpoint
