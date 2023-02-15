@@ -80,6 +80,7 @@
 .config/rclone
 .config/remmina
 .config/session
+.config/simple-scan
 .config/spotify
 .config/systemd
 .config/teams
