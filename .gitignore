@@ -24,6 +24,7 @@
 .config/VirtualBox
 .config/autostart
 .config/background
+.config/cef_user_data
 .config/chromium
 .config/configstore
 .config/dangerzone
@@ -218,12 +219,15 @@
 .local/share/vlc
 .local/share/webkitgtk
 .local/share/xorg
+.local/share/yelp
 .local/share/zathura
 .local/share/zoom
 .local/state
 .matlab
 .mozilla
 .netrc
+.nv
+.pki
 .pulse_secure
 .rnd
 .ssh
