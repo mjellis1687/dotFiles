@@ -5,14 +5,34 @@
 vman() { vim <(man $1); }
 
 # Get a bibtex citation from a DOI
-doi2bib()
-{
-		echo >> bib.bib;
-		curl -s "https://api.crossref.org/works/$1/transform/application/x-bibtex" >> bib.bib;
-		echo >> bib.bib;
+doi2bib() {
+	echo >> bib.bib;
+	curl -s "https://api.crossref.org/works/$1/transform/application/x-bibtex" >> bib.bib;
+	echo >> bib.bib;
 }
 
-fcd()
-{
+fcd() {
 	cd $(fd -t d $1 | head -n 1)
+}
+
+pacdescr() {
+	local copy_to_clipboard=false
+	OPTIND=0
+    while getopts ":c" opt; do
+        case $opt in
+            c)
+                copy_to_clipboard=true
+                ;;
+            \?)
+                echo "Invalid option: -$OPTARG" >&2
+                return 1
+                ;;
+        esac
+    done
+	shift $((OPTIND - 1))
+	local description=$(yay -Si $1 | awk -F": " '/Description/{print $2}')
+	if $copy_to_clipboard; then
+		echo "$description" | xclip -selection clipboard
+	fi
+	echo "$description"
 }
