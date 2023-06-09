@@ -32,6 +32,7 @@
 .config/download-director
 .config/dleyna-renderer-service.conf
 .config/dleyna-server-service.conf
+.config/dunst
 .config/enchant
 .config/eog
 .config/evince
@@ -89,7 +90,9 @@
 .config/user-dirs.dirs
 .config/user-dirs.locale
 .config/vlc
+.config/wal
 .config/xdg-terminals.list
+.config/zathura
 .config/zoom.conf
 .config/zoomus.conf
 .cups
