@@ -292,3 +292,20 @@ $ find . -type f -name ".<file_type>"
 ```
 bib2xml mybib.bib | xml2wordbib | sed -e 's/PeriodicalName/PeriodicalTitle/g' -e 's/>Proceedings/>ConferenceProceedings/g' > word.xml
 ```
+
+## Convert PDFs to PDF/As
+
+- To convert the PDF to PDF/A format, use the following command:
+```bash
+gs -dPDFA=2 -dBATCH -dNOPAUSE -sProcessColorModel=DeviceRGB -sDEVICE=pdfwrite -sPDFACompatibilityPolicy=1 -sOutputFile=output.pdf input.pdf
+```
+- In the above command:
+	- `-dPDFA=2` specifies the PDF/A version (PDF/A-2).
+	- `-dBATCH` and `-dNOPAUSE` options ensure that Ghostscript processes the file without prompting for additional input.
+	- `-sProcessColorModel=DeviceRGB` sets the color model to RGB.
+	- `-sDEVICE=pdfwrite` specifies the output device as PDF writer.
+	- `-sPDFACompatibilityPolicy=1` enables strict PDF/A compliance.
+	- `-sOutputFile=output.pdf` specifies the output file name (replace output.pdf with your desired file name).
+	- `input.pdf` is the name of your input PDF file.
+- Note: The conversion process may vary depending on the complexity of your PDF file and the version of Ghostscript installed on your system. Make sure to review the output PDF/A file to ensure that the conversion meets your requirements.
+- If this does not work, you can use an online convert (e.g., [https://docupub.com/pdfconvert/](https://docupub.com/pdfconvert/))
