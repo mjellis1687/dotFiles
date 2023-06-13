@@ -172,6 +172,7 @@
 .local/bin/tutorialvids
 .local/bin/unix
 .local/lib
+.local/pipx
 .local/share/LanguageTool
 .local/share/Mendeley Ltd.
 .local/share/Nextcloud
@@ -196,6 +197,7 @@
 .local/share/gsettings-data-convert
 .local/share/gvfs-metadata
 .local/share/icc
+.local/share/iwctl
 .local/share/jupyter
 .local/share/kcookiejar
 .local/share/keyrings

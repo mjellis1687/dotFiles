@@ -6,6 +6,17 @@ This approach for storing dotfiles was inspired by [https://www.atlassian.com/gi
 
 ## Automatic Make Recipe Generation
 
+### Make Alias
+
+I added an alias for `make` to potential automatically run it with my generic Makefile. Below is a summary of the various situations that can occur:
+
+| Makefile exists | Template Makefile exists |             Run             |
+|:---------------:|:------------------------:|:---------------------------:|
+|       yes       |            yes           |        Regular `make`       |
+|       yes       |            no            |        Regular `make`       |
+|        no       |            yes           | Make with Template Makefile |
+|        no       |            no            |        Regular `make`       |
+
 ### Matlab
 
 For automatic recipe of Matlab scripts, include a comment block starting with `% !build` and ending with `% !end-build`. For example, the following:

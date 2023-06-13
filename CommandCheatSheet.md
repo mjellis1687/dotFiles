@@ -1,6 +1,6 @@
 #. Command Cheat Sheet
 
-## Setup Updates and Configuration Note
+## Setup Updates and Configuration Notes
 
 ### `$HOME` Clean-up Notes
 
@@ -21,7 +21,6 @@ Files that cannot move:
 - Move git location
 - Move location of markdown files
 - Move vim
-
 
 ### Code42 (CrashPlan)
 
@@ -53,6 +52,19 @@ ExecStop=/usr/local/crashplan/bin/service.sh stop
 
 [Install]
 WantedBy=multi-user.target
+```
+
+### `dwmblocks`
+
+`dwmblocks` was not loading after launching `dwm` with a display manager (`gdm`). The reason is that the `$PATH` was not being set, since `bash_profile` is not sourced by `gdm`. Instead, added this to `~/.config/x11/xprofile`:
+```bash
+if [ "$GDMSESSION" == "dwm" ]; then
+	source ${HOME}/.bash_profile
+	xrandr --output DP-4 --auto --output HDMI-0 --left-of DP-4 --auto --output DP-3 --right-of DP-4 --auto
+	{ killall dunst ; setsid -f dunst ;} >/dev/null 2>&1
+	setbg &
+	remaps &
+fi
 ```
 
 ### tmux
