@@ -24,6 +24,7 @@
 .config/VirtualBox
 .config/autostart
 .config/background
+.config/bluetooth
 .config/cef_user_data
 .config/chromium
 .config/configstore
