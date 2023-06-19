@@ -59,7 +59,6 @@ while true; do
     retry_count=$((retry_count + 1))
     if [ $retry_count -eq $MAX_RETRIES ]; then
         printf "Failed to connect to device '$device_name' after multiple attempts.\n"
-		turn_off_bluetooth_scan
         exit 1
     fi
 
