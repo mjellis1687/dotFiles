@@ -66,11 +66,13 @@
 .config/mimeapps.list
 .config/monitors.xml
 .config/nautilus
+.config/nvidia
 .config/octave/octave-gui.ini
 .config/octave/qt-settings
 .config/okularpartrc
 .config/okularrc
 .config/okular.kmessagebox
+.config/pavucontrol.ini
 .config/pdfarranger
 .config/pianobar/config
 .config/pianobar/state
