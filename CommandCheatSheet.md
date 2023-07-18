@@ -321,3 +321,33 @@ gs -dPDFA=2 -dBATCH -dNOPAUSE -sProcessColorModel=DeviceRGB -sDEVICE=pdfwrite -s
 	- `input.pdf` is the name of your input PDF file.
 - Note: The conversion process may vary depending on the complexity of your PDF file and the version of Ghostscript installed on your system. Make sure to review the output PDF/A file to ensure that the conversion meets your requirements.
 - If this does not work, you can use an online convert (e.g., [https://docupub.com/pdfconvert/](https://docupub.com/pdfconvert/))
+
+## Password Management
+
+The `pass` utility is a password manager that stores passwords in an encrypted format, using a GPG key.
+
+1. **Generate a GPG key pair:** `pass` uses GPG encryption to secure your passwords. The GPG key pair can be generated from:
+   ```bash
+   gpg --full-generate-key
+   ```
+   Follow the prompts to set up the GPG key pair, including choosing the key type and size, setting the expiration date, and providing a passphrase.
+2. Set permissions on the GnuPG's directory:
+   ```bash
+   chmod 600 ~/.local/share/gnupg/*
+   chmod 700 ~/.local/share/gnupg
+   ```
+3. **Initialize the password store:** Run the following command:
+   ```bash
+   pass init <email or GPG_KEY_ID>
+   ```
+   where `<GPG_KEY_ID>` is the ID of he GPG key, which can be find by running `gpg --list-keys`.
+4. **Add passwords:** To add a new password to `pass`, use `pass insert` followed by a name for the password. For example:
+   ```bash
+   pass insert Email/Gmail
+   ```
+5. **Retrieve passwords:** To retrieve a password, use the `pass` command followed by the name of the password to retrieve. For example:
+   ```bash
+   pass Email/Gmail
+   ```
+   This command will decrypt and display the password on the terminal.
+6. **Integrate with a browser extension (optional):** If you want to conveniently fill passwords in web forms, you can install a browser extension like `passff` (for Firefox) or `chromium-pass` (for Chromium-based browsers). These extensions integrate with `pass` and allow you to autofill passwords.

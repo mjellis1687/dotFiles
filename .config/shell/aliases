@@ -38,3 +38,6 @@ function make() {
 	&& /usr/bin/make -f "${HOME}/Templates/Makefile" "$@")  \
 	|| /usr/bin/make "$@"
 }
+
+# alias nvidia-settings
+alias nvidia-settings="nvidia-settings --config=$XDG_CONFIG_HOME/nvidia/settings"
