@@ -1,4 +1,4 @@
-#. Command Cheat Sheet
+# Command Cheat Sheet
 
 ## Setup Updates and Configuration Notes
 

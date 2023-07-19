@@ -98,6 +98,7 @@
 .config/zathura
 .config/zoom.conf
 .config/zoomus.conf
+.crashplan
 .cups
 .dropbox*
 .hplip
