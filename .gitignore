@@ -215,6 +215,7 @@
 .local/share/nautilus
 .local/share/octave
 .local/share/okular
+.local/share/openfortivpn-webview
 .local/share/pass
 .local/share/pki
 .local/share/ranger
@@ -235,7 +236,6 @@
 .matlab
 .mozilla
 .netrc
-.nv
 .pki
 .pulse_secure
 .rnd

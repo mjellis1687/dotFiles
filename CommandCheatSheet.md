@@ -351,3 +351,16 @@ The `pass` utility is a password manager that stores passwords in an encrypted f
    ```
    This command will decrypt and display the password on the terminal.
 6. **Integrate with a browser extension (optional):** If you want to conveniently fill passwords in web forms, you can install a browser extension like `passff` (for Firefox) or `chromium-pass` (for Chromium-based browsers). These extensions integrate with `pass` and allow you to autofill passwords.
+
+## FortiClient VPN
+
+- Dependencies: `openfortivpn` and `openfortivpn-webview`
+- Get cookie:
+```bash
+openfortivpn-webview <Remote Gateway>
+```
+- Copy cookie
+- Then, this can be piped into `openfortivpn`:
+```bash
+echo $SVPNCOOKIE | sudo openfortivpn <remote gateway> --username=<username> --trusted-cert <cert-here> --cookie-on-stdin
+```
