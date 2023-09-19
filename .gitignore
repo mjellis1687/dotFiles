@@ -51,6 +51,7 @@
 .config/gtk-3.0
 .config/gtk-4.0
 .config/guake
+.config/hp-mpc-job
 .config/htop
 .config/ibus
 .config/inkscape
