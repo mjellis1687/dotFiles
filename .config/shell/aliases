@@ -1,4 +1,4 @@
-# Bash Aliases
+#Bash Aliases
 # Author: Matt Ellis
 
 # enable color support of ls and also add handy aliases
@@ -41,3 +41,9 @@ function make() {
 
 # alias nvidia-settings
 alias nvidia-settings="nvidia-settings --config=$XDG_CONFIG_HOME/nvidia/settings"
+
+# Update all outdated pip
+alias pipupdate="pip list -o | awk 'NR>=3 {print $1}' | xargs pip install -U"
+
+# ctags with exclude file
+alias myctags="if [ -f .ctags_exclude_files ]; then ctags -R . --exclude=@.ctags_exclude_files; else ctags -R .; fi"

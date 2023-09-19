@@ -9,9 +9,11 @@ CBET
 CPLEX
 CPlex
 CSTR
+CasADi
 Chakraborty
 Christofides
 Code42
+Cplex
 CrashPlan
 Durand
 E1
@@ -23,20 +25,24 @@ Econet
 FNN
 Farra
 Flowsheets
+GPM
 Gajjar
 Geankoplis
-Github
+GitHub
 Gitlab
 Goldfarb
+Gurobi
 HPWH
 HPWHs
 HVAC
+Ipopt
 JSON
 Jupyter
 LHB
 LOI
 LSTM
 LTV
+LabVIEW
 Liu
 Lyapunov
 MFHP
@@ -47,6 +53,7 @@ Nael
 Narasimhan
 Narayanan
 OCP
+OCPs
 OEB
 OMEB
 PEM
@@ -59,6 +66,7 @@ PV
 QP
 RBC
 RBCs
+Rheem
 SPC
 Shanno
 Subhrajit
@@ -66,6 +74,7 @@ TBD
 TEMA
 TES
 TODO
+TensorFlow
 Timeseries
 Turton
 UC
@@ -75,6 +84,7 @@ Zhang
 atm
 biorefinery
 deadband
+deadbands
 deadzones
 decarbonization
 dissipativity
@@ -96,5 +106,6 @@ setpoint
 setpoints
 stiction
 th
+thermocline
 timeseries
 www

@@ -382,3 +382,16 @@ pkgfile libssl.so.1.1
 pkgfile will then search its database and show you the package(s) that provide the specified shared library. If the library is available in multiple packages, it will list all of them.
 
 Keep in mind that pkgfile will only be able to find the package if the library is part of the official Arch Linux repositories. If the library comes from the AUR (Arch User Repository) or other external sources, you may need to use other methods to determine the package providing it.
+
+## FortiClient VPN
+
+- Dependencies: `openfortivpn` and `openfortivpn-webview`
+- Get cookie:
+```bash
+openfortivpn-webview <Remote Gateway>
+```
+- Copy cookie
+- Then, this can be piped into `openfortivpn`:
+```bash
+echo $SVPNCOOKIE | sudo openfortivpn <remote gateway> --username=<username> --trusted-cert <cert-here> --cookie-on-stdin
+```
