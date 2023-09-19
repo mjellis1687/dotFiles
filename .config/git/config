@@ -23,3 +23,5 @@
 	d = diff
 	m = mergetool
 	list-conflicts = !git ls-files -u | cut -f 2 | sort -u
+[push]
+	autoSetupRemote = true
