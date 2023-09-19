@@ -7,15 +7,19 @@ Bainer
 Broyden
 CBET
 CPLEX
+CPlex
 CSTR
 Chakraborty
 Christofides
+Code42
+CrashPlan
 Durand
 E1
 E2
 ECH
 EEI
 EMPC
+Econet
 FNN
 Farra
 Flowsheets
@@ -27,9 +31,11 @@ Goldfarb
 HPWH
 HPWHs
 HVAC
+JSON
 Jupyter
 LHB
 LOI
+LSTM
 LTV
 Liu
 Lyapunov
@@ -52,6 +58,7 @@ PTW
 PV
 QP
 RBC
+RBCs
 SPC
 Shanno
 Subhrajit
@@ -59,6 +66,7 @@ TBD
 TEMA
 TES
 TODO
+Timeseries
 Turton
 UC
 Vinod
@@ -67,6 +75,7 @@ Zhang
 atm
 biorefinery
 deadband
+deadzones
 decarbonization
 dissipativity
 downcomer
@@ -76,6 +85,7 @@ feedforward
 flowrate
 flowsheet
 flowsheets
+hoc
 intercooling
 nonisothermal
 polytropic
@@ -84,5 +94,7 @@ psig
 semidefinite
 setpoint
 setpoints
+stiction
 th
+timeseries
 www

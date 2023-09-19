@@ -351,3 +351,34 @@ The `pass` utility is a password manager that stores passwords in an encrypted f
    ```
    This command will decrypt and display the password on the terminal.
 6. **Integrate with a browser extension (optional):** If you want to conveniently fill passwords in web forms, you can install a browser extension like `passff` (for Firefox) or `chromium-pass` (for Chromium-based browsers). These extensions integrate with `pass` and allow you to autofill passwords.
+
+## Determining What Package Provides a Library
+
+In Arch Linux, you can use the pkgfile utility to determine which package provides a shared library. pkgfile allows you to search for files in the Arch Linux package repositories. Before using pkgfile, you need to make sure it's installed on your system. If you don't have it yet, you can install it using the package manager, pacman.
+
+Here's how to install pkgfile and use it to find the package that provides a shared library:
+
+Step 1: Install pkgfile (if you haven't already)
+Open a terminal and run the following command:
+
+```bash
+sudo pacman -S pkgfile
+```
+
+Step 2: Update pkgfile database
+After installing pkgfile, you need to update its database to make sure it's up-to-date. Run the following command:
+
+bash
+
+sudo pkgfile --update
+
+Step 3: Search for the package providing the shared library
+Once the database is updated, you can use pkgfile to search for the package that provides a specific shared library. For example, let's say you want to find the package that provides the libssl.so.1.1 library. You can use the following command:
+
+bash
+
+pkgfile libssl.so.1.1
+
+pkgfile will then search its database and show you the package(s) that provide the specified shared library. If the library is available in multiple packages, it will list all of them.
+
+Keep in mind that pkgfile will only be able to find the package if the library is part of the official Arch Linux repositories. If the library comes from the AUR (Arch User Repository) or other external sources, you may need to use other methods to determine the package providing it.
