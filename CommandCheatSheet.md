@@ -209,6 +209,22 @@ $ git add ...
 $ git commit -c ORIG_HEAD
 ```
 
+### Tags
+
+- Move tag
+	1. Delete the tag on any remote before you push
+	```
+	git push origin :refs/tags/<tagname>
+	```
+	2. Replace the tag to reference the most recent commit
+	```
+	git tag -fa <tagname>
+	```
+	3. Push the tag to the remote origin
+	```
+	git push origin --tags
+	```
+
 ## Vim commands
 
 ### Movements
@@ -395,3 +411,92 @@ openfortivpn-webview <Remote Gateway>
 ```bash
 echo $SVPNCOOKIE | sudo openfortivpn <remote gateway> --username=<username> --trusted-cert <cert-here> --cookie-on-stdin
 ```
+
+## Editing Videos with `ffmpeg`
+
+### Cutting Video between Specific Times
+
+
+To cut a video between two specific times using `ffmpeg`, you can use:
+```bash
+ffmpeg -i input.mp4 -ss START_TIME -to END_TIME -c:v copy -c:a copy output.mp4
+```
+Replace the following placeholders:
+
+- `input.mp4`: The name of your input video file.
+- `START_TIME`: The start time from where you want to cut the video (in the format `hh:mm:ss` or `ss` for seconds).
+- `END_TIME`: The end time where you want to stop cutting the video (also in the format `hh:mm:ss` or `ss` for seconds).
+- `output.mp4`: The name of the output video file.
+
+Here's a breakdown of the options used in the command:
+
+- `-i input.mp4`: Specifies the input video file.
+- `-ss START_TIME`: Sets the start time for the cut.
+- `-to END_TIME`: Sets the end time for the cut.
+- `-c:v copy`: This option copies the video codec without re-encoding, which is faster and lossless.
+- `-c:a copy`: This option copies the audio codec without re-encoding.
+
+If your `ffmpeg` version supports the `-t` option for duration, you can use it instead of `-to` like this:
+
+```bash
+ffmpeg -i input.mp4 -ss START_TIME -t DURATION -c:v copy -c:a copy output.mp4
+```
+
+In this case, replace `DURATION` with the duration of the segment you want to cut (also in the format `hh:mm:ss` or `ss` for seconds).
+
+Here's an example command:
+
+```bash
+ffmpeg -i input.mp4 -ss 00:01:30 -to 00:03:45 -c:v copy -c:a copy output.mp4
+```
+
+This command will cut a segment from 1 minute and 30 seconds into the video to 3 minutes and 45 seconds and save it as `output.mp4`.
+
+If you experience a brief blank screen when cutting a video with `ffmpeg`, you can try re-encoding the video to ensure consistent video and audio streams throughout the cut. Here's how to do it:
+
+```bash
+ffmpeg -i input.mp4 -ss START_TIME -to END_TIME -vf "select=gte(n\,0)" -af "aselect=gte(n\,0)" -c:v libx264 -c:a aac output.mp4
+```
+
+where
+
+- `input.mp4`: The name of your input video file.
+- `START_TIME`: The start time from where you want to cut the video (in the format `hh:mm:ss` or `ss` for seconds).
+- `END_TIME`: The end time where you want to stop cutting the video (also in the format `hh:mm:ss` or `ss` for seconds).
+- `output.mp4`: The name of the output video file.
+- `-vf "select=gte(n\,0)"`: This filter selects all video frames starting from the first frame (frame number `n` greater than or equal to 0). This ensures that no frames are dropped from the beginning of the cut, eliminating the blank screen issue.
+- `-af "aselect=gte(n\,0)"`: This filter selects all audio frames starting from the first frame (frame number `n` greater than or equal to 0).
+- `-c:v libx264`: This specifies the video codec to use (libx264 in this case). You can change it to another codec if needed.
+- `-c:a aac`: This specifies the audio codec to use (AAC in this case). You can change it to another codec if needed.
+
+This command will re-encode both the video and audio, which may take some additional time compared to the previous method that copied streams. However, it should result in a video without any blank screens during playback.
+
+### Merging Videos
+
+To merge two video files with `ffmpeg`, you can use the `concat` demuxer. This method allows you to concatenate multiple video files together without re-encoding, which preserves the original video and audio quality. Here's a step-by-step guide:
+
+1. Create a text file (e.g., `input.txt`) and list the video files you want to merge in the desired order, one file per line. For example:
+
+   ```
+   file 'video1.mp4'
+   file 'video2.mp4'
+   ```
+
+   Replace `'video1.mp4'` and `'video2.mp4'` with the actual filenames and paths of your video files. You can include as many video files as you need in this list.
+
+2. Run the following `ffmpeg` command to merge the video files:
+
+   ```bash
+   ffmpeg -f concat -safe 0 -i input.txt -c:v copy -c:a copy output.mp4
+   ```
+
+   - `-f concat`: Specifies the format as `concat` for the demuxer.
+   - `-safe 0`: This option allows `ffmpeg` to read files outside of the current directory. You may need this if your input files are in different directories.
+   - `-i input.txt`: Specifies the input text file containing the list of video files.
+   - `-c:v copy`: Copies the video streams without re-encoding, preserving the original video quality.
+   - `-c:a copy`: Copies the audio streams without re-encoding, preserving the original audio quality.
+   - `output.mp4`: The name of the output video file.
+
+3. `ffmpeg` will merge the video files listed in `input.txt` and create a single output video file named `output.mp4`.
+
+This method is safe and efficient because it doesn't involve re-encoding, so there is no loss of quality, and it is generally faster than re-encoding. However, it requires that the video files have compatible codecs and settings for successful concatenation. If you encounter any issues with incompatible formats, you may need to preprocess or convert the videos before merging them.
