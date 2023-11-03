@@ -395,3 +395,7 @@ openfortivpn-webview <Remote Gateway>
 ```bash
 echo $SVPNCOOKIE | sudo openfortivpn <remote gateway> --username=<username> --trusted-cert <cert-here> --cookie-on-stdin
 ```
+
+### `ppp` Version 2.5.0
+
+Something as of `ppp` version 2.5.0 changed, resulting in the error: "Peer refused to agree to his IP address" (see [here](https://aur.archlinux.org/packages/networkmanager-fortisslvpn#comment-933331) and [here](https://bbs.archlinux.org/viewtopic.php?id=288717)). One of the reported solutions or work-rounds is to uncomment `ipcp-accept-remote` in `/etc/ppp/options`, which seemed to resolve the issue.
