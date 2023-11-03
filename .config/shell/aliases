@@ -47,3 +47,5 @@ alias pipupdate="pip list -o | awk 'NR>=3 {print $1}' | xargs -n 1 pip install -
 
 # ctags with exclude file
 alias myctags="if [ -f .ctags_exclude_files ]; then ctags -R . --exclude=@.ctags_exclude_files; else ctags -R .; fi"
+
+alias myvpn="grep 'host' ${XDG_CONFIG_HOME}/openfortivpn/config | awk -F' = ' '{print \$2}' | xargs openfortivpn-webview 2> /dev/null | sudo openfortivpn -c ${XDG_CONFIG_HOME}/openfortivpn/config --cookie-on-stdin"
