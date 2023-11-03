@@ -15,13 +15,19 @@ if [ -x /usr/bin/dircolors ]; then
 fi
 
 # Dot file git
-alias config='/usr/bin/git --git-dir=${HOME}/.cfg --work-tree=${HOME}'
+if [ -f /usr/share/bash-completion/completions/git ]; then
+	. /usr/share/bash-completion/completions/git
+	__git_complete config __git_main
+	__git_complete ggs _git_status
+	__git_complete gd _git_diff
+fi
 
-alias ccs="vim ${HOME}/CommandCheatSheet.md"
+alias config='/usr/bin/git --git-dir=${HOME}/.cfg --work-tree=${HOME}'
 alias ggs="git status"
+alias gd="git diff"
+alias ccs="vim ${HOME}/CommandCheatSheet.md"
 alias brc="vim ${HOME}/.bashrc"
 alias vrc="vim ${HOME}/.vimrc"
-alias gd="git diff"
 
 # Make xget use the history file in $XDG_CACHE_HOME
 alias wget='wget --hsts-file="$XDG_CACHE_HOME/wget-hsts"'
