@@ -3,7 +3,6 @@
 .bash_history
 .bash_logout
 .cache
-.cfg
 .cmake
 .config/.gsd-keyboard.settings-ported
 .config/.org.chromium.Chromium.*
@@ -231,6 +230,7 @@
 .local/share/yelp
 .local/share/zathura
 .local/share/zoom
+.local/src
 .local/state
 .matlab
 .mozilla
