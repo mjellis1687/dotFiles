@@ -5,7 +5,6 @@
 .cache
 .cfg
 .cmake
-.code42
 .config/.gsd-keyboard.settings-ported
 .config/.org.chromium.Chromium.*
 .config/Code - OSS
@@ -102,7 +101,6 @@
 .config/zoom.conf
 .config/zoomus.conf
 .crashplan
-.cups
 .dropbox*
 .hplip
 .local/bin/booksplit
@@ -237,6 +235,7 @@
 .matlab
 .mozilla
 .netrc
+.pdbhistory
 .pki
 .pulse_secure
 .rnd
