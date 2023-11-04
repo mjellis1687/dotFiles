@@ -298,7 +298,8 @@ get_pandoc_options () {
 
 latex_pdf () {
 	#TODO: do we need to worry about dependencies with latexmk?
-	RECIPE="${BASE}.pdf : ${SRC}
+	# TODO: automatically get dependencies?
+	RECIPE="${BASE}.pdf : ${SRC} ${DEPENDS}
 	@echo \"Building \$@\"
 	@cd $(dirname ${SRC}) ; \${LATEXMK} -pdf -pdflatex='\${PDFLATEX}' \$(notdir \$<)
 	"
