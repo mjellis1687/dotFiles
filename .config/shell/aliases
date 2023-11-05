@@ -25,7 +25,7 @@ fi
 alias config='/usr/bin/git --git-dir=${HOME}/.local/src/.cfg --work-tree=${HOME}'
 alias ggs="git status"
 alias gd="git diff"
-alias ccs="vim ${HOME}/CommandCheatSheet.md"
+alias ccs="vim ${HOME}/.local/docs/CommandCheatSheet.md"
 alias brc="vim ${HOME}/.bashrc"
 alias vrc="vim ${HOME}/.vimrc"
 
