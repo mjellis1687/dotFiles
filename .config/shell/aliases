@@ -22,7 +22,7 @@ if [ -f /usr/share/bash-completion/completions/git ]; then
 	__git_complete gd _git_diff
 fi
 
-alias config='/usr/bin/git --git-dir=${HOME}/.cfg --work-tree=${HOME}'
+alias config='/usr/bin/git --git-dir=${HOME}/.local/src/.cfg --work-tree=${HOME}'
 alias ggs="git status"
 alias gd="git diff"
 alias ccs="vim ${HOME}/CommandCheatSheet.md"

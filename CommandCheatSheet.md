@@ -4,22 +4,12 @@
 
 ### `$HOME` Clean-up Notes
 
+- Use utility: `xdg-ninja`
 - `BCL` - Building component library from `OpenStudio`?
 - `.cmake` - Used for the user registry (hardcoded). Builds of CasADi created this (moved to backup)
-- `.code42` - UI logs (not sure if this path can be reconfigure?)
-- `.eclipse` - Not sure which program installed this (moved to backup)
-
-Files that cannot move:
-
-- `.netrc`
 
 ### TODO
 
-- Verify that `.profile` works (for some reason it was not getting loaded properly in the quake terminal)
-- Make sure that `~/.zoom` does not come back
-	- My thought is that it is getting regenerated since the profile is not being loaded correctly (related to point one or a gnome crash?)
-- Move git location
-- Move location of markdown files
 - Move vim
 
 ### Code42 (CrashPlan)
@@ -370,34 +360,25 @@ The `pass` utility is a password manager that stores passwords in an encrypted f
 
 ## Determining What Package Provides a Library
 
-In Arch Linux, you can use the pkgfile utility to determine which package provides a shared library. pkgfile allows you to search for files in the Arch Linux package repositories. Before using pkgfile, you need to make sure it's installed on your system. If you don't have it yet, you can install it using the package manager, pacman.
+In Arch Linux, you can use the `pkgfile` utility to determine which package provides a shared library. `pkgfile` allows you to search for files in the Arch Linux package repositories. Before using `pkgfile`, you need to make sure it's installed on your system. If you don't have it yet, you can install it using the package manager, `pacman`.
 
-Here's how to install pkgfile and use it to find the package that provides a shared library:
+Here's how to install `pkgfile` and use it to find the package that provides a shared library:
 
-Step 1: Install pkgfile (if you haven't already)
-Open a terminal and run the following command:
+- Step 1: Install `pkgfile` (if you haven't already)
+	```bash
+	sudo pacman -S pkgfile
+	```
+- Step 2: Update `pkgfile` database. After installing `pkgfile`, you need to update its database to make sure it's up-to-date. Run the following command:
+	```bash
+	sudo pkgfile --update
+	```
+- Step 3: Search for the package providing the shared library. Once the database is updated, you can use `pkgfile` to search for the package that provides a specific shared library. For example, let's say you want to find the package that provides the `libssl.so.1.1` library. You can use the following command:
+	```bash
+	pkgfile libssl.so.1.1
+	```
+	`pkgfile` will then search its database and show you the package(s) that provide the specified shared library. If the library is available in multiple packages, it will list all of them.
 
-```bash
-sudo pacman -S pkgfile
-```
-
-Step 2: Update pkgfile database
-After installing pkgfile, you need to update its database to make sure it's up-to-date. Run the following command:
-
-bash
-
-sudo pkgfile --update
-
-Step 3: Search for the package providing the shared library
-Once the database is updated, you can use pkgfile to search for the package that provides a specific shared library. For example, let's say you want to find the package that provides the libssl.so.1.1 library. You can use the following command:
-
-bash
-
-pkgfile libssl.so.1.1
-
-pkgfile will then search its database and show you the package(s) that provide the specified shared library. If the library is available in multiple packages, it will list all of them.
-
-Keep in mind that pkgfile will only be able to find the package if the library is part of the official Arch Linux repositories. If the library comes from the AUR (Arch User Repository) or other external sources, you may need to use other methods to determine the package providing it.
+Keep in mind that `pkgfile` will only be able to find the package if the library is part of the official Arch Linux repositories. If the library comes from the AUR (Arch User Repository) or other external sources, you may need to use other methods to determine the package providing it.
 
 ## FortiClient VPN
 
