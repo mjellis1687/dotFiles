@@ -14,21 +14,6 @@
 # Vi mode in bash
 set -o vi
 
-# Use powerline so this is worthless
-# # If this is an xterm set the title to user@host:dir
-# case "$TERM" in
-# xterm*|rxvt*|screen*)
-# 	reset=$(tput sgr0)
-# 	red=$(tput setaf 1)
-# 	blue=$(tput setaf 4)
-# 	green=$(tput setaf 7)
-# 	PS1='\[$red\][\u@\h\[$reset\] \[$blue\]\W\[$reset\]\[$red\]]\$ \[$reset\]\[$green\]'
-#     ;;
-# *)
-# 	PS1="\u@\h:\W$ "
-#     ;;
-# esac
-
 # check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
 shopt -s checkwinsize
@@ -38,17 +23,6 @@ shopt -s checkwinsize
 shopt -s cdspell
 
 # COMPLETION OPTIONS
-
-# # enable programmable completion features (you don't need to enable
-# # this, if it's already enabled in /etc/bash.bashrc and /etc/profile
-# # sources /etc/bash.bashrc).
-# if ! shopt -oq posix; then
-#   if [ -f /usr/share/bash-completion/bash_completion ]; then
-#     . /usr/share/bash-completion/bash_completion
-#   elif [ -f /etc/bash_completion ]; then
-#     . /etc/bash_completion
-#   fi
-# fi
 
 # Ignore case in tab complete
 bind "set completion-ignore-case on"
