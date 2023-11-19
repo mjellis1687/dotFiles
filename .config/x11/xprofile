@@ -29,12 +29,13 @@ if [ -z "$GDMSESSION" ] || [ "$GDMSESSION" = "dwm" ]; then
 	source ${HOME}/.bash_profile
 	setbg &			# set the background with the `setbg` script
 
-	autostart="xcompmgr dunst unclutter remapd"
+ 	# autostart="xcompmgr dunst unclutter remapd"
+ 	autostart="xcompmgr dunst unclutter remapd"
 
-	for program in $autostart; do
-		pidof -sx "$program" || "$program" &
-	done >/dev/null 2>&1
+ 	for program in $autostart; do
+ 		pidof -sx "$program" || "$program" &
+ 	done >/dev/null 2>&1
 
-	# Ensure that xrdb has finished running before moving on to start the WM/DE.
-	[ -n "$xrdbpid" ] && wait "$xrdbpid"
+ 	# Ensure that xrdb has finished running before moving on to start the WM/DE.
+ 	[ -n "$xrdbpid" ] && wait "$xrdbpid"
 fi
