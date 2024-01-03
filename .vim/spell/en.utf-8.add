@@ -6,6 +6,7 @@ Alanqar
 Bainer
 Broyden
 CBET
+CEC
 CPLEX
 CPlex
 CSTR
@@ -25,9 +26,12 @@ EEI
 EMPC
 Econet
 FNN
+FOA
 Farra
 Flowsheets
+GFO
 GPM
+GWP
 Gajjar
 Geankoplis
 GitHub
@@ -40,11 +44,13 @@ HVAC
 Ipopt
 JSON
 Jupyter
+Khalil
 LHB
 LOI
 LPV
 LSTM
 LTV
+LaSalle's
 LabVIEW
 Liu
 Lyapunov
@@ -57,6 +63,7 @@ NPSH
 Nael
 Narasimhan
 Narayanan
+Nonautonomous
 OCP
 OCPs
 OEB
@@ -71,6 +78,7 @@ PV
 QP
 RBC
 RBCs
+Rawlings
 Rheem
 Riccati
 SPC
@@ -85,6 +93,7 @@ Timeseries
 Turton
 UC
 Vinod
+WCEC
 Walas
 Zhang
 atm
@@ -104,6 +113,7 @@ flowsheets
 hoc
 intercooling
 nonisothermal
+nonsingular
 polytropic
 psia
 psig
