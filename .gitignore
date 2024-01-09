@@ -6,6 +6,7 @@
 .cmake
 .config/.gsd-keyboard.settings-ported
 .config/.org.chromium.Chromium.*
+.config/BraveSoftware
 .config/Code - OSS
 .config/CrashPlan
 .config/Florian_Hackenberger
@@ -66,6 +67,7 @@
 .config/mimeapps.list
 .config/monitors.xml*
 .config/nautilus
+.config/ncmpcpp/error.log
 .config/nvidia
 .config/octave/octave-gui.ini
 .config/octave/qt-settings
@@ -235,6 +237,7 @@
 .matlab
 .mozilla
 .netrc
+.nv
 .pdbhistory
 .pki
 .pulse_secure

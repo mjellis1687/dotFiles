@@ -2,7 +2,7 @@
 # M. Ellis
 
 # Load in system-wide rc file
-mkdir('~/.local/share/octave')
+[status, msg, msgid] = mkdir('~/.local/share/octave');
 source /usr/share/octave/site/m/startup/octaverc
 pkg prefix ~/.local/share/octave/packages ~/.local/share/octave/packages;
 pkg local_list ~/.local/share/octave/octave_packages
@@ -31,3 +31,6 @@ function checkPackages()
 	end
 end
 checkPackages()
+
+# Change graphics toolkit to QT
+graphics_toolkit("qt")

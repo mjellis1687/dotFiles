@@ -376,8 +376,7 @@ matlab () {
 	[[ -z ${TO} ]] && TO=${BASE}.${DEFAULT_EXT}
 	RECIPE="${TO} : ${SRC} ${DEPENDS}
 	@echo \"Running Matlab on \$<.\"
-	\${MATLAB} -log -nodesktop -nosplash -noFigureWindows \\
-		-r \"try, run('\$<'); catch err, disp(err.message); quit(1); end, quit(0)\"
+	\${MATLAB} \${MATLAB_OPTS} \"try, run('\$<'); catch err, disp(err.message); quit(1); end, quit(0)\"
 	"
 	echo "DEST += ${TO}
 	" >> "${MAKEH}"
@@ -387,9 +386,8 @@ matlab () {
 octave () {
 	[[ -z ${TO} ]] && TO=${BASE}.${DEFAULT_EXT}
 	local RECIPE="${TO} : ${SRC} ${DEPENDS}
-	@echo \"Running Matlab on \$<.\"
-	\${OCTAVE} --no-gui --no-window-system \\
-		--eval \"try, run('\$<'); catch err, disp(err.message); quit(1); end, quit(0)\"
+	@echo \"Running Octave on \$<.\"
+	\${OCTAVE} \${OCTAVE_OPTS} \"try, run('\$<'); catch err, disp(err.message); quit(1); end, quit(0)\"
 	"
 	echo "DEST += ${TO}
 	" >> "${MAKEH}"

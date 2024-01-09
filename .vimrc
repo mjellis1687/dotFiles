@@ -55,7 +55,7 @@ Plug 'vim-latex/vim-latex'
 " Language-tool
 Plug 'rhysd/vim-grammarous'
 " Matlab
-Plug 'ebranlard/vim-matlab-behave'
+" Plug 'ebranlard/vim-matlab-behave'
 " Vim-Pandoc
 Plug 'vim-pandoc/vim-pandoc'
 Plug 'vim-pandoc/vim-pandoc-syntax'
@@ -390,9 +390,11 @@ let g:pandoc#folding#level = 8
 " ==============================================================================
 " MATLAB SUPPORT
 
-" TODO: is this on git or can it be managed by the plug-in manager?
-source $VIMRUNTIME/macros/matchit.vim
-autocmd BufEnter *.m    compiler mlint
+" I believe this requires Matlab to be installed (mlint is provided by
+" Mathworks)
+" Alternatives seem to be MISS_HIT though I am not sure there are any
+" plug-ins for vim
+" autocmd BufEnter *.m    compiler mlint
 
 " ==============================================================================
 " FUNCTIONS
