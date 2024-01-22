@@ -14,6 +14,7 @@
 .config/LanguageTool
 .config/Mendeley Ltd.
 .config/Microsoft
+.config/MusicBrainz
 .config/NREL
 .config/Nextcloud
 .config/OpenStudio
@@ -206,6 +207,7 @@
 .local/share/kcookiejar
 .local/share/keyrings
 .local/share/larbs
+.local/share/lyrics
 .local/share/lesshst
 .local/share/lf
 .local/share/man
@@ -257,11 +259,11 @@ Desktop
 Documents
 Downloads
 Dropbox
+[Mm]usic
 Pictures
 RemoteDrives
 Storage
 Templates
 VirtualBox\ VMs
-music
 node_modules
 repos
