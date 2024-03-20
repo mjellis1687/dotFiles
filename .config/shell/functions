@@ -36,3 +36,24 @@ pacdescr() {
 	fi
 	echo "$description"
 }
+
+open_with_fzf() {
+	file="$(fd -t f -H | fzf --preview="head -$LINES {}")"
+	if [ -n "$file" ]; then
+		mimetype="$(xdg-mime query filetype $file)"
+		default="$(xdg-mime query default $mimetype)"
+		if [[ "$default" == "vim.desktop" ]]; then
+			vim "$file"
+		else
+			&>/dev/null xdg-open "$file" & disown
+		fi
+	fi
+}
+
+cd_with_fzf() {
+	cd "$(fd -t d | fzf --preview="tree -L 1 {}" --bind="space:toggle-preview" --preview-window=:hidden)" && clear
+}
+
+pacs() {
+	sudo pacman -Syy $(pacman -Ssq | fzf -m --preview="pacman -Si {}" --preview-window=:hidden --bind=space:toggle-preview)
+}

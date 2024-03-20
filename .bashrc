@@ -60,3 +60,9 @@ stty -ixon
 
 # Bash completion for pandoc
 eval "$(pandoc --bash-completion)"
+
+# KEYBINDINGS
+
+bind '"\C-o":"cd_with_fzf\n"'
+bind '"\C-f":"open_with_fzf\n"'
+bind '"\C-v":"vim\n"'
