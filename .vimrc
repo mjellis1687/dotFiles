@@ -65,6 +65,8 @@ Plug 'KyleOndy/wombat256mod'
 Plug 'rickhowe/diffchar.vim'
 " Vim-tables
 Plug 'dhruvasagar/vim-table-mode'
+" CSV files
+Plug 'chrisbra/csv.vim'
 
 " Tell vim-plug we finished declaring plugins, so it can load them
 call plug#end()
