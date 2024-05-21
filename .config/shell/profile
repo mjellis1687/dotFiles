@@ -6,9 +6,9 @@
 export PATH="$PATH:$(find $HOME/.local/bin/ -type d -printf ':%p')"
 
 # Default programs:
-export EDITOR="vim"  # TODO: consider neovim?
-export TERMINAL="urxvt"	 # TODO: change
-export BROWSER="firefox"  # TODO: change
+export EDITOR="vim"
+export TERMINAL="st"
+export BROWSER="brave"
 
 # XDG stuff
 export XDG_CONFIG_HOME="${HOME}"/.config
