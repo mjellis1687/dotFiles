@@ -1,0 +1,28 @@
+#!/bin/bash
+#
+# Syncs a box folder (remote to local)
+
+# Variables
+REMOTE_NAME="Box"
+LOCAL_PATH="${HOME}/RemoteDrives/Box/"
+EXCLUDE_FILE="${HOME}/RemoteDrives/exclude_box"
+
+# Logging
+# Date format for log file (e.g., 2024-05-20)
+CURRENT_DATE=$(date +"%Y-%m-%d")
+LOGFILE="${HOME}/RemoteDrives/rclone_sync_$CURRENT_DATE.log"
+
+# Exclude
+EXCLUDE_OPTION=""
+[ -f "$EXCLUDE_FILE" ] && echo "Excluding files from $EXCLUDE_FILE" && EXCLUDE_OPTION="--exclude-from $EXCLUDE_FILE"
+
+# Sync command
+echo "Syncing ${LOCAL_PATH}"
+rclone sync "$REMOTE_NAME:" $EXCLUDE_OPTION "$LOCAL_PATH" --log-file="$LOGFILE" --log-level ERROR
+
+# Check for success
+if [ $? -eq 0 ]; then
+    echo "Sync completed successfully."
+else
+    echo "Error during sync. Check the log file: $LOGFILE"
+fi
