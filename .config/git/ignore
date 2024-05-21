@@ -133,6 +133,7 @@
 .local/bin/fonttools
 .local/bin/getbib
 .local/bin/getkeys
+.local/bin/hp-mpc-job
 .local/bin/ifinstalled
 .local/bin/import_pb_to_tensorboard
 .local/bin/ipdb3
