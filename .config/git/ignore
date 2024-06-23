@@ -72,8 +72,10 @@
 .config/ktikzrc
 .config/libreoffice
 .config/libvirt
+.config/menus
 .config/mimeapps.list
 .config/monitors.xml*
+.config/mpd/mpd.db
 .config/mupen64plus
 .config/nautilus
 .config/ncmpcpp/error.log
@@ -199,9 +201,11 @@
 .local/share/backgrounds
 .local/share/bg
 .local/share/data
+.local/share/desktop-directories
 .local/share/dvdcss
 .local/share/epiphany
 .local/share/evolution
+.local/share/icons
 .local/share/flatpak
 .local/share/folks
 .local/share/fonts
