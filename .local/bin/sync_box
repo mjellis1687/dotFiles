@@ -10,7 +10,9 @@ EXCLUDE_FILE="${HOME}/RemoteDrives/exclude_box"
 # Logging
 # Date format for log file (e.g., 2024-05-20)
 CURRENT_DATE=$(date +"%Y-%m-%d")
-LOGFILE="${HOME}/RemoteDrives/rclone_sync_$CURRENT_DATE.log"
+LOGDIR="${HOME}/RemoteDrives/log"
+mkdir -p "$LOGDIR"
+LOGFILE="${LOGDIR}/rclone_sync_$CURRENT_DATE.log"
 
 # Exclude
 EXCLUDE_OPTION=""
