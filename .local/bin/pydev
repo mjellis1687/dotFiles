@@ -8,6 +8,15 @@ if [ -z "$TMUX" ]; then
   exit 1
 fi
 
+# Parse the arguments
+USE_FZF=false
+while [ "$#" -gt 0 ]; do
+  case "$1" in
+    -s|--select) USE_FZF=true; shift ;;
+    *) echo "Unknown option: $1"; exit 1 ;;
+  esac
+done
+
 # Get the window ID of the terminal
 WINDOW_ID=$(xdotool getactivewindow)
 
@@ -29,16 +38,34 @@ CELL_ROWS=$(($WINDOW_HEIGHT / $CELL_HEIGHT))
 H_SPLIT_COLUMNS=$(($CELL_COLUMNS * 30 / 100))
 V_SPLIT_ROWS=$(($CELL_ROWS * 50 / 100))
 
-VENV=$(find . -wholename '*venv*/*/activate')
+# Find available virtual environments
+VENV_DIRS=$(find . -maxdepth 1 -name '.venv*' | sort -V)
+
+# If there are multiple virtual environments and the --select option is used, prompt for selection
+if [ "$(echo "$VENV_DIRS" | wc -l)" -gt 1 ] && [ "$USE_FZF" = true ]; then
+  VENV_DIR=$(echo "$VENV_DIRS" | fzf --prompt="Select a virtual environment: ")
+else
+  # Default to the latest version if no selection is made
+  VENV_DIR=$(echo "$VENV_DIRS" | tail -n 1)
+fi
+
+# Check if a virtual environment was found
+if [ -z "$VENV_DIR" ]; then
+  echo "Error: No virtual environment found."
+  exit 1
+fi
+
+VENV_ACTIVATE="$VENV_DIR/bin/activate"
+
 ACTIVE_PANE=$(tmux display-message -p "#{pane_id}")
 
-tmux send-keys "source ${VENV}" C-m "vim" C-m
+tmux send-keys "source ${VENV_ACTIVATE}" C-m "vim" C-m
 tmux split-window -h
 tmux resize-pane -x $H_SPLIT_COLUMNS
 
-tmux send-keys "source ${VENV}" C-m "ipython" C-m "clear" C-m
+tmux send-keys "source ${VENV_ACTIVATE}" C-m "ipython" C-m "clear" C-m
 tmux split-window -v
 tmux resize-pane -y $V_SPLIT_ROWS
 
-tmux send-keys "source ${VENV}" C-m "clear" C-m
+tmux send-keys "source ${VENV_ACTIVATE}" C-m "clear" C-m
 tmux select-pane -t "${ACTIVE_PANE}"
