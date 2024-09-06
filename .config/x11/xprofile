@@ -30,7 +30,7 @@ if [ -z "$GDMSESSION" ] || [ "$GDMSESSION" = "dwm" ]; then
 	setbg &			# set the background with the `setbg` script
 
  	# autostart="xcompmgr dunst unclutter remapd"
- 	autostart="xcompmgr dunst unclutter remapd"
+ 	autostart="xcompmgr dunst unclutter remapd dropbox"
 
  	for program in $autostart; do
  		pidof -sx "$program" || "$program" &
