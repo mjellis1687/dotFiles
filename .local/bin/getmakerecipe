@@ -323,7 +323,7 @@ pdf2png () {
 	#TODO: automatically add latex_pdf if needed
 	RECIPE="${BASE}.png : ${BASE}.pdf
 	@echo \"Building \$@\"
-	@cd $(dirname ${SRC}) ; convert -density 800 \$(notdir \$<) \$(notdir \$@)
+	@cd $(dirname ${SRC}) ; magick -density 800 \$(notdir \$<) -quality 100 \$(notdir \$@)
 	"
 	echo "DEST += ${BASE}.png
 	" >> "${MAKEH}"
@@ -334,7 +334,7 @@ pdf2jpg () {
 	#TODO: automatically add latex_pdf if needed
 	RECIPE="${BASE}.jpg : ${BASE}.pdf
 	@echo \"Building \$@\"
-	@cd $(dirname ${SRC}) ; convert -density 800 \$(notdir \$<) \$(notdir \$@)
+	@cd $(dirname ${SRC}) ; magick -density 800 \$(notdir \$<) \$(notdir \$@)
 	"
 	echo "DEST += ${BASE}.jpg
 	" >> "${MAKEH}"

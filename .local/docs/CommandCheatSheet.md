@@ -485,3 +485,10 @@ To merge two video files with `ffmpeg`, you can use the `concat` demuxer. This m
 3. `ffmpeg` will merge the video files listed in `input.txt` and create a single output video file named `output.mp4`.
 
 This method is safe and efficient because it doesn't involve re-encoding, so there is no loss of quality, and it is generally faster than re-encoding. However, it requires that the video files have compatible codecs and settings for successful concatenation. If you encounter any issues with incompatible formats, you may need to preprocess or convert the videos before merging them.
+
+## Rotate a HIEC Image
+
+- ImageMagick will do it
+```bash
+magick input.heic -rotate 90 output.heic
+```
