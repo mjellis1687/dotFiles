@@ -486,9 +486,13 @@ To merge two video files with `ffmpeg`, you can use the `concat` demuxer. This m
 
 This method is safe and efficient because it doesn't involve re-encoding, so there is no loss of quality, and it is generally faster than re-encoding. However, it requires that the video files have compatible codecs and settings for successful concatenation. If you encounter any issues with incompatible formats, you may need to preprocess or convert the videos before merging them.
 
-## Rotate a HIEC Image
+## HIEC Images
 
-- ImageMagick will do it
+- Using ImageMagick to rotate an image
 ```bash
 magick input.heic -rotate 90 output.heic
+```
+- Reduce
+```bash
+magick input.heic -quality 90 output.jpg
 ```
