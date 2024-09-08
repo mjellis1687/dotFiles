@@ -486,10 +486,7 @@ function GetTemplate(fname)
 endfunction
 command! -nargs=1 GetTemplate call GetTemplate(<q-args>)
 
-" function! Synctex()
-" 	" remove 'silent' for debugging
-" 	execute "silent !zathura --synctex-forward " . line('.') . ":" . col('.') . ":" . bufname('%') . " " . g:syncpdf
-" endfunction
+" See this: https://gist.github.com/vext01/16df5bd48019d451e078
 function! Synctex()
   " remove 'silent' for debugging
   execute "silent !zathura --synctex-forward " . line('.') . ":" . col('.') . ":" . bufname('%') . " " . bufname('%')[:-5]. ".pdf"
