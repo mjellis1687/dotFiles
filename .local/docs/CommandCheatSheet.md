@@ -215,6 +215,10 @@ $ git commit -c ORIG_HEAD
 	git push origin --tags
 	```
 
+### Credentials
+
+Even though I had set the credential manager to `store`, seems to prioritize using `.netrc` for credentials (not sure why).
+
 ## Vim commands
 
 ### Movements
