@@ -49,9 +49,11 @@
 .config/gedit
 .config/ghb
 .config/git/credentials
+.config/glow
 .config/gnome-boxes
 .config/gnome-builder
 .config/gnome-control-center
+.config/go
 .config/goa-1.0
 .config/gtk-2.0
 .config/gtk-3.0
@@ -270,7 +272,7 @@
 .nv
 .pdbhistory
 .pki
-.pulse_secure
+.pulsesecure
 .rnd
 .ssh
 .swt
