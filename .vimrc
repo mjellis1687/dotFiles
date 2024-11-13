@@ -346,8 +346,10 @@ let g:Tex_DefaultTargetFormat = 'pdf'
 " Seems possible with zathura; see: https://tex.stackexchange.com/questions/584529/setting-up-synctex-with-vim-and-zathura
 " Seems partially possible with markdown as well; see: https://groups.google.com/g/pandoc-discuss/c/IFN1QN3gh14/m/87hLeyc7BwAJ
 let g:Tex_CompileRule_pdf = 'latexmk -pdf $*'
-let g:Tex_ViewRule_pdf = 'evince'
+let g:Tex_ViewRule_pdf = 'zathura'
 let g:Tex_MultipleCompileFormats='pdf,bibtex,pdf'
+
+map <C-Enter> :call Tex_
 
 " let g:Tex_CompileRule_pdf = 'latexmk -pdf -pdflatex="pdflatex -synctex=1 -src-specials -interaction=nonstopmode" $*'
 " let g:Tex_ViewRule_pdf = 'zathura'
@@ -484,10 +486,12 @@ function GetTemplate(fname)
 endfunction
 command! -nargs=1 GetTemplate call GetTemplate(<q-args>)
 
+" See this: https://gist.github.com/vext01/16df5bd48019d451e078
 function! Synctex()
-	" remove 'silent' for debugging
-	execute "silent !zathura --synctex-forward " . line('.') . ":" . col('.') . ":" . bufname('%') . " " . g:syncpdf
+  " remove 'silent' for debugging
+  execute "silent !zathura --synctex-forward " . line('.') . ":" . col('.') . ":" . bufname('%') . " " . bufname('%')[:-5]. ".pdf"
+  redraw!
 endfunction
-map <C-enter> :call Synctex()<cr>
+map <C-S-Leader> :call Synctex()<cr>
 
 " EOF
