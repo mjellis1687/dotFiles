@@ -52,8 +52,8 @@ alias nvidia-settings="nvidia-settings --config=$XDG_CONFIG_HOME/nvidia/settings
 alias pipupdate="pip list -o | awk 'NR>=3 {print $1}' | xargs -n 1 pip install -U"
 
 # ctags with exclude file
-alias myctags="if [ -f .ctags_exclude_files ]; then ctags -R . --exclude=@.ctags_exclude_files; else ctags -R .; fi"
+alias myctags="if [ -f .ctags_exclude_files ]; then ctags -R --exclude=@.ctags_exclude_files .; else ctags -R .; fi"
 
-alias myvpn="/opt/pulsesecure/bin/pulseUI"
+alias myvpn="sudo systemctl start pulsesecure; /opt/pulsesecure/bin/pulseUI"
 
 alias vim='/usr/bin/vim --servername vim'
