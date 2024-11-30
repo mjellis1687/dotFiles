@@ -20,7 +20,7 @@ EXCLUDE_OPTION=""
 
 # Sync command
 echo "Syncing ${LOCAL_PATH}"
-rclone sync "$REMOTE_NAME:" $EXCLUDE_OPTION "$LOCAL_PATH" --log-file="$LOGFILE" --log-level ERROR
+rclone copy "$REMOTE_NAME:" $EXCLUDE_OPTION "$LOCAL_PATH" --log-file="$LOGFILE" --log-level ERROR
 
 # Check for success
 if [ $? -eq 0 ]; then

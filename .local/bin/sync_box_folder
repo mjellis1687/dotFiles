@@ -1,10 +1,10 @@
 #!/bin/bash
 #
-# Syncs a box folder (remote to local)
+# Syncs a local folder to the remote (Box) folder
 
 # Variables
 REMOTE_NAME="Box"
-LOCAL_PATH="${HOME}/RemoteDrives/Box/"
+BOX_FOLDER="${HOME}/RemoteDrives/Box/"
 EXCLUDE_FILE="${HOME}/RemoteDrives/exclude_box"
 
 # Logging
@@ -14,17 +14,32 @@ LOGDIR="${HOME}/RemoteDrives/log"
 mkdir -p "$LOGDIR"
 LOGFILE="${LOGDIR}/rclone_sync_$CURRENT_DATE.log"
 
+# Validate input argument
+if [ -z "$1" ]; then
+    echo "Usage: $0 <local_directory>"
+    exit 1
+fi
+
+LOCAL_PATH=$(realpath "$1")
+REMOTE_PATH=$(echo "$LOCAL_PATH" | sed "s|$BOX_FOLDER||")
+
+# Check if the directory exists
+if [ ! -d "$LOCAL_PATH" ]; then
+    echo "Error: Directory $LOCAL_PATH does not exist."
+    exit 1
+fi
+
 # Exclude
 EXCLUDE_OPTION=""
 [ -f "$EXCLUDE_FILE" ] && echo "Excluding files from $EXCLUDE_FILE" && EXCLUDE_OPTION="--exclude-from $EXCLUDE_FILE"
 
-# Sync command
-echo "Syncing ${LOCAL_PATH}"
-rclone sync "$REMOTE_NAME:" $EXCLUDE_OPTION "$LOCAL_PATH" --log-file="$LOGFILE" --log-level ERROR
+# Sync local folder to remote
+echo "Syncing $LOCAL_PATH to remote ($REMOTE_NAME:$REMOTE_PATH)..."
+rclone sync "$LOCAL_PATH" "$REMOTE_NAME:$REMOTE_PATH" $EXCLUDE_OPTION --log-file="$LOGFILE" --log-level INFO
 
-# Check for success
 if [ $? -eq 0 ]; then
     echo "Sync completed successfully."
 else
     echo "Error during sync. Check the log file: $LOGFILE"
+    exit 1
 fi
