@@ -30,32 +30,49 @@ if [ $# -ne 1 ]; then
 fi
 LOCAL_PATH=$(realpath "$1")
 
-# Validate input arguments
-[ -z "$LOCAL_PATH" ] && usage
+# Validate the mode and local path
+if [ "$MODE" != "sync" ] && [ "$MODE" != "copy" ]; then
+    echo "Error: Invalid mode. Use 'sync' or 'copy'."
+    usage
+	exit 1
+fi
 if [ ! -d "$LOCAL_PATH" ]; then
     echo "Error: Directory $LOCAL_PATH does not exist."
+	usage
     exit 1
 fi
-[ "$MODE" != "sync" ] && [ "$MODE" != "copy" ] && MODE="sync"
 
-# Set remote name from
 REMOTE_DRIVES_BASE="${HOME}/RemoteDrives"
-# Extract the direction name containing the LOCAL_PATH
-REMOTE_NAME=$(basename "$(dirname "$LOCAL_PATH")")
+
+# Extract the first path component after $REMOTE_DRIVES_BASE as REMOTE_NAME
+if [[ "$LOCAL_PATH" != ${REMOTE_DRIVES_BASE}/* ]]; then
+    echo "Error: LOCAL_PATH must be within ${REMOTE_DRIVES_BASE}."
+    exit 1
+fi
+REMOTE_NAME=$(echo "$LOCAL_PATH" | sed "s|^${REMOTE_DRIVES_BASE}/||" | cut -d'/' -f1)
+
+# Validate REMOTE_NAME
+if [ -z "$REMOTE_NAME" ]; then
+    echo "Error: Unable to determine REMOTE_NAME from $LOCAL_PATH."
+    exit 1
+fi
+
 LOCAL_DIR_BASE="${REMOTE_DRIVES_BASE}/${REMOTE_NAME}"
 EXCLUDE_FILE="${REMOTE_DRIVES_BASE}/ExcludeRClone/exclude_${REMOTE_NAME}"
 
-if [[ "$LOCAL_PATH" != "$LOCAL_DIR/"* ]]; then
-	echo "Error: LOCAL_PATH must be within {$REMOTE_DRIVES_BASE}/${REMOTE_NAME}"
-	exit 1
+# Ensure LOCAL_PATH is within the expected remote directory structure
+if [[ "$LOCAL_PATH" != "$LOCAL_DIR_BASE/"* ]]; then
+    echo "Error: LOCAL_PATH must be within ${LOCAL_DIR_BASE}."
+    exit 1
 fi
 
+# Prepare the remote path by stripping the base directory
 REMOTE_PATH=$(echo "$LOCAL_PATH" | sed "s|$LOCAL_DIR_BASE||")
 
-# Logging
+# Logging setup
 # Date format for log file (e.g., 2024-05-20)
 CURRENT_DATE=$(date +"%Y-%m-%d")
-LOGDIR="${HOME}/RemoteDrives/rclone_logs/${REMOTE_NAME}"
+LOGDIR="${REMOTE_DRIVES_BASE}/rclone_logs/${REMOTE_NAME}"
 mkdir -p "$LOGDIR"
 LOGFILE="${LOGDIR}/l2d_${MODE}_${CURRENT_DATE}.log"
 
@@ -66,13 +83,13 @@ if [ -f "$EXCLUDE_FILE" ]; then
 	EXCLUDE_OPTION="--exclude-from $EXCLUDE_FILE"
 fi
 
-# Sync local folder to remote
+# Execute rclone command
 echo "Executing rclone $MODE from $LOCAL_PATH to remote ($REMOTE_NAME:$REMOTE_PATH)..."
 rclone "$MODE" "$LOCAL_PATH" "$REMOTE_NAME:$REMOTE_PATH" $EXCLUDE_OPTION --log-file="$LOGFILE"
 
 if [ $? -eq 0 ]; then
     echo "$MODE completed successfully."
 else
-    echo "Error during sync. Check the log file: $LOGFILE"
+    echo "Error during $MODE. Check the log file: $LOGFILE"
     exit 1
 fi
