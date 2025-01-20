@@ -1,0 +1,70 @@
+#!/bin/bash
+#
+# Syncs or copies a local folder to the remote folder using rclone
+
+set -e
+
+# Variables
+MODE="copy"
+
+# Function to display usage
+usage() {
+    echo "Usage: $0 [-m <sync|copy>] <Remote>"
+    echo "  <Remote>        Remote to copy/sync"
+    echo "  -m              Mode: 'copy' (default) or 'sync'"
+    exit 1
+}
+
+# Parse command-line arguments
+while getopts "m:" opt; do
+    case "$opt" in
+        m) MODE="$OPTARG" ;;
+        *) usage ;;
+    esac
+done
+
+# Validate remaining positional argument
+shift $((OPTIND - 1))
+if [ $# -ne 1 ]; then
+    usage
+fi
+REMOTE_NAME="$1"
+
+# Validate input arguments
+[ -z "$REMOTE_NAME" ] && usage
+[ "$MODE" != "sync" ] && [ "$MODE" != "copy" ] && MODE="sync"
+
+# Set remote name from
+REMOTE_DRIVES_BASE="${HOME}/RemoteDrives"
+LOCAL_PATH="${REMOTE_DRIVES_BASE}/${REMOTE_NAME}"
+EXCLUDE_FILE="${REMOTE_DRIVES_BASE}/ExcludeRClone/exclude_${REMOTE_NAME}"
+
+if [ ! -d "$LOCAL_PATH" ]; then
+    echo "Error: Directory $LOCAL_PATH does not exist."
+    exit 1
+fi
+
+# Logging
+# Date format for log file (e.g., 2024-05-20)
+CURRENT_DATE=$(date +"%Y-%m-%d")
+LOGDIR="${HOME}/RemoteDrives/rclone_logs/${REMOTE_NAME}"
+mkdir -p "$LOGDIR"
+LOGFILE="${LOGDIR}/r2l_${MODE}_${CURRENT_DATE}.log"
+
+# Exclude
+EXCLUDE_OPTION=""
+if [ -f "$EXCLUDE_FILE" ]; then
+	echo "Excluding files from $EXCLUDE_FILE"
+	EXCLUDE_OPTION="--exclude-from $EXCLUDE_FILE"
+fi
+
+# Sync local folder to remote
+echo "Executing rclone $MODE from $LOCAL_PATH to remote ($REMOTE_NAME:$REMOTE_PATH)..."
+rclone "$MODE" "$REMOTE_NAME:" "$LOCAL_PATH" $EXCLUDE_OPTION --log-file="$LOGFILE"
+
+if [ $? -eq 0 ]; then
+    echo "$MODE completed successfully."
+else
+    echo "Error during sync. Check the log file: $LOGFILE"
+    exit 1
+fi

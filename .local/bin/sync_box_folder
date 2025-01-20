@@ -35,7 +35,7 @@ EXCLUDE_OPTION=""
 
 # Sync local folder to remote
 echo "Syncing $LOCAL_PATH to remote ($REMOTE_NAME:$REMOTE_PATH)..."
-rclone sync "$LOCAL_PATH" "$REMOTE_NAME:$REMOTE_PATH" $EXCLUDE_OPTION --log-file="$LOGFILE" --log-level INFO
+rclone sync "$LOCAL_PATH" "$REMOTE_NAME:$REMOTE_PATH" $EXCLUDE_OPTION --log-file="$LOGFILE"
 
 if [ $? -eq 0 ]; then
     echo "Sync completed successfully."
