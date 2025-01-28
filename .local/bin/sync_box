@@ -5,7 +5,7 @@
 # Variables
 REMOTE_NAME="Box"
 LOCAL_PATH="${HOME}/RemoteDrives/Box/"
-EXCLUDE_FILE="${HOME}/RemoteDrives/exclude_box"
+EXCLUDE_FILE="${HOME}/RemoteDrives/ExcludeRClone/exclude_Box"
 
 # Logging
 # Date format for log file (e.g., 2024-05-20)
