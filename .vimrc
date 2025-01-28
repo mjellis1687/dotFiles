@@ -354,7 +354,7 @@ map <C-Enter> :call Tex_
 let g:Tex_IgnoreLevel=0
 
 " Markdown ------------------------------
-autocmd FileType markdown noremap <Leader>c i::: {.columns}<CR>:::: {.column width=%}<CR><CR><CR><CR>::::<CR>:::: {.column width=%}<CR><CR><++><CR><CR>::::<CR>:::<Esc>11k2h
+autocmd FileType markdown noremap <Leader>c i::: {.columns}<CR>:::: {.column width=<++>%}<CR><CR><++><CR><CR>::::<CR>:::: {.column width=<++>%}<CR><CR><++><CR><CR>::::<CR>:::<Esc>11k2h
 autocmd FileType markdown noremap <Leader>lv :!xdg-open %:r.pdf &<CR><CR>
 noremap <Leader>w :w<CR>
 autocmd FileType markdown noremap <Leader>w :w<CR>:make<CR>
