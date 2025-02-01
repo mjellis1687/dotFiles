@@ -353,6 +353,9 @@ map <C-Enter> :call Tex_
 "autocmd BufEnter *.tex filetype plugin on|set shellslash| set grepprg=grep\ -nH\ $*|filetype indent on|let g:tex_flavor='latex'|set iskeyword+=:
 let g:Tex_IgnoreLevel=0
 
+" Prevent vim-latex from going to an error after successful complilation
+let g:Tex_GotoError = 0
+
 " Markdown ------------------------------
 autocmd FileType markdown noremap <Leader>c i::: {.columns}<CR>:::: {.column width=<++>%}<CR><CR><++><CR><CR>::::<CR>:::: {.column width=<++>%}<CR><CR><++><CR><CR>::::<CR>:::<Esc>11k2h
 autocmd FileType markdown noremap <Leader>lv :!xdg-open %:r.pdf &<CR><CR>
