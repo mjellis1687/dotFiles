@@ -34,6 +34,7 @@ EMPC
 ERWHs
 Econet
 EnergyPlus
+EnergyPlus's
 Eq
 Eqs
 FNN
@@ -62,6 +63,7 @@ Jupyter
 Khalil
 LHB
 LMF
+LMTD
 LOI
 LPV
 LQR
@@ -70,6 +72,7 @@ LTV
 LaSalle's
 LabVIEW
 Liu
+Luenberger
 Lyapunov
 Lyapunov
 MFHP
@@ -81,6 +84,7 @@ MPC's
 MPT
 Mande
 Minkowski
+NAVFAC
 NMPC
 NPSH
 Nael
@@ -92,6 +96,7 @@ OCPs
 ODEs
 OEB
 OMEB
+PARAM
 PDEs
 PEM
 PEMs
@@ -101,6 +106,7 @@ PLCs
 PSE
 PTW
 PV
+Prandtl
 QP
 RAs
 RBC
@@ -109,6 +115,7 @@ Rawlings
 Rheem
 Riccati
 Riccatti
+SIPPY
 SPC
 Shanno
 Shilpa
@@ -140,6 +147,7 @@ decarbonizing
 dela
 discretization
 discretize
+discretized
 dissipativity
 downcomer
 electrolyzer
@@ -152,6 +160,7 @@ fugacity
 hoc
 intercooling
 linearized
+linearizing
 mRPI
 nonisothermal
 nonlinearities
@@ -171,5 +180,5 @@ testbed
 th
 thermocline
 timeseries
+timestep
 www
-NAVFAC
