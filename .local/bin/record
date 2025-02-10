@@ -1,0 +1,55 @@
+#!/bin/bash
+#
+# Make recording
+
+# ffmpeg -f alsa -thread_queue_size 8192 -i default -c:a aac -b:a 192k -ar 44100 audio.mp4 &
+# ffmpeg -f x11grab -framerate 30 -s 2560x1440 -i :0.0+1920,0 -c:v h264 -crf 18 -preset ultrafast video.mp4
+# ffmpeg -i video.mp4 -i audio.mp4 -c:v copy -c:a aac final_output.mp4
+
+set -eu
+
+# Output directory
+OUTPUT_DIR="$HOME/Videos"
+mkdir -p "$OUTPUT_DIR"
+
+# File names
+TIMESTAMP=$(date '+%y%m%d-%H%M-%S')
+VIDEO_FILE="$OUTPUT_DIR/screen_$TIMESTAMP.mp4"
+AUDIO_FILE="$OUTPUT_DIR/audio_$TIMESTAMP.wav"
+FINAL_OUTPUT="$OUTPUT_DIR/recording_$TIMESTAMP.mp4"
+
+# Screen recording settings
+DISPLAY=":0.0+1920,0"			# Change if using a different display
+SCREEN_RESOLUTION="2560x1440"	# Adjust resolution if needed
+FRAMERATE=30
+
+# Audio settings
+AUDIO_SOURCE="default"  # Use `pactl list sources short` to find available sources
+# AUDIO_SOURCE="alsa_input.pci-0000_2d_00.4.analog-stereo"
+
+# Start screen recording
+ffmpeg -y -f x11grab -r $FRAMERATE -s $SCREEN_RESOLUTION -i $DISPLAY \
+       -c:v libx264 -preset ultrafast "$VIDEO_FILE" &
+
+VIDEO_PID=$!
+
+# Start audio recording
+ffmpeg -y -f alsa -i "$AUDIO_SOURCE" -c:a pcm_s16le "$AUDIO_FILE" &
+
+AUDIO_PID=$!
+
+echo "Recording started. Press [Enter] to stop..."
+read -r
+
+# Stop recording
+kill $VIDEO_PID $AUDIO_PID
+
+sleep 2
+
+# Merge video and audio
+ffmpeg -y -i "$VIDEO_FILE" -i "$AUDIO_FILE" -c:v copy -c:a aac -strict experimental "$FINAL_OUTPUT"
+
+# Cleanup
+rm "$VIDEO_FILE" "$AUDIO_FILE"
+
+echo "Recording saved as: $FINAL_OUTPUT"
