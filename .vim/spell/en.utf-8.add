@@ -61,6 +61,7 @@ Ipopt
 JSON
 Jupyter
 Khalil
+Kremser
 LHB
 LMF
 LMTD
@@ -169,6 +170,7 @@ overfitting
 polytropic
 psia
 psig
+reboiler
 semidefinite
 setpoint
 setpoints
