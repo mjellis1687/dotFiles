@@ -61,6 +61,7 @@ Ipopt
 JSON
 Jupyter
 Khalil
+Kremser
 LHB
 LMF
 LMTD
@@ -172,6 +173,7 @@ polytope
 polytropic
 psia
 psig
+reboiler
 semidefinite
 setpoint
 setpoints
