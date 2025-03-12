@@ -114,7 +114,6 @@
 .config/vlc
 .config/wal
 .config/xdg-terminals.list
-.config/zathura
 .config/zoom.conf
 .config/zoomus.conf
 .crashplan

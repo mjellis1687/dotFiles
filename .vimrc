@@ -341,21 +341,20 @@ let g:tex_flavor='latex'
 set iskeyword+=:
 
 let g:Tex_DefaultTargetFormat = 'pdf'
-" let g:Tex_CompileRule_pdf = 'pdflatex -interaction=nonstopmode -file-line-error-style $*'
-" TODO: get forward and backward search set-up (seems to require synctex)
-" Seems possible with zathura; see: https://tex.stackexchange.com/questions/584529/setting-up-synctex-with-vim-and-zathura
-" Seems partially possible with markdown as well; see: https://groups.google.com/g/pandoc-discuss/c/IFN1QN3gh14/m/87hLeyc7BwAJ
-let g:Tex_CompileRule_pdf = 'latexmk -pdf $*'
-let g:Tex_ViewRule_pdf = 'zathura'
+let g:Tex_CompileRule_pdf = 'latexmk -pdf -synctex=1 -interaction=nonstopmode -file-line-error $*'
+" Search in vim <Leader>ls
+let g:Tex_BackwardSearch = 'vim --servername vim --remote +%l %f'
+let g:Tex_ViewRule_pdf = 'zathura --synctex-editor-command="vim --servername {v:servername} --remote +\%{line} \%{input}"'
+let g:Tex_ViewRuleComplete_pdf = 'zathura --synctex-editor-command="vim --servername {v:servername} --remote +\%{line} \%{input}" '.shellescape(expand("%:p:r")).'.pdf > /dev/null 2>&1 &'
 let g:Tex_MultipleCompileFormats='pdf,bibtex,pdf'
 
 map <C-Enter> :call Tex_
 
-" let g:Tex_CompileRule_pdf = 'latexmk -pdf -pdflatex="pdflatex -synctex=1 -src-specials -interaction=nonstopmode" $*'
-" let g:Tex_ViewRule_pdf = 'zathura'
-
 "autocmd BufEnter *.tex filetype plugin on|set shellslash| set grepprg=grep\ -nH\ $*|filetype indent on|let g:tex_flavor='latex'|set iskeyword+=:
 let g:Tex_IgnoreLevel=0
+
+" Prevent vim-latex from going to an error after successful complilation
+let g:Tex_GotoError = 0
 
 " Markdown ------------------------------
 autocmd FileType markdown noremap <Leader>c i::: {.columns}<CR>:::: {.column width=<++>%}<CR><CR><++><CR><CR>::::<CR>:::: {.column width=<++>%}<CR><CR><++><CR><CR>::::<CR>:::<Esc>11k2h
@@ -377,28 +376,6 @@ let g:ycm_add_preview_to_completeopt = 1
 
 " Vim-pandoc ------------------------------
 let g:pandoc#folding#level = 8
-
-" ==============================================================================
-" PYTHON SUPPORT
-
-"python with virtualenv support
-"py << EOF
-"import os
-"import sys
-"if 'VIRTUAL_ENV' in os.environ:
-"  project_base_dir = os.environ['VIRTUAL_ENV']
-"  activate_this = os.path.join(project_base_dir, 'bin/activate_this.py')
-"  execfile(activate_this, dict(__file__=activate_this))
-"EOF
-
-" ==============================================================================
-" MATLAB SUPPORT
-
-" I believe this requires Matlab to be installed (mlint is provided by
-" Mathworks)
-" Alternatives seem to be MISS_HIT though I am not sure there are any
-" plug-ins for vim
-" autocmd BufEnter *.m    compiler mlint
 
 " ==============================================================================
 " FUNCTIONS
@@ -485,13 +462,5 @@ function GetTemplate(fname)
 	call feedkeys("\<C-j>")
 endfunction
 command! -nargs=1 GetTemplate call GetTemplate(<q-args>)
-
-" See this: https://gist.github.com/vext01/16df5bd48019d451e078
-function! Synctex()
-  " remove 'silent' for debugging
-  execute "silent !zathura --synctex-forward " . line('.') . ":" . col('.') . ":" . bufname('%') . " " . bufname('%')[:-5]. ".pdf"
-  redraw!
-endfunction
-map <C-S-Leader> :call Synctex()<cr>
 
 " EOF

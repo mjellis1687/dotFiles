@@ -384,27 +384,9 @@ Here's how to install `pkgfile` and use it to find the package that provides a s
 
 Keep in mind that `pkgfile` will only be able to find the package if the library is part of the official Arch Linux repositories. If the library comes from the AUR (Arch User Repository) or other external sources, you may need to use other methods to determine the package providing it.
 
-## FortiClient VPN
-
-- Dependencies: `openfortivpn` and `openfortivpn-webview`
-- Get cookie:
-```bash
-openfortivpn-webview <Remote Gateway>
-```
-- Copy cookie
-- Then, this can be piped into `openfortivpn`:
-```bash
-echo $SVPNCOOKIE | sudo openfortivpn <remote gateway> --username=<username> --trusted-cert <cert-here> --cookie-on-stdin
-```
-
-### `ppp` Version 2.5.0
-
-Something as of `ppp` version 2.5.0 changed, resulting in the error: "Peer refused to agree to his IP address" (see [here](https://aur.archlinux.org/packages/networkmanager-fortisslvpn#comment-933331) and [here](https://bbs.archlinux.org/viewtopic.php?id=288717)). One of the reported solutions or work-rounds is to uncomment `ipcp-accept-remote` in `/etc/ppp/options`, which seemed to resolve the issue.
-
-## Editing Videos with `ffmpeg`
+## `ffmpeg` Examples
 
 ### Cutting Video between Specific Times
-
 
 To cut a video between two specific times using `ffmpeg`, you can use:
 ```bash
