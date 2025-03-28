@@ -2,6 +2,7 @@ ACC
 AIChE
 ASME
 ASTM
+ATR
 Aatam
 Alanqar
 BHP
@@ -37,6 +38,8 @@ EnergyPlus
 EnergyPlus's
 Eq
 Eqs
+FCI
+FEL
 FNN
 FOA
 Farra
@@ -64,6 +67,7 @@ Ipopt
 JSON
 Jupyter
 Khalil
+Kirkbride
 Kremser
 LHB
 LMF
@@ -119,6 +123,7 @@ Rawlings
 Rheem
 Riccati
 Riccatti
+SCFD
 SIPPY
 SPC
 Shanno
@@ -127,6 +132,7 @@ Shilpa's
 Stuxnet
 Subhrajit
 Subhrajit's
+TAs
 TBD
 TEMA
 TES
@@ -139,9 +145,12 @@ Turton
 UC
 Vinod
 WCEC
+WGS
 Walas
 Zhang
 amberlite
+adsorbant
+adsorbants
 atm
 biorefinery
 deadband
@@ -158,12 +167,14 @@ downcomer
 electrolyzer
 electrolyzers
 feedforward
+fermentor
 flowrate
 flowsheet
 flowsheets
 fugacity
 hoc
 intercooling
+interfacial
 linearized
 linearizing
 mRPI
@@ -171,9 +182,13 @@ nonisothermal
 nonlinearities
 nonsingular
 overfitting
+pentane
+polytope
 polytropic
 psia
 psig
+pts
+raffinate
 reboiler
 semidefinite
 setpoint
@@ -187,4 +202,5 @@ th
 thermocline
 timeseries
 timestep
+unreacted
 www
