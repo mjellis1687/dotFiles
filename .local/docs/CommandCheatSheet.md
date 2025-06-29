@@ -269,7 +269,7 @@ command! MakeTags !ctags -R .
 ### Compressed files
 - Create a `.tar.gz` file
 ```bash
-$ tar -cvzf file file.tar.gz
+$ tar -cvzf file.tar.gz file
 ```
 - Extract `.tar.gz` file
 ```bash
@@ -441,6 +441,38 @@ where
 - `-c:a aac`: This specifies the audio codec to use (AAC in this case). You can change it to another codec if needed.
 
 This command will re-encode both the video and audio, which may take some additional time compared to the previous method that copied streams. However, it should result in a video without any blank screens during playback.
+
+### Examples
+
+- Screen recording with audio
+```bash
+ffmpeg -y -f x11grab -framerate 30 -s 2560x1440 -i :1+2560,0 -f alsa -thread_queue_size 8192 -i default -c:v h264 -crf 18 -preset ultrafast -pix_fmt yuv420p -c:a aac -b:a 192k -ar 44100 "example.mp4"
+```
+- Webcam recording
+```bash
+ffmpeg -y -f v4l2 -i /dev/video0 -c:v libx264 -preset veryfast -crf 23 webcam_recording.mp4
+```
+- Webcam recording with audio
+```bash
+ffmpeg -y \
+-f v4l2 -i /dev/video0 \
+-f alsa -thread_queue_size 8192 -i default \
+-c:v h264 -crf 18 -preset slow \
+-c:a aac -b:a 192k -ar 44100 \
+"example.mp4"
+```
+-
+```bash
+ffmpeg -y \
+-f x11grab -video_size 2560x1440 -framerate 30 -i :1+2560,0 \
+-f v4l2 -i /dev/video0 \
+-f alsa -thread_queue_size 8192 -i default \
+-filter_complex "[1:v]scale=320:240[webcam];[0:v][webcam]overlay=W-w-10:H-h-10[outv]" \
+-map "[outv]" -map 2:a \
+-c:v h264 -preset veryfast -crf 23 -pix_fmt yuv420p \
+-c:a aac -b:a 192k -ar 44100 \
+output.mp4
+```
 
 ### Merging Videos
 
