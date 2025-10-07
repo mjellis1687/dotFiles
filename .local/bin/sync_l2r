@@ -74,7 +74,7 @@ REMOTE_PATH=$(echo "$LOCAL_PATH" | sed "s|$LOCAL_DIR_BASE||")
 CURRENT_DATE=$(date +"%Y-%m-%d")
 LOGDIR="${REMOTE_DRIVES_BASE}/rclone_logs/${REMOTE_NAME}"
 mkdir -p "$LOGDIR"
-LOGFILE="${LOGDIR}/l2d_${MODE}_${CURRENT_DATE}.log"
+LOGFILE="${LOGDIR}/l2r_${MODE}_${CURRENT_DATE}.log"
 
 # Exclude
 EXCLUDE_OPTION=""
