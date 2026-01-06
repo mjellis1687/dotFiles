@@ -1,6 +1,9 @@
 #!/bin/sh
 #
-# In TMUX, will  create three splits: one for editing code, one for IPython, and other for git
+# In TMUX, creates three splits: one for editing code, one for IPython, and another for git
+#
+# Works under both Wayland and Xorg.
+# Under Wayland, window geometry is skipped (uses default tmux proportions).
 
 # Check if tmux is open
 if [ -z "$TMUX" ]; then
@@ -17,48 +20,75 @@ while [ "$#" -gt 0 ]; do
   esac
 done
 
-# Get the window ID of the terminal
-WINDOW_ID=$(xdotool getactivewindow)
+# --- Detect display server type ---
+if [ -n "$WAYLAND_DISPLAY" ]; then
+  DISPLAY_SERVER="wayland"
+elif [ -n "$DISPLAY" ]; then
+  DISPLAY_SERVER="xorg"
+else
+  DISPLAY_SERVER="unknown"
+fi
 
-# Get the size of the terminal window in pixels
-WINDOW_GEOMETRY=$(xdotool getwindowgeometry $WINDOW_ID | grep -oP '\d+x\d+')
-WINDOW_WIDTH=$(echo $WINDOW_GEOMETRY | cut -d 'x' -f 1)
-WINDOW_HEIGHT=$(echo $WINDOW_GEOMETRY | cut -d 'x' -f 2)
-
-# Approximate cell size (can vary based on terminal and font)
+# --- Default geometry values ---
 CELL_WIDTH=8
 CELL_HEIGHT=16
+H_SPLIT_COLUMNS=80
+V_SPLIT_ROWS=24
 
-# Calculate the number of cells in the terminal
-CELL_COLUMNS=$(($WINDOW_WIDTH / $CELL_WIDTH))
-CELL_ROWS=$(($WINDOW_HEIGHT / $CELL_HEIGHT))
+# --- Get geometry depending on backend ---
+if [ "$DISPLAY_SERVER" = "xorg" ] && command -v xdotool >/dev/null 2>&1; then
+  WINDOW_ID=$(xdotool getactivewindow 2>/dev/null)
+  if [ -n "$WINDOW_ID" ]; then
+    WINDOW_GEOMETRY=$(xdotool getwindowgeometry "$WINDOW_ID" | grep -oP '\d+x\d+')
+    WINDOW_WIDTH=$(echo "$WINDOW_GEOMETRY" | cut -d 'x' -f 1)
+    WINDOW_HEIGHT=$(echo "$WINDOW_GEOMETRY" | cut -d 'x' -f 2)
 
-# Determine the sizes of the panes based on pixel values
-# For example, setting one pane to 30% of the width in pixels
-H_SPLIT_COLUMNS=$(($CELL_COLUMNS * 30 / 100))
-V_SPLIT_ROWS=$(($CELL_ROWS * 50 / 100))
+    CELL_COLUMNS=$(($WINDOW_WIDTH / $CELL_WIDTH))
+    CELL_ROWS=$(($WINDOW_HEIGHT / $CELL_HEIGHT))
 
-# Find available virtual environments
+    H_SPLIT_COLUMNS=$(($CELL_COLUMNS * 30 / 100))
+    V_SPLIT_ROWS=$(($CELL_ROWS * 50 / 100))
+  fi
+
+elif [ "$DISPLAY_SERVER" = "wayland" ]; then
+  # Try Wayland-specific tools if available (Hyprland or Sway)
+  if command -v hyprctl >/dev/null 2>&1; then
+    GEOM=$(hyprctl activewindow -j | jq -r '.size | "\(.x)x\(.y)"' 2>/dev/null)
+  elif command -v swaymsg >/dev/null 2>&1; then
+    GEOM=$(swaymsg -t get_tree | jq -r '.. | select(.focused? == true).rect | "\(.width)x\(.height)"' 2>/dev/null)
+  fi
+  if [ -n "$GEOM" ]; then
+    WINDOW_WIDTH=$(echo "$GEOM" | cut -d 'x' -f 1)
+    WINDOW_HEIGHT=$(echo "$GEOM" | cut -d 'x' -f 2)
+
+    CELL_COLUMNS=$(($WINDOW_WIDTH / $CELL_WIDTH))
+    CELL_ROWS=$(($WINDOW_HEIGHT / $CELL_HEIGHT))
+    H_SPLIT_COLUMNS=$(($CELL_COLUMNS * 30 / 100))
+    V_SPLIT_ROWS=$(($CELL_ROWS * 50 / 100))
+  fi
+else
+  echo "Warning: Unknown display server or no geometry tools found. Using default tmux pane sizes."
+fi
+
+# --- Find virtual environments ---
 VENV_DIRS=$(find . -maxdepth 1 -name '.venv*' | sort -V)
 
-# If there are multiple virtual environments and the --select option is used, prompt for selection
+# --- Prompt for venv if requested ---
 if [ "$(echo "$VENV_DIRS" | wc -l)" -gt 1 ] && [ "$USE_FZF" = true ]; then
   VENV_DIR=$(echo "$VENV_DIRS" | fzf --prompt="Select a virtual environment: ")
 else
-  # Default to the latest version if no selection is made
   VENV_DIR=$(echo "$VENV_DIRS" | tail -n 1)
 fi
 
-# Check if a virtual environment was found
 if [ -z "$VENV_DIR" ]; then
   echo "Error: No virtual environment found."
   exit 1
 fi
 
 VENV_ACTIVATE="$VENV_DIR/bin/activate"
-
 ACTIVE_PANE=$(tmux display-message -p "#{pane_id}")
 
+# --- Create tmux panes ---
 tmux send-keys "source ${VENV_ACTIVATE}" C-m "vim" C-m
 tmux split-window -h
 tmux resize-pane -x $H_SPLIT_COLUMNS
