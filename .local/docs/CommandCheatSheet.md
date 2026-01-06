@@ -121,6 +121,8 @@ GRUB_CMDLINE_LINUX_DEFAULT="intel_pstate=disable"
 # cpupower frequency-set -g performance
 ```
 
+## Pip
+
 ```
 pip list --outdated --format=freeze | grep -v '^\-e' | cut -d = -f 1  | xargs -n1 pip install -U
 ```
@@ -143,6 +145,7 @@ pacman -Qq | fzf --preview 'pacman -Qil {}' --layout=reverse --bind 'enter:execu
 ## Git Commands
 
 ### Diffs and Checkouts
+
 - Uncommitted file to HEAD
 ```bash
 $ git diff <path>
@@ -169,6 +172,7 @@ $ git checkout <branch_name> file
 ```
 
 ### Branches
+
 - Delete local branch
 ```bash
 $ git branch -d <branch_name>
@@ -191,6 +195,7 @@ $ git checkout --patch <branch_name> file
 ```
 
 ### Commits
+
 - Undo a commit and redo
 ```bash
 $ git commit -m "Something terribly misguided"
@@ -213,6 +218,15 @@ $ git commit -c ORIG_HEAD
 	3. Push the tag to the remote origin
 	```
 	git push origin --tags
+	```
+- Delete tag from a remote repository
+	1. Delete the remote tag
+	```bash
+	git push origin --delete <tagname>
+	```
+	2. Delete the tag locally (strictly not needed):
+	```bash
+	git tag -d <tagname>
 	```
 
 ### Credentials
@@ -267,6 +281,7 @@ command! MakeTags !ctags -R .
 ## Bash Commands
 
 ### Compressed files
+
 - Create a `.tar.gz` file
 ```bash
 $ tar -cvzf file.tar.gz file
@@ -292,6 +307,7 @@ $ find . -type f -name ".<file_type>"
 ```
 
 ## tmux
+
 - Create a new tab: Ctrl + B, C
 - Move to next/previous tab: Ctrl + B, N/P
 - Move window:

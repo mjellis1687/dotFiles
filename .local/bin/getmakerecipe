@@ -279,7 +279,7 @@ get_pandoc_options () {
 	BIB=$(get_instruction 'bib')
 	[[ ! -z ${BIB} ]] && CSL=$(get_instruction 'csl' ${DEFAULT_CSL}) && \
 		BIBLIOGRAPHY=`echo --bibliography=${BIB} | sed 's/\s/ --bibliography=/g'`" --citeproc --csl=\${PANDOC_TEMPLATE_DIR}/${CSL}"
-	HIGHLIGHT="--highlight-style $(get_instruction 'highligh' ${DEFAULT_HIGHLIGHT})"
+	HIGHLIGHT="--highlight-style $(get_instruction 'highlight' ${DEFAULT_HIGHLIGHT})"
 	FLTRS=($(get_instruction 'filters'))
 	FILTERS=
 	for f in ${FLTRS[@]} ; do
