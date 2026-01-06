@@ -59,7 +59,7 @@ if [ -f "$EXCLUDE_FILE" ]; then
 fi
 
 # Sync local folder to remote
-echo "Executing rclone $MODE from $LOCAL_PATH to remote ($REMOTE_NAME:$REMOTE_PATH)..."
+echo "Executing rclone $MODE from remote ($REMOTE_NAME:$REMOTE_PATH) to $LOCAL_PATH..."
 rclone "$MODE" "$REMOTE_NAME:" "$LOCAL_PATH" $EXCLUDE_OPTION --log-file="$LOGFILE"
 
 if [ $? -eq 0 ]; then
