@@ -268,12 +268,15 @@
 .matlab
 .mozilla
 .netrc
+.npmrc
 .nv
+.ollama
 .pdbhistory
 .pki
 .pulsesecure
 .rnd
 .ssh
+.streamlit
 .swt
 .tox
 .vim/.netrwhist
