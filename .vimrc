@@ -45,8 +45,8 @@ Plug 'jistr/vim-nerdtree-tabs'
 Plug 'ctrlpvim/ctrlp.vim'
 " Powerline
 Plug 'powerline/powerline'
-" Python Mode - not supported in Python3.8
-Plug 'python-mode/python-mode', { 'for': 'python', 'branch': 'develop' }
+" Python Mode
+Plug 'python-mode/python-mode'
 Plug 'python-rope/ropevim'
 " Python imports
 Plug 'mgedmin/python-imports.vim'
@@ -309,7 +309,8 @@ let g:pymode_virtualenv = 1
 " let g:pymode_syntax_builtin_objs = 0
 " let g:pymode_syntax_builtin_funcs = 0
 " let g:pymode_rope_lookup_project = 0
-autocmd FileType python map <Leader>b Oimport ipdb; ipdb.set_trace() # BREAKPOINT<C-c>
+let python_highlight_string_format = 1
+let python_highlight_doctests = 0
 
 " Vim-Latex ------------------------------
 
