@@ -136,6 +136,7 @@ PTW
 PTs
 PV
 Prandtl
+PtG
 QP
 RAs
 RBC
@@ -178,6 +179,7 @@ adsorbant
 adsorbants
 amberlite
 atm
+biogenous
 biorefinery
 deadband
 deadbands
@@ -204,11 +206,13 @@ interfacial
 linearized
 linearizing
 mRPI
+methanation
 nonisothermal
 nonlinearities
 nonsingular
 overfitting
 pentane
+photothermal
 polytope
 polytropic
 psia
