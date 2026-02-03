@@ -1,66 +1,83 @@
-#!/bin/sh
+#!/bin/bash
+#
+# Get a template
 
 # Author: Matthew Ellis
 
-usage() {
-	# Print usage
-	echo "Copy the template file into a specified directory"
-	echo
-	echo "Syntax: gettemplate [-h|-l|-t [TEMPLATE]|-n [OUTPUT]|-m|-d [DIR]]"
-	echo
-	echo "options:"
-	echo "  h	Print this help"
-	echo "  l	List all Pandoc templates"
-	echo "  s	List all Markdown templates"
-	echo "  t	Template to get"
-	echo "  n	Rename template file to"
-	echo "  m	Include generic Makefile"
-	echo "  d	Directory to copy file(s) into (default: current directory)"
-}
-
 SEARCH_DIR=$HOME/Templates
-DIR=`pwd`
+DEST_DIR="$(pwd)"
 INC_MAKE=false
 TEMPLATE=
 OUTPUT=
 
-list_all_templates() {
-	ls ${SEARCH_DIR}/pandoc-templates
+usage() {
+    cat << EOF
+Usage: gettemplate [-h|-l|-s|-t TEMPLATE] [-n OUTPUT] [-m] [-d DIR]
+
+Copy template files from $SEARCH_DIR into a specified directory.
+
+Options:
+  -h    Print this help
+  -l    List all Pandoc templates
+  -s    List all Markdown skeleton templates
+  -t    Template name to search for
+  -n    Rename the output file to this name
+  -m    Include generic Makefile from templates
+  -d    Target directory (default: current directory)
+EOF
 }
 
-list_all_skeletons() {
-	ls ${SEARCH_DIR}/markdown
+list_templates() {
+    local sub_dir="$1"
+    if [[ -d "$SEARCH_DIR/$sub_dir" ]]; then
+        ls "$SEARCH_DIR/$sub_dir"
+    else
+        echo "Error: $SEARCH_DIR/$sub_dir not found." >&2
+    fi
 }
 
 while getopts "d:t:n:mlsh" opt; do
 	case "$opt" in
-		h)
-			usage
-			exit 0
-			;;
-		l)
-			list_all_templates
-			exit 0
-			;;
-		s)
-			list_all_skeletons
-			exit 0
-			;;
-		t)	TEMPLATE="$OPTARG"
-			;;
-		n)	OUTPUT="$OPTARG"
-			;;
-		m)	INC_MAKE=true
-			;;
-		d)	DIR="$OPTARG"
-			;;
-		*)
-			usage
-			echo "Invalid option provided"
-			exit 1
+		h) usage; exit 0 ;;
+		l) list_all_templates "pandoc-templates"; exit 0 ;;
+		s) list_all_templates "markdown"; exit 0 ;;
+		t) TEMPLATE="$OPTARG" ;;
+		n) OUTPUT="$OPTARG" ;;
+		m) INC_MAKE=true ;;
+		d) DEST_DIR="$OPTARG" ;;
+		*) usage; exit 1 ;;
 	esac
 done
 
-[ -z "$TEMPLATE" ] && [ "$INC_MAKE" == false ] && echo "No arguments provided" && usage
-[ ! -z "$TEMPLATE" ] && cp `find "$SEARCH_DIR" -type f -not -path "$SEARCH_DIR/pandoc/*" -name "$TEMPLATE"` "$DIR"/"$OUTPUT"
-[ "$INC_MAKE" == true ] && cp $SEARCH_DIR/Makefile "$DIR"
+# Validation: If no template requested and no Makefile requested, exit.
+if [[ -z "$TEMPLATE" && "$INC_MAKE" == false ]]; then
+    echo "Error: No actions specified." >&2
+    usage
+    exit 1
+fi
+
+# Handle template copying
+if [[ -n "$TEMPLATE" ]]; then
+	# Find the file, excluding the pandoc/ subdir as requested
+    # Using head -n 1 to prevent errors if multiple files match
+    FOUND_PATH=$(find "$SEARCH_DIR" -type f -not -path "$SEARCH_DIR/pandoc/*" -name "$TEMPLATE" | head -n 1)
+
+    if [[ -z "$FOUND_PATH" ]]; then
+        echo "Error: Template '$TEMPLATE' not found in $SEARCH_DIR" >&2
+    else
+        # Determine filename: use -n value if provided, else keep original name
+        FINAL_NAME="${OUTPUT:-$(basename "$FOUND_PATH")}"
+        cp "$FOUND_PATH" "$DEST_DIR/$FINAL_NAME"
+        echo "Copied: $(basename "$FOUND_PATH") -> $DEST_DIR/$FINAL_NAME"
+    fi
+fi
+
+# Handle Makefile Copying
+if [[ "$INC_MAKE" == true ]]; then
+    if [[ -f "$SEARCH_DIR/Makefile" ]]; then
+        cp "$SEARCH_DIR/Makefile" "$DEST_DIR/"
+        echo "Copied: Makefile -> $DEST_DIR/"
+    else
+        echo "Error: Makefile not found in $SEARCH_DIR" >&2
+    fi
+fi
