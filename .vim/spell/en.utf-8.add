@@ -15,6 +15,7 @@ Broyden
 CBET
 CDU
 CEC
+CHP
 CPLEX
 CPlex
 CSTR
@@ -193,8 +194,10 @@ adsorbant
 adsorbants
 amberlite
 atm
+biochar
 biogenous
 biorefinery
+briquetting
 cycloalkane
 cycloalkanes
 deadband
