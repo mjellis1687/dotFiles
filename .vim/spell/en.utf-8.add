@@ -14,6 +14,7 @@ Broyden
 CBET
 CDU
 CEC
+CHP
 CPLEX
 CPlex
 CSTR
@@ -180,8 +181,10 @@ adsorbant
 adsorbants
 amberlite
 atm
+biochar
 biogenous
 biorefinery
+briquetting
 deadband
 deadbands
 deadzones
@@ -196,6 +199,7 @@ downcomer
 electrolyzer
 electrolyzers
 feedforward
+feedstocks
 fermentor
 flowrate
 flowsheet
