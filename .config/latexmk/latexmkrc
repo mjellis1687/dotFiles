@@ -1,7 +1,7 @@
 $clean_ext = 'acn acr alg aux bbl blg dvi fdb_latexmk fls glg glo gls idx ilg ind lof log lol lot out synctex.gz toc';
 
 # Enable PDF compilation with SyncTeX
-$pdf_mode = 1;
+$pdf_mode = 4;
 $synctex = 1;
 $continuous_mode = 1;
 
@@ -9,7 +9,8 @@ $continuous_mode = 1;
 $pdf_previewer = 'start zathura';
 
 # Define a custom command for forward search with Zathura
-$pdflatex = 'pdflatex -synctex=1 -interaction=nonstopmode -file-line-error %O %S';
+$pdflatex = 'lualatex -synctex=1 %O %S';
+$lualatex = 'lualatex -synctex=1 %O %S';
 
 # Open Zathura with the PDF after compilation
 $pdf_previewer = "zathura --synctex-forward %l:0:%s %o &";
