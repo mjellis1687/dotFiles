@@ -36,6 +36,12 @@ pacdescr() {
 	fi
 	echo "$description"
 }
+_pacdescr_complete() {
+    local cur="${COMP_WORDS[COMP_CWORD]}"
+    local packages=$(pacman -Ssq "$cur" 2>/dev/null)
+    COMPREPLY=($(compgen -W "$packages" -- "$cur"))
+}
+complete -F _pacdescr_complete pacdescr
 
 open_with_fzf() {
 	file="$(fd -t f -H | fzf --preview="head -$LINES {}")"
