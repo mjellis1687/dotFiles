@@ -1,3 +1,0 @@
-map <C-s> exec zathura_backward_search
-# set synctex-editor-command "python map_to_markdown.py output.tex %{line} && vim --servername vim --remote +%{line} input.md"
-# set synctex-editor-command "python /home/matt/Downloads/testdir/map_to_markdown.py output.tex %{line} input.md"

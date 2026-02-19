@@ -111,8 +111,9 @@
 .config/user-dirs.dirs
 .config/user-dirs.locale
 .config/vlc
-.config/wal
+.config/wal/colorschemes
 .config/xdg-terminals.list
+.config/zathurarc
 .config/zoom.conf
 .config/zoomus.conf
 .crashplan
