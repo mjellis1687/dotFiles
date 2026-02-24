@@ -46,7 +46,7 @@ Plug 'ctrlpvim/ctrlp.vim'
 " Powerline
 Plug 'powerline/powerline'
 " Python Mode
-Plug 'python-mode/python-mode'
+Plug 'python-mode/python-mode', { 'for': 'python', 'branch': 'develop' }
 Plug 'python-rope/ropevim'
 " Python imports
 Plug 'mgedmin/python-imports.vim'
@@ -54,8 +54,6 @@ Plug 'mgedmin/python-imports.vim'
 Plug 'vim-latex/vim-latex'
 " Language-tool
 Plug 'rhysd/vim-grammarous'
-" Matlab
-" Plug 'ebranlard/vim-matlab-behave'
 " Vim-Pandoc
 Plug 'vim-pandoc/vim-pandoc'
 Plug 'vim-pandoc/vim-pandoc-syntax'
