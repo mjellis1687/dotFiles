@@ -47,7 +47,7 @@ Plug 'ctrlpvim/ctrlp.vim'
 Plug 'powerline/powerline'
 " Python Mode
 Plug 'python-mode/python-mode', { 'for': 'python', 'branch': 'develop' }
-Plug 'python-rope/ropevim'
+" Plug 'python-rope/ropevim'
 " Python imports
 Plug 'mgedmin/python-imports.vim'
 " Vim-LaTeX
@@ -309,6 +309,7 @@ let g:pymode_virtualenv = 1
 " let g:pymode_rope_lookup_project = 0
 let python_highlight_string_format = 1
 let python_highlight_doctests = 0
+let g:pymode_lint_checkers = ['pylint']
 
 " Vim-Latex ------------------------------
 

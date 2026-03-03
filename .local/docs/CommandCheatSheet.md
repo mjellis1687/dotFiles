@@ -4,13 +4,7 @@
 
 ### `$HOME` Clean-up Notes
 
-- Use utility: `xdg-ninja`
-- `BCL` - Building component library from `OpenStudio`?
-- `.cmake` - Used for the user registry (hardcoded). Builds of CasADi created this (moved to backup)
-
-### TODO
-
-- Move vim
+Use utility: `xdg-ninja`
 
 ### Code42 (CrashPlan)
 
@@ -56,10 +50,6 @@ if [ "$GDMSESSION" == "dwm" ]; then
 	remaps &
 fi
 ```
-
-### tmux
-
-Currently, `.tmux.conf` is manually configured to find the location of `powerline` within Python installed packages. This means every time Python is upgraded one has to update the configuration.
 
 ### Octave
 
