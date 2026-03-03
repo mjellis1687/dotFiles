@@ -229,6 +229,65 @@ $ git commit -c ORIG_HEAD
 	git tag -d <tagname>
 	```
 
+### Move File From Another Repository
+
+You can move a file from one Git repository to another while preserving its history, but Git does not track file history across repository boundaries by default. So, you need to use a technique that preserves the file's commits, typically involving filtering the original repo's history to extract only what's relevant to the file, and then, importing that into the target repository.
+
+1. Clone the source repository:
+	```bash
+	git clone https://github.com/source-user/source-repo.git
+	cd source-repo
+	```
+2. Use git log to verify the file's history exists:
+	```bash
+	git log -- path/to/file.ext
+	```
+3. Use git filter-branch or git filter-repo to extract the file's history:
+Preferred (modern): git filter-repo (install from [https://github.com/newren/git-filter-repo](https://github.com/newren/git-filter-repo)):
+	```bash
+	git filter-repo --path path/to/file.ext --path-rename path/to/file.ext:file.ext
+	```
+
+	This will:
+
+	- Extract just the history for the file.
+	- Rename it to the root of the repo (file.ext).
+
+	Note: git filter-repo rewrites history. Use it on a clone or backup.
+
+4. Create a bare clone of the target repo or add it as a remote:
+	```bash
+	cd ..
+	git clone https://github.com/target-user/target-repo.git
+	cd target-repo
+	```
+5. Add the filtered repo as a remote and fetch it:
+	```bash
+	git remote add source ../source-repo
+	git fetch source
+	```
+6. Merge the filtered history into the target repo. You can merge it into a branch:
+	```bash
+	git checkout -b import-file-branch
+	git merge source/master --allow-unrelated-histories
+	```
+
+	Or cherry-pick if you want tighter control:
+
+	```
+	git cherry-pick <commit-sha>
+	```
+7. Move the file to the desired location (optional):
+	```bash
+	mkdir -p desired/path/
+	git mv file.ext desired/path/
+	git commit -m "Move file.ext to desired/path/"
+	```
+8. Push the changes
+	```bash
+	git push origin import-file-branch
+	```
+
 ### Credentials
 
 Even though I had set the credential manager to `store`, seems to prioritize using `.netrc` for credentials (not sure why).
