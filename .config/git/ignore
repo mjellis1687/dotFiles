@@ -113,7 +113,7 @@
 .config/vlc
 .config/wal/colorschemes
 .config/xdg-terminals.list
-.config/zathurarc
+.config/zathura
 .config/zoom.conf
 .config/zoomus.conf
 .crashplan
@@ -189,6 +189,7 @@
 .local/share/applications
 .local/share/backgrounds
 .local/share/bg
+.local/share/cargo
 .local/share/data
 .local/share/desktop-directories
 .local/share/dvdcss
@@ -218,6 +219,7 @@
 .local/share/lyrics
 .local/share/lesshst
 .local/share/lf
+.local/share/nvim
 .local/share/man
 .local/share/maps-places.json
 .local/share/mendeleydesktop
@@ -229,6 +231,7 @@
 .local/share/openfortivpn-webview
 .local/share/pass
 .local/share/pki
+.local/share/pulseUI
 .local/share/ranger
 .local/share/recently-used.xbel*
 .local/share/remmina
