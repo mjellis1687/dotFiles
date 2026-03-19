@@ -1,0 +1,94 @@
+#!/bin/sh
+# sb-bt-battery: Show connected Bluetooth headphone battery for dwmblocks
+# Requires: bluez (bluetoothctl), and either:
+#   - upower (most common), or
+#   - dbus-send (fallback for devices that expose battery via D-Bus directly)
+#
+# Usage in dwmblocks blocks[] config:
+#   { bt-battery, <interval_seconds>, <signal_number> }
+# Recommended interval: 60 seconds
+
+ICON=""       # Nerd Font Bluetooth icon (optional, replace with "BT" if not using NF)
+ICON_CHARGED=""
+ICON_HIGH=""
+ICON_MID=""
+ICON_LOW=""
+ICON_CRITICAL=""
+THRESHOLD_LOW=25
+THRESHOLD_CRITICAL=5
+
+get_battery_upower() {
+    device_path="$1"
+    upower -i "$device_path" 2>/dev/null | awk '/percentage/{print $2}' | tr -d '%'
+}
+
+get_battery_dbus() {
+    mac="$1"
+    # Convert MAC address colons to underscores for D-Bus path
+    mac_path=$(echo "$mac" | tr ':' '_')
+    dbus_path="/org/bluez/hci0/dev_${mac_path}"
+    dbus-send --system --print-reply \
+        --dest=org.bluez \
+        "$dbus_path" \
+        org.freedesktop.DBus.Properties.Get \
+        string:"org.bluez.Battery1" string:"Percentage" 2>/dev/null \
+        | awk '/variant/{print $3}'
+}
+
+main() {
+    # Get connected Bluetooth devices
+    connected=$(bluetoothctl info 2>/dev/null)
+
+    # If no device is connected, output nothing (block hidden in dwmblocks)
+    if [ -z "$connected" ]; then
+        exit 0
+    fi
+
+    # Extract MAC address and device name
+    mac=$(echo "$connected" | awk '/^Device/{print $2}')
+    name=$(echo "$connected" | awk -F': ' '/Name:/{print $2; exit}')
+
+    if [ -z "$mac" ]; then
+        exit 0
+    fi
+
+    battery=""
+
+    # Try upower first
+    if command -v upower >/dev/null 2>&1; then
+        # Find upower path for this device
+        mac_lower=$(echo "$mac" | tr '[:upper:]' '[:lower:]' | tr ':' '_')
+        upower_path=$(upower -e 2>/dev/null | grep -i "bluetooth.*${mac_lower}" | head -n1)
+
+        if [ -n "$upower_path" ]; then
+            battery=$(get_battery_upower "$upower_path")
+        fi
+    fi
+
+    # Fallback: try D-Bus directly
+    if [ -z "$battery" ] && command -v dbus-send >/dev/null 2>&1; then
+        battery=$(get_battery_dbus "$mac")
+    fi
+
+    # If no battery info found, exit silently (device may not support reporting)
+    if [ -z "$battery" ]; then
+        exit 0
+    fi
+
+    # Pick icon based on battery level
+    if [ "$battery" -ge 95 ]; then
+        icon="$ICON_CHARGED"
+    elif [ "$battery" -ge 60 ]; then
+        icon="$ICON_HIGH"
+    elif [ "$battery" -ge "$THRESHOLD_LOW" ]; then
+        icon="$ICON_MID"
+    elif [ "$battery" -ge "$THRESHOLD_CRITICAL" ]; then
+        icon="$ICON_LOW"
+    else
+        icon="$ICON_CRITICAL"
+    fi
+
+    printf "%s %s %d%%\n" "$icon" "$name" "$battery"
+}
+
+main

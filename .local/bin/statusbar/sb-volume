@@ -1,0 +1,40 @@
+#!/bin/sh
+
+# Volume module for status bar
+
+# volume-down: 
+# volume-mute: 
+# volume-off:  
+# volume-up:   
+
+case $BLOCK_BUTTON in
+	1)
+		# Left click
+		if [ "$BLOCK_MODIFIERS" = "1" ]; then
+			# With shift: edit script
+			$TERMINAL -e "$EDITOR" "$0"
+        else
+			# Regular
+			setsid -f "$TERMINAL" -e pulsemixer
+		fi
+		;;
+	2) pamixer -t ;;
+	3) notify-send "Volume module" "\- Shows volume or symbol if muted.
+- Middle click to mute.
+- Scroll to change." ;;
+esac
+
+[ $(pamixer --get-mute) = true ] && echo 🔇 && exit
+
+vol="$(pamixer --get-volume)"
+if [ "$vol" -gt "70" ]; then
+	icon=""
+elif [ "$vol" -gt "30" ]; then
+	icon=""
+elif [ "$vol" -gt "0" ]; then
+	icon=""
+else
+		echo   && exit
+fi
+
+echo "$vol% $icon"

@@ -1,0 +1,39 @@
+#!/bin/sh
+#
+# Status bar - date
+
+case $BLOCK_BUTTON in
+	1)
+		# Left click
+		if [ "$BLOCK_MODIFIERS" = "1" ]; then
+			# With shift: edit script
+			$TERMINAL -e "$EDITOR" "$0"
+        else
+			# Regular: Show calander
+			# Get Pywal accent color once for use in cases
+			COLOR=$(xrdb -query | awk '/^\*color2:/{print $2; exit}' || echo "#ffffff")
+			DAY=$(date +%e | tr -d ' ')
+			CONTENT=$(cal | sed "s/\b${DAY}\b/<b><span foreground='${COLOR}'>${DAY}<\/span><\/b>/g")
+			notify-send "Calendar" "<tt>${CONTENT}</tt>"
+		fi
+        ;;
+	2)
+        # Middle Click: Show specific system uptime or sync info
+        UPTIME=$(uptime -p)
+        notify-send "System Stats" "Uptime: $UPTIME"
+        ;;
+    3)
+		# Right Click: Full Date + Epoch Timestamp
+        FULL_DATE=$(date +'%A, %B %d, %Y')
+        EPOCH=$(date +'%s')
+
+        # Send notification
+        notify-send "Date Details" "Date: $FULL_DATE\nEpoch: $EPOCH"
+
+        # Optional: Copy epoch to clipboard (requires xclip)
+        echo "$EPOCH" | xclip -sel clip
+		;;
+esac
+
+# The actual string printed to your status bar
+date +"%m/%d/%Y %I:%M %p"
