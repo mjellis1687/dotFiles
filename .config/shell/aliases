@@ -1,4 +1,4 @@
-#Bash Aliases
+# Bash Aliases
 # Author: Matt Ellis
 
 # enable color support of ls and also add handy aliases
@@ -25,16 +25,13 @@ fi
 alias config='/usr/bin/git --git-dir=${HOME}/.local/src/.cfg --work-tree=${HOME}'
 alias ggs="git status"
 alias gd="git diff"
+alias vim="nvim"
 alias ccs="vim ${HOME}/.local/docs/CommandCheatSheet.md"
 alias brc="vim ${HOME}/.bashrc"
-alias vrc="vim ${HOME}/.vimrc"
+alias vrc="vim ${HOME}/.config/nvim/init.lua"
 
-# Make xget use the history file in $XDG_CACHE_HOME
+# Make wget use the history file in $XDG_CACHE_HOME
 alias wget='wget --hsts-file="$XDG_CACHE_HOME/wget-hsts"'
-
-# When opening a terminal from a folder, it will open GNOME terminal. ct will
-# switch to rxvt-unicode
-alias ct="$HOME/.local/bin/change_terminal.sh"
 
 # "Alias" make
 function make() {
@@ -56,4 +53,4 @@ alias myctags="if [ -f .ctags_exclude_files ]; then ctags -R --exclude=@.ctags_e
 
 alias myvpn="sudo systemctl start pulsesecure; /opt/pulsesecure/bin/pulseUI"
 
-alias vim='/usr/bin/vim --servername vim'
+# alias vim='/usr/bin/vim --servername vim'

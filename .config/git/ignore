@@ -83,6 +83,7 @@
 .config/nautilus
 .config/ncmpcpp/error.log
 .config/nvidia
+.config/nvim/lazy-lock.json
 .config/octave/octave-gui.ini
 .config/octave/qt-settings
 .config/okularpartrc
@@ -102,6 +103,7 @@
 .config/remmina
 .config/session
 .config/simple-scan
+.config/speech-dispatcher
 .config/spotify
 .config/systemd
 .config/teams
