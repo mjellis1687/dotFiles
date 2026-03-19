@@ -2,25 +2,27 @@
 	name=Matt Ellis
 	email=mjellis@ucdavis.edu
 [core]
-	editor=vim
+	editor=nvim
 	trustctime=false
 [pull]
 	rebase=false  # merge (the default strategy)
 [init]
 	defaultBranch = main
 [diff]
-	tool=vimdiff
+	tool=nvim
 	prompt=false
 [merge]
-	tool=vimdiff
+	tool=nvim
 	conflictstyle=diff3
-[mergetool "vimdiff"]
-	tool=vimdiff
+[difftool "nvim"]
+	cmd=nvim -d "$LOCAL" "$REMOTE"
+[mergetool "nvim"]
+	cmd=nvim -d "$LOCAL" "$MERGED" "$REMOTE" -c '$wincmd w' -c 'wincmd J'
 	keepBackup=false
 [credential]
 	helper = store
 [alias]
-	d = diff
+	d = difftool
 	m = mergetool
 	list-conflicts = !git ls-files -u | cut -f 2 | sort -u
 [push]

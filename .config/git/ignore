@@ -125,17 +125,8 @@
 .local/bin/coverage-3.10
 .local/bin/coverage3
 .local/bin/cron/
-.local/bin/displayselect
-.local/bin/dmenuhandler
-.local/bin/dmenumount
-.local/bin/dmenumountcifs
-.local/bin/dmenupass
-.local/bin/dmenurecord
-.local/bin/dmenuumount
-.local/bin/dmenuunicode
 .local/bin/estimator_ckpt_converter
 .local/bin/fonttools
-.local/bin/getbib
 .local/bin/getkeys
 .local/bin/hp-mpc-job
 .local/bin/ifinstalled
@@ -146,7 +137,6 @@
 .local/bin/latexwalker
 .local/bin/lfub
 .local/bin/linkhandler
-.local/bin/maimpick
 .local/bin/markdown-it
 .local/bin/myst-anchors
 .local/bin/myst-docutils-html
@@ -173,11 +163,8 @@
 .local/bin/rssadd
 .local/bin/saved_model_cli
 .local/bin/sd
-.local/bin/setbg
 .local/bin/shortcuts
 .local/bin/slider
-.local/bin/statusbar
-.local/bin/sysact
 .local/bin/tag
 .local/bin/td-toggle
 .local/bin/tensorboard
