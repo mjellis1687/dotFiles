@@ -35,7 +35,7 @@ autocmd("BufWritePre", {
 })
 
 -- Markdown Specific Autocmds
-vim.api.nvim_create_autocmd('FileType', {
+autocmd('FileType', {
   pattern = 'markdown',
   callback = function()
     local opts = { buffer = true, remap = false }
@@ -51,4 +51,15 @@ vim.api.nvim_create_autocmd('FileType', {
     -- Note: This overrides the global <Leader>w only when in a Markdown file
     vim.keymap.set('n', '<Leader>w', ':w<CR>:make<CR>', opts)
   end,
+})
+
+autocmd({ "BufNewFile", "BufRead" }, {
+	pattern = { "*.tex", "*.md" },
+    group = augroup,
+    callback = function()
+		vim.opt_local.spell = true
+		vim.opt_local.wrap = true
+		vim.opt_local.linebreak = true
+		vim.opt_local.scrolloff = 0
+    end,
 })
