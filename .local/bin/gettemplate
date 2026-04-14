@@ -39,8 +39,8 @@ list_templates() {
 while getopts "d:t:n:mlsh" opt; do
 	case "$opt" in
 		h) usage; exit 0 ;;
-		l) list_all_templates "pandoc-templates"; exit 0 ;;
-		s) list_all_templates "markdown"; exit 0 ;;
+		l) list_templates "pandoc-templates"; exit 0 ;;
+		s) list_templates "markdown"; exit 0 ;;
 		t) TEMPLATE="$OPTARG" ;;
 		n) OUTPUT="$OPTARG" ;;
 		m) INC_MAKE=true ;;
