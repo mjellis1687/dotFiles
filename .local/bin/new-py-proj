@@ -1,0 +1,142 @@
+#!/bin/bash
+#
+# Create a new Python project using a combination of pyscaffold and custom templates
+
+set -e
+
+# Hardcoded global parameter
+TEMPLATES="${HOME}/Templates/python-project"
+
+# Defaults
+AUTHOR="Matt Ellis"
+EMAIL="mjellis@ucdavis.edu"
+
+# Has defaults
+PYTHON=$(which python)
+
+if [ -z "$PYTHON" ]; then
+    echo "Error: Python is not installed or not in your PATH." >&2
+    exit 1
+fi
+
+# Function to show usage/help instructions
+usage() {
+    echo "Usage: $(basename "$0") -n <project_name> -d <description> -r <repository_url>"
+    echo ""
+    echo "Options:"
+	echo "  -a, --author       Name of the author"
+	echo "  -e, --email        Email of author"
+    echo "  -n, --name         Name of the project"
+    echo "  -d, --description  Short description of the project"
+    echo "  -r, --repository   Git remote repository URL (without .git extension)"
+	echo "  -p, --python       Python to use"
+    echo "  -h, --help         Show this help message"
+    echo ""
+    echo "Example:"
+    echo "  $(basename "$0") -n my-cool-app -d 'A awesome tool' -r 'https://gitlab.com/username/my-cool-app'"
+    exit 1
+}
+
+# User must provide
+PROJECT_NAME=
+DESCRIPTION=
+REPOSITORY=
+
+# Parse command line arguments
+while [[ "$#" -gt 0 ]]; do
+    case $1 in
+		-a|--author) AUTHOR="$2"; shift ;;
+		-e|--email) EMAIL="$2"; shift ;;
+        -n|--name) PROJECT_NAME="$2"; shift ;;
+        -d|--description) DESCRIPTION="$2"; shift ;;
+        -r|--repository) REPOSITORY="$2"; shift ;;
+		-p|--python) PYTHON="$2"; shift ;;
+        -h|--help) usage ;;
+        *) echo "Unknown parameter passed: $1"; usage ;;
+    esac
+    shift
+done
+
+if [ -z "$PROJECT_NAME" ] || [ -z "$DESCRIPTION" ] || [ -z "$REPOSITORY" ]; then
+    echo "Error: Missing required arguments." >&2
+    usage
+fi
+
+# Get Python versions
+# e.g., "3.11"
+PYTHON_VER=$($PYTHON -c 'import sys; print(f"{sys.version_info.major}.{sys.version_info.minor}")')
+# e.g., "311" (removes the period)
+VENV_DIGITS=$($PYTHON -c 'import sys; print(f"{sys.version_info.major}{sys.version_info.minor}")')
+VENV=".venv${VENV_DIGITS}"
+
+# Sanitize project name for standard Python package formatting (replacing hyphens with underscores)
+PKG_NAME=$(echo "$PROJECT_NAME" | tr '-' '_' | tr ' ' '_')
+
+# Helper function to copy files and replace placeholders
+# Placeholders: ${name}, ${repository}, ${description}, ${author}, ${email}
+replace_and_copy() {
+    local src="$1"
+    local dest="$2"
+
+    if [ ! -f "$src" ]; then
+        echo "Error: Template file $src does not exist. Skipping." >&2
+    fi
+
+    # Ensure destination parent directory exists
+    mkdir -p "$(dirname "$dest")"
+
+    # Use sed to replace placeholder tokens. | is used as a delimiter to prevent conflicts with directory slashes in REPOSITORY.
+    sed -e "s|\${name}|$PROJECT_NAME|g" \
+        -e "s|\${repository}|$REPOSITORY|g" \
+        -e "s|\${description}|$DESCRIPTION|g" \
+        -e "s|\${author}|$AUTHOR|g" \
+        -e "s|\${email}|$EMAIL|g" \
+        "$src" > "$dest"
+}
+
+echo "========================================="
+echo " Creating project: ${PROJECT_NAME} (${PKG_NAME})"
+echo " Python Version:  ${PYTHON_VER}"
+echo " Virtual Env:     ${VENV}"
+echo "========================================="
+
+# 1. Create directory and initialize virtual environment
+mkdir -p "${PROJECT_NAME}"
+cd "${PROJECT_NAME}"
+
+${PYTHON} -m venv "${VENV}"
+source "${VENV}/bin/activate"
+
+# 2. Install PyScaffold requirements & bootstrap the project setup
+pip install --upgrade pip
+pip install pyscaffold pyscaffoldext-markdown
+
+putup -f --markdown -n "${PROJECT_NAME}" --no-skeleton --gitlab --pre-commit .
+rm .readthedocs.yml
+
+# 3. Apply custom templates
+replace_and_copy "$TEMPLATES/CONTRIBUTING.md" "./CONTRIBUTING.md"
+replace_and_copy "$TEMPLATES/index.md" "./docs/index.md"
+replace_and_copy "$TEMPLATES/__init__.py" "./src/${PKG_NAME}/__init__.py"
+replace_and_copy "$TEMPLATES/README.md" "./README.md"
+replace_and_copy "$TEMPLATES/setup.cfg" "./setup.cfg"
+replace_and_copy "$TEMPLATES/tox.ini" "./tox.ini"
+replace_and_copy "$TEMPLATES/.ctags_exclude_files" "./.ctags_exclude_files"
+replace_and_copy "$TEMPLATES/.gitlab-ci.yml" "./.gitlab-ci.yml"
+replace_and_copy "$TEMPLATES/.pre-commit-config.yaml" "./.pre-commit-config.yaml"
+
+# 4. Install local development dependencies and configure git hooks
+pip install -e .[dev,testing]
+pre-commit autoupdate || true  # Don't fail the whole setup if remote pre-commit servers are down
+pre-commit install
+
+# Set remote repository
+git remote add origin "${REPOSITORY}.git"
+
+# Exit virtual environment inside the script context
+deactivate
+
+echo "========================================="
+echo "Setup of ${PROJECT_NAME} was successful!"
+echo "Don't forget to set up PIP_EXTRA_INDEX_URL in .gitlab-ci.yml if needed!"
+echo "========================================="

@@ -63,3 +63,22 @@ cd_with_fzf() {
 pacs() {
 	sudo pacman -Syy $(pacman -Ssq | fzf -m --preview="pacman -Si {}" --preview-window=:hidden --bind=space:toggle-preview)
 }
+
+create_pyproject() {
+	new-py-proj "$@"
+
+	# Grab the project name argument
+	local PROJ_DIR=""
+    while [[ "$#" -gt 0 ]]; do
+        case $1 in
+            -n|--name) PROJ_DIR="$2"; shift ;;
+			*) shift ;;
+        esac
+    done
+
+    # If the project directory exists, move into it and launch pydev
+    if [ -n "$TMUX" ] && [ -d "$PROJ_DIR" ]; then
+        cd "$PROJ_DIR"
+        pydev
+    fi
+}
