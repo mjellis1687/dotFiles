@@ -86,6 +86,7 @@ replace_and_copy() {
 
     # Use sed to replace placeholder tokens
     sed -e "s|\${name}|$PROJECT_NAME|g" \
+		-e "s|\${pkg_name}|$PKG_NAME|g" \
         -e "s|\${repository}|$REPOSITORY|g" \
         -e "s|\${description}|$DESCRIPTION|g" \
         -e "s|\${author}|$AUTHOR|g" \

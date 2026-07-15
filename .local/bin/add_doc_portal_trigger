@@ -111,5 +111,14 @@ curl -s --request POST \
   --form "key=PORTAL_TRIGGER_TOKEN" \
   --form "value=${PORTAL_TRIGGER_TOKEN}" \
   "https://${LAB_SERVER}/api/v4/projects/${PROJECT_ID}/variables" > /dev/null
+# Disable Auto DevOps
+curl -s --request PUT \
+  --header "PRIVATE-TOKEN: ${GITLAB_TOKEN}" \
+  "https://${LAB_SERVER}/api/v4/projects/${PROJECT_ID}?auto_devops_enabled=false" > /dev/null
+# Assign the project a Runner
+curl -s --request POST \
+  --header "PRIVATE-TOKEN: ${GITLAB_TOKEN}" \
+  --form "runner_id=5" \
+  "https://${LAB_SERVER}/api/v4/projects/${PROJECT_ID}/runners" > /dev/null
 
 echo "Successfully configured PORTAL_TRIGGER_TOKEN on ${LAB_SERVER} for ${PROJECT_NAME}!"
