@@ -537,4 +537,5 @@ require('lazy').setup({
 	  vim.g.vimtex_quickfix_mode = 1
     end
   },
+  { 'dhruvasagar/vim-table-mode' },
 })
