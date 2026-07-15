@@ -47,6 +47,11 @@ keymap('n', '<Esc>', '<cmd>nohlsearch<CR>')
 keymap("n", "<Leader>ex", vim.cmd.Ex)
 
 -- EDITING
-keymap("v", "J", ":m '>+1<CR>gv=gv")
-keymap("v", "K", ":m '<-2<CR>gv=gv")
+-- keymap("v", "J", ":m '>+1<CR>gv=gv")
+-- keymap("v", "K", ":m '<-2<CR>gv=gv")
 keymap('n', '<Leader>w', ':w<CR>', { desc = 'Save file' })
+keymap('n', '<C-j>', '/<++><CR>cf>', { desc = "Jump to placeholder and edit" })
+keymap('i', '<C-j>', '<Esc>/<++><CR>cf>', { desc = "Jump to placeholder and edit" })
+
+-- Diagnostics
+keymap("n", "<Leader>e", vim.diagnostic.open_float)

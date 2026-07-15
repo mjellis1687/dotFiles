@@ -41,7 +41,7 @@ opt.softtabstop = 4
 opt.shiftwidth = 4
 
 -- Enable "smart" indentation logic based on the code syntax
--- opt.smartindent = true
+opt.smartindent = true
 
 -- Don't turn tabs into spaces by default (use actual tab characters)
 opt.expandtab = false
