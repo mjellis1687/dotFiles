@@ -82,6 +82,7 @@
 .config/mupen64plus
 .config/nautilus
 .config/ncmpcpp/error.log
+.config/new-py-project/secrets.json
 .config/nvidia
 .config/nvim/lazy-lock.json
 .config/octave/octave-gui.ini

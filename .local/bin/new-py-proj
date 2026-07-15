@@ -11,8 +11,8 @@ TEMPLATES="${HOME}/Templates/python-project"
 AUTHOR="Matt Ellis"
 EMAIL="mjellis@ucdavis.edu"
 
-# Has defaults
-PYTHON=$(which python)
+# Has defaults - Safely check without triggering set -e exit
+PYTHON=$(command -v python3 || command -v python || true)
 
 if [ -z "$PYTHON" ]; then
     echo "Error: Python is not installed or not in your PATH." >&2
@@ -24,17 +24,17 @@ usage() {
     echo "Usage: $(basename "$0") -n <project_name> -d <description> -r <repository_url>"
     echo ""
     echo "Options:"
-	echo "  -a, --author       Name of the author"
-	echo "  -e, --email        Email of author"
+    echo "  -a, --author       Name of the author"
+    echo "  -e, --email        Email of author"
     echo "  -n, --name         Name of the project"
     echo "  -d, --description  Short description of the project"
     echo "  -r, --repository   Git remote repository URL (without .git extension)"
-	echo "  -p, --python       Python to use"
+    echo "  -p, --python       Python to use"
     echo "  -h, --help         Show this help message"
     echo ""
     echo "Example:"
     echo "  $(basename "$0") -n my-cool-app -d 'A awesome tool' -r 'https://gitlab.com/username/my-cool-app'"
-    exit 1
+    exit 1 # Fixed: Ensure script stops execution after printing usage
 }
 
 # User must provide
@@ -45,16 +45,15 @@ REPOSITORY=
 # Parse command line arguments
 while [[ "$#" -gt 0 ]]; do
     case $1 in
-		-a|--author) AUTHOR="$2"; shift ;;
-		-e|--email) EMAIL="$2"; shift ;;
-        -n|--name) PROJECT_NAME="$2"; shift ;;
-        -d|--description) DESCRIPTION="$2"; shift ;;
-        -r|--repository) REPOSITORY="$2"; shift ;;
-		-p|--python) PYTHON="$2"; shift ;;
+        -a|--author) AUTHOR="$2"; shift 2;;
+        -e|--email) EMAIL="$2"; shift 2;;
+        -n|--name) PROJECT_NAME="$2"; shift 2;;
+        -d|--description) DESCRIPTION="$2"; shift 2;;
+        -r|--repository) REPOSITORY="$2"; shift 2;;
+        -p|--python) PYTHON="$2"; shift 2;;
         -h|--help) usage ;;
         *) echo "Unknown parameter passed: $1"; usage ;;
     esac
-    shift
 done
 
 if [ -z "$PROJECT_NAME" ] || [ -z "$DESCRIPTION" ] || [ -z "$REPOSITORY" ]; then
@@ -73,19 +72,19 @@ VENV=".venv${VENV_DIGITS}"
 PKG_NAME=$(echo "$PROJECT_NAME" | tr '-' '_' | tr ' ' '_')
 
 # Helper function to copy files and replace placeholders
-# Placeholders: ${name}, ${repository}, ${description}, ${author}, ${email}
 replace_and_copy() {
     local src="$1"
     local dest="$2"
 
     if [ ! -f "$src" ]; then
-        echo "Error: Template file $src does not exist. Skipping." >&2
+        echo "Warning: Template file $src does not exist. Skipping." >&2
+        return 0 # Fixed: Return early so sed doesn't execute and fail
     fi
 
     # Ensure destination parent directory exists
     mkdir -p "$(dirname "$dest")"
 
-    # Use sed to replace placeholder tokens. | is used as a delimiter to prevent conflicts with directory slashes in REPOSITORY.
+    # Use sed to replace placeholder tokens
     sed -e "s|\${name}|$PROJECT_NAME|g" \
         -e "s|\${repository}|$REPOSITORY|g" \
         -e "s|\${description}|$DESCRIPTION|g" \
@@ -112,7 +111,7 @@ pip install --upgrade pip
 pip install pyscaffold pyscaffoldext-markdown
 
 putup -f --markdown -n "${PROJECT_NAME}" --no-skeleton --gitlab --pre-commit .
-rm .readthedocs.yml
+rm -f .readthedocs.yaml # Fixed: Avoid failing if file is already missing
 
 # 3. Apply custom templates
 replace_and_copy "$TEMPLATES/CONTRIBUTING.md" "./CONTRIBUTING.md"
@@ -127,7 +126,7 @@ replace_and_copy "$TEMPLATES/.pre-commit-config.yaml" "./.pre-commit-config.yaml
 
 # 4. Install local development dependencies and configure git hooks
 pip install -e .[dev,testing]
-pre-commit autoupdate || true  # Don't fail the whole setup if remote pre-commit servers are down
+pre-commit autoupdate || true  # Don't fail if pre-commit servers are down
 pre-commit install
 
 # Set remote repository
@@ -135,6 +134,9 @@ git remote add origin "${REPOSITORY}.git"
 
 # Exit virtual environment inside the script context
 deactivate
+
+# Add DOC portal trigger if needed
+add_doc_portal_trigger -n "${PROJECT_NAME}" -r "${REPOSITORY}" || true
 
 echo "========================================="
 echo "Setup of ${PROJECT_NAME} was successful!"

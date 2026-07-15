@@ -1,0 +1,115 @@
+#!/bin/bash
+#
+# Adds PORTAL_TRIGGER_TOKEN to project
+
+set -e
+
+# Define the path to your secrets file
+SECRETS_FILE="${HOME}/.config/new-py-project/secrets.json"
+
+# Function to show usage/help instructions
+usage() {
+    echo "Usage: $(basename "$0") -n <project_name> -r <repository_url>"
+    echo ""
+    echo "Options:"
+    echo "  -n, --name         Name of the project"
+    echo "  -r, --repository   Git remote repository URL (without .git extension)"
+    echo "  -h, --help         Show this help message"
+    echo ""
+    echo "Example:"
+    echo "  $(basename "$0") -n my-cool-app -r 'https://gitlab.com/username/my-cool-app'"
+    exit 1
+}
+
+# User must provide
+PROJECT_NAME=
+REPOSITORY=
+
+# Parse command line arguments
+while [[ "$#" -gt 0 ]]; do
+    case $1 in
+        -n|--name) PROJECT_NAME="$2"; shift 2 ;;
+        -r|--repository) REPOSITORY="$2"; shift 2 ;;
+        -h|--help) usage ;;
+        *) echo "Unknown parameter passed: $1"; usage ;;
+    esac
+done
+
+if [ -z "$PROJECT_NAME" ] || [ -z "$REPOSITORY" ]; then
+    echo "Error: Missing required arguments." >&2
+    usage
+fi
+
+# Determine if repository is contained on lab server
+[ ! -f "$SECRETS_FILE" ] && echo "Error: Secrets file not found at $SECRETS_FILE." >&2 && exit 1
+LAB_SERVER=$(jq -r '.lab_server // empty' "$SECRETS_FILE")
+[ ! -n "$LAB_SERVER" ] && echo "Warning: 'lab_server' key is missing or empty in $SECRETS_FILE." >&2 && exit 1
+
+if [[ "$REPOSITORY" != *"$LAB_SERVER"* ]]; then
+    echo "$LAB_SERVER was not found in $REPOSITORY" >&2
+    exit 1
+fi
+
+# Extract a password/token from ~/.netrc for a given machine name.
+get_netrc_token() {
+    local target_machine="$1"
+    local netrc_file="${2:-$HOME/.netrc}"
+
+    if [ -z "$target_machine" ]; then
+        echo "Error [get_netrc_token]: No machine name provided." >&2
+        return 1
+    fi
+
+    if [ ! -f "$netrc_file" ]; then
+        echo "Error [get_netrc_token]: File not found at '$netrc_file'." >&2
+        return 1
+    fi
+
+    local token
+    token=$(awk -v target="$target_machine" '
+        $1 == "machine" && $2 == target { found = 1; next }
+        $1 == "machine" && $2 != target { found = 0 }
+        found && $1 == "password" { print $2; exit }
+    ' "$netrc_file")
+
+    if [ -z "$token" ]; then
+        echo "Error [get_netrc_token]: No token found for machine '$target_machine' in $netrc_file." >&2
+        return 1
+    fi
+
+    echo "$token"
+}
+
+# Get tokens
+PORTAL_TRIGGER_TOKEN=$(get_netrc_token "doc-portal-${LAB_SERVER}")
+GITLAB_TOKEN=$(get_netrc_token "${LAB_SERVER}")
+
+# Escape only the literal dots in the domain (e.g., "my-university.deparment.edu" -> "my-university\.deparment\.edu")
+ESCAPED_SERVER="${LAB_SERVER//./\\.}"
+
+# Strip everything up to and including the domain prefix (e.g., "https://domain/" or "git@domain:")
+# This leaves us with "group/project" or "group/project.git"
+TEMP_PATH=$(echo "$REPOSITORY" | sed -E "s|.*${ESCAPED_SERVER}[:/]||")
+
+#  Strip ".git" from the end of the string only if it is present
+PROJECT_PATH=$(echo "$TEMP_PATH" | sed 's|\.git$||')
+
+# URL-encode the path (replaces '/' with '%2F')
+ENCODED_PATH=$(echo "$PROJECT_PATH" | sed 's|/|%2F|g')
+
+# Fetch the numerical Project ID directly from your lab server using curl and jq
+PROJECT_ID=$(curl -s --header "PRIVATE-TOKEN: ${GITLAB_TOKEN}" "https://${LAB_SERVER}/api/v4/projects/${ENCODED_PATH}" | jq '.id')
+
+if [ -z "$PROJECT_ID" ] || [ "$PROJECT_ID" = "null" ]; then
+    echo "Error: Could not retrieve Project ID from GitLab API." >&2
+    exit 1
+fi
+
+# Use the ID to configure your variables!
+curl -s --request POST \
+  --header "PRIVATE-TOKEN: ${GITLAB_TOKEN}" \
+  --form "key=PORTAL_TRIGGER_TOKEN" \
+  --form "value=${PORTAL_TRIGGER_TOKEN}" \
+  "https://${LAB_SERVER}/api/v4/projects/${PROJECT_ID}/variables" > /dev/null
+
+echo "Successfully configured PORTAL_TRIGGER_TOKEN on ${LAB_SERVER} for ${PROJECT_NAME}!"
