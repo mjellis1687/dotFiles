@@ -9,8 +9,8 @@ $continuous_mode = 1;
 $pdf_previewer = 'start zathura';
 
 # Define a custom command for forward search with Zathura
-$pdflatex = 'lualatex -synctex=1 %O %S';
-$lualatex = 'lualatex -synctex=1 %O %S';
+$pdflatex = 'lualatex -synctex=1 -shell-escape %O %S';
+$lualatex = 'lualatex -synctex=1 -shell-escape %O %S';
 
 # Open Zathura with the PDF after compilation
 $pdf_previewer = "zathura --synctex-forward %l:0:%s %o &";
