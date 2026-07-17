@@ -520,7 +520,9 @@ require('lazy').setup({
           -- vim.wo.foldmethod = 'expr'
 
           -- enables treesitter based indentation
-          vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+		  if filetype ~= "python" then
+            vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+          end
         end,
       })
     end,
@@ -538,4 +540,8 @@ require('lazy').setup({
     end
   },
   { 'dhruvasagar/vim-table-mode' },
+  {
+    "Vimjas/vim-python-pep8-indent",
+    ft = "python", -- Only load for python files
+  },
 })
