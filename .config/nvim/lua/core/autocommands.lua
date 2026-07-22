@@ -15,6 +15,17 @@ autocmd("FileType", {
         vim.keymap.set("n", "<Leader>c", "<C-w>z :windo lcl|ccl<CR>", { buffer = true })
     end,
 })
+-- Add a breakpoint keymap specifically for Python buffers
+autocmd('FileType', {
+  pattern = 'python',
+  callback = function(event)
+    -- Inserts breakpoint() on a new line below the current cursor
+    vim.keymap.set('n', '<leader>b', 'obreakpoint()<Esc>', {
+      buffer = event.buf,
+      desc = 'Python: Insert [B]reakpoint',
+    })
+  end,
+})
 
 -- Highlight trailing whitespace as red
 vim.api.nvim_set_hl(0, "BadWhitespace", { ctermbg = "red", bg = "red" })

@@ -273,6 +273,26 @@ require('lazy').setup({
         -- gopls = {},
         pyright = {
 		  filetypes = { "python" },
+		  on_init = function(client)
+            local cwd = vim.fn.getcwd()
+            local matches = vim.fn.glob(cwd .. "/.venv31*", false, true)
+
+            if #matches > 0 then
+              -- Sort .venv31* directories by version number descending
+              table.sort(matches, function(a, b)
+                local ver_a = tonumber(a:match("%.venv(%d+)")) or 0
+                local ver_b = tonumber(b:match("%.venv(%d+)")) or 0
+                return ver_a > ver_b
+              end)
+
+              local venv_python = matches[1] .. "/bin/python"
+
+              if vim.fn.executable(venv_python) == 1 then
+                client.config.settings.python.pythonPath = venv_python
+                client.notify("workspace/didChangeConfiguration", { settings = client.config.settings })
+              end
+            end
+          end,
 		},
 		texlab = {
 		  filetypes = { "tex", "bib", "markdown" },
