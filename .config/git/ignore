@@ -74,6 +74,7 @@
 .config/kdeglobals
 .config/ktikzrc
 .config/libreoffice
+.config/libaccounts-glib
 .config/libvirt
 .config/menus
 .config/mimeapps.list
@@ -117,10 +118,12 @@
 .config/wal/colorschemes
 .config/xdg-terminals.list
 .config/zathura
+.config/zoom
 .config/zoom.conf
 .config/zoomus.conf
 .crashplan
 .dropbox*
+.gnupg
 .hplip
 .local/bin/booksplit
 .local/bin/compiler
@@ -128,6 +131,7 @@
 .local/bin/coverage-3.10
 .local/bin/coverage3
 .local/bin/cron/
+.local/bin/csv-plot
 .local/bin/estimator_ckpt_converter
 .local/bin/fonttools
 .local/bin/getkeys
@@ -251,6 +255,7 @@
 .local/share/virtualenv
 .local/share/vlc
 .local/share/webkitgtk
+.local/share/xca
 .local/share/xorg
 .local/share/xrdp
 .local/share/yelp
@@ -281,17 +286,21 @@
 .viminfo
 .vscode-oss
 .zoom
+.zotero
 BCL
 Desktop
 Documents
 Downloads
 Dropbox
 [Mm]usic
+Numerics
 Pictures
+Projects
 RemoteDrives
 Storage
 Templates
 Videos
 VirtualBox\ VMs
+Zotero
 node_modules
 repos
