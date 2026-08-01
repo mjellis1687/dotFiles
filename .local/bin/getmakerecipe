@@ -341,6 +341,17 @@ pdf2jpg () {
 	echo "${RECIPE}" >> "${MAKEH}"
 }
 
+pdf2svg () {
+	#TODO: automatically add latex_pdf if needed
+	RECIPE="${BASE}.svg : ${BASE}.pdf
+	@echo \"Building \$@\"
+	@cd $(dirname ${SRC}) ; pdf2svg \$(notdir \$<) \$(notdir \$@)
+	"
+	echo "DEST += ${BASE}.svg
+	" >> "${MAKEH}"
+	echo "${RECIPE}" >> "${MAKEH}"
+}
+
 python () {
 	# Poor man's check for virtualenvs
 	# TODO: implement something that is not terrible (will not work with multiple venv's)
