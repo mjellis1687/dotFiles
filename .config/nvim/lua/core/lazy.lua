@@ -496,6 +496,24 @@ require('lazy').setup({
       -- - sr)'  - [S]urround [R]eplace [)] [']
       require('mini.surround').setup()
 
+	  -- Buffer removal (deletes buffer while preserving window splits)
+      require('mini.bufremove').setup()
+
+      -- Keymap for buffer deletion (<leader>bd)
+      vim.keymap.set('n', '<leader>bd', function()
+        local bd = require('mini.bufremove').delete
+        -- If buffer is modified, ask confirmation instead of forcing close
+        if not bd(0, false) then
+          local choice = vim.fn.confirm('Buffer has unsaved changes. Save first?', '&Yes\n&No\n&Cancel')
+          if choice == 1 then
+            vim.cmd('write')
+            bd(0, true)
+          elseif choice == 2 then
+            bd(0, true) -- force delete (discard changes)
+          end
+        end
+      end, { desc = '[B]uffer [D]elete (keep layout)' })
+
       -- Simple and easy statusline.
       --  You could remove this setup call if you don't like it,
       --  and try some other statusline plugin
