@@ -289,7 +289,7 @@ require('lazy').setup({
 
               if vim.fn.executable(venv_python) == 1 then
                 client.config.settings.python.pythonPath = venv_python
-                client.notify("workspace/didChangeConfiguration", { settings = client.config.settings })
+                client:notify("workspace/didChangeConfiguration", { settings = client.config.settings })
               end
             end
           end,
