@@ -579,3 +579,11 @@ magick input.heic -rotate 90 output.heic
 ```bash
 magick input.heic -quality 90 output.jpg
 ```
+
+## Networking Issues on Workstation
+
+- Fix network connection on workstation:
+```bash
+sudo modprobe -r e1000e
+sudo modprobe e1000e
+```
