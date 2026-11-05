@@ -59,7 +59,7 @@ POWERLINE_BASH_SELECT=1
 stty -ixon
 
 # Bash completion for pandoc
-eval "$(pandoc --bash-completion)"
+eval "$(pandoc --completion=bash)"
 
 # KEYBINDINGS
 
